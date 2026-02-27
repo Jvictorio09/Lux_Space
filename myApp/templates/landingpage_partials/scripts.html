@@ -1,0 +1,44 @@
+<script>
+// Cursor
+const cur = document.getElementById('cursor');
+const crng = document.getElementById('cring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    crng.style.left = e.clientX + 'px';
+    crng.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cur.style.width = '14px'; cur.style.height = '14px';
+    crng.style.width = '52px'; crng.style.height = '52px';
+    crng.style.borderColor = 'rgba(201,168,76,0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cur.style.width = '8px'; cur.style.height = '8px';
+    crng.style.width = '36px'; crng.style.height = '36px';
+    crng.style.borderColor = 'rgba(201,168,76,0.5)';
+  });
+});
+
+// Nav sticky
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('stuck', window.scrollY > 60);
+});
+
+// Mobile menu
+function toggleMob() {
+  document.getElementById('mob-nav').classList.toggle('open');
+  document.getElementById('burger').classList.toggle('open');
+}
+
+// Reveal observer
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.rev, .rev-l').forEach(el => ro.observe(el));
+</script>
+
+
