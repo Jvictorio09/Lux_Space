@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — LuxSpace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --dark: #1a1a1a;
+      --dark-2: #222222;
+      --dark-3: #2d2d2d;
+      --text-main: #f0ece4;
+      --text-muted: #a09880;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--text-main);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .serif { font-family: 'Cormorant Garamond', serif; }
+
+    /* Gold line decorator */
+    .gold-line {
+      display: inline-block;
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Animated gold border card */
+    .contact-card {
+      position: relative;
+      background: linear-gradient(135deg, #242424 0%, #1e1e1e 100%);
+      border: 1px solid rgba(201,168,76,0.15);
+      transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.5), transparent 60%, rgba(201,168,76,0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .contact-card:hover::before { opacity: 1; }
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(201,168,76,0.07);
+      border-color: rgba(201,168,76,0.35);
+    }
+
+    /* Glowing gold icon circle */
+    .icon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(201,168,76,0.2), rgba(201,168,76,0.05));
+      border: 1px solid rgba(201,168,76,0.3);
+      box-shadow: 0 0 20px rgba(201,168,76,0.1);
+      flex-shrink: 0;
+    }
+
+    /* Background geometric decor */
+    .decor-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.07);
+      pointer-events: none;
+    }
+
+    /* Form input */
+    .lux-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--text-main);
+      padding: 14px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    .lux-input::placeholder { color: rgba(160,152,128,0.6); }
+    .lux-input:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.04);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.07);
+    }
+
+    textarea.lux-input { resize: none; min-height: 130px; }
+
+    .lux-btn {
+      background: linear-gradient(135deg, var(--gold) 0%, #a8852f 100%);
+      color: #111;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 16px 48px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .lux-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .lux-btn:hover::after { opacity: 1; }
+    .lux-btn:hover {
+      box-shadow: 0 8px 32px rgba(201,168,76,0.35);
+      transform: translateY(-2px);
+    }
+
+    /* Divider with diamond */
+    .diamond-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--gold);
+    }
+    .diamond-divider::before,
+    .diamond-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+    }
+
+    /* Page fade-in */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.9s ease both; }
+    .fade-up-1 { animation-delay: 0.1s; }
+    .fade-up-2 { animation-delay: 0.25s; }
+    .fade-up-3 { animation-delay: 0.4s; }
+    .fade-up-4 { animation-delay: 0.55s; }
+
+    /* Logo bar */
+    .logo-bar {
+      background: linear-gradient(180deg, #111 0%, transparent 100%);
+    }
+
+    /* Map embed */
+    .map-wrap {
+      border: 1px solid rgba(201,168,76,0.15);
+      overflow: hidden;
+      position: relative;
+    }
+    .map-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid transparent;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background decorative circles -->
+  <div class="decor-circle" style="width:500px;height:500px;top:-200px;right:-150px;"></div>
+  <div class="decor-circle" style="width:300px;height:300px;bottom:100px;left:-100px;"></div>
+  <div class="decor-circle" style="width:180px;height:180px;top:40%;right:10%;"></div>
+
+  <!-- HEADER / NAV BAR -->
+  <header class="logo-bar relative z-10 px-8 py-6 flex items-center justify-between border-b border-white border-opacity-5">
+    <div class="flex items-center gap-4">
+      <!-- Logo mark (SVG mimic of the brand mark) -->
+      <div style="width:44px;height:44px;background:#3a3a2a;border:1px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <polygon points="4,20 12,4 20,20" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+          <polygon points="2,22 12,2 22,22 2,22" stroke="rgba(201,168,76,0.3)" stroke-width="0.5" fill="none"/>
+        </svg>
+      </div>
+      <a href="{% url 'home' %}" style="text-decoration:none;">
+        <div class="serif text-xl font-light tracking-widest text-white leading-none" style="letter-spacing:0.3em;">LUX<span style="color:var(--gold)">SPACE</span></div>
+        <div style="font-size:8px;letter-spacing:0.25em;color:var(--text-muted);margin-top:3px;">FIT OUT &nbsp;|&nbsp; LANDSCAPING &nbsp;|&nbsp; JOINERY</div>
+      </a>
+    </div>
+    <nav class="hidden md:flex gap-8">
+      <a href="{% url 'home' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Home</a>
+      <a href="{% url 'services' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Services</a>
+      <a href="{% url 'home' %}#projects" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Projects</a>
+      <a href="{% url 'contact' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--gold);padding-bottom:2px;">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative z-10 text-center px-6 pt-20 pb-16">
+    <div class="fade-up fade-up-1">
+      <p style="font-size:11px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:20px;">Reach Out To Us</p>
+    </div>
+    <div class="fade-up fade-up-2">
+      <h1 class="serif" style="font-size:clamp(52px,9vw,96px);font-weight:300;line-height:1;letter-spacing:0.02em;color:#f0ece4;">
+        Get In <em style="color:var(--gold);font-style:italic;">Touch</em>
+      </h1>
+    </div>
+    <div class="fade-up fade-up-3" style="max-width:620px;margin:28px auto 0;">
+      <p style="font-size:16px;line-height:1.9;color:#b8b0a0;font-weight:300;letter-spacing:0.01em;">
+        Get in touch with Luxspace for expert consultation, premium design solutions, and seamless project execution. Our team provides personalized guidance, detailed planning, and professional support from concept to completion — ensuring exceptional quality, precision, and timely delivery for every project.
+      </p>
+    </div>
+    <div class="fade-up fade-up-4" style="margin-top:36px;">
+      <div class="diamond-divider" style="max-width:400px;margin:0 auto;">
+        <i class="fa-solid fa-diamond" style="font-size:8px;color:var(--gold);"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT INFO CARDS -->
+  <section class="relative z-10 px-6 pb-16 max-w-5xl mx-auto">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+
+      <!-- Phone -->
+      <div class="contact-card fade-up fade-up-2 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
+        <div class="icon-circle">
+          <i class="fa-solid fa-phone" style="color:var(--gold);font-size:20px;"></i>
+        </div>
+        <div>
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Phone Number</p>
+          <a href="tel:0507267332" style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:#f0ece4;letter-spacing:0.04em;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#f0ece4'">050 7267 332</a>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">Available Sun – Thu, 9AM – 6PM</p>
+        </div>
+        <div class="gold-line"></div>
+      </div>
+
+      <!-- Email -->
+      <div class="contact-card fade-up fade-up-3 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
+        <div class="icon-circle">
+          <i class="fa-solid fa-envelope" style="color:var(--gold);font-size:20px;"></i>
+        </div>
+        <div>
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Email Address</p>
+          <a href="mailto:info@luxspacefitout.com" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:#f0ece4;letter-spacing:0.02em;text-decoration:none;transition:color 0.3s;word-break:break-all;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#f0ece4'">info@luxspacefitout.com</a>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">We respond within 24 hours</p>
+        </div>
+        <div class="gold-line"></div>
+      </div>
+
+      <!-- Address -->
+      <div class="contact-card fade-up fade-up-4 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
+        <div class="icon-circle">
+          <i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:22px;"></i>
+        </div>
+        <div>
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Office Address</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:#f0ece4;line-height:1.4;letter-spacing:0.02em;">Office 214, Bayan Business Center,<br/>DIP 1 — Dubai</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">United Arab Emirates</p>
+        </div>
+        <div class="gold-line"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT FORM + MAP -->
+  <section class="relative z-10 px-6 pb-24 max-w-5xl mx-auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;" class="contact-grid">
+
+      <!-- FORM -->
+      <div class="fade-up fade-up-2">
+        <div style="margin-bottom:32px;">
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Send A Message</p>
+          <h2 class="serif" style="font-size:38px;font-weight:300;color:#f0ece4;line-height:1.2;">Start Your<br/><em style="color:var(--gold);font-style:italic;">Project</em> With Us</h2>
+        </div>
+
+        <form onsubmit="handleSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <input class="lux-input" type="text" placeholder="Your Name" required/>
+            <input class="lux-input" type="tel" placeholder="Phone Number"/>
+          </div>
+          <input class="lux-input" type="email" placeholder="Email Address" required/>
+          <select class="lux-input" style="appearance:none;cursor:pointer;">
+            <option value="" style="background:#222;">Select Service</option>
+            <option style="background:#222;">Fit Out</option>
+            <option style="background:#222;">Landscaping</option>
+            <option style="background:#222;">Joinery</option>
+            <option style="background:#222;">Full Project</option>
+          </select>
+          <textarea class="lux-input" placeholder="Tell us about your project..."></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <button type="submit" class="lux-btn">
+              Send Message &nbsp;<i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <p style="font-size:11px;color:var(--text-muted);font-weight:300;">We'll respond within 24 hours</p>
+          </div>
+        </form>
+        <div id="successMsg" style="display:none;margin-top:20px;padding:16px 20px;border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.06);color:var(--gold);font-size:13px;letter-spacing:0.05em;">
+          <i class="fa-solid fa-check-circle" style="margin-right:8px;"></i> Thank you! We'll be in touch shortly.
+        </div>
+      </div>
+
+      <!-- MAP / INFO PANEL -->
+      <div class="fade-up fade-up-3 flex flex-col gap-6">
+        <!-- Map embed -->
+        <div class="map-wrap" style="flex:1;min-height:300px;border-radius:2px;">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3613.7!2d55.18!3d25.02!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6e3a3a3a3a3a%3A0x0!2sBayan+Business+Center%2C+DIP+1%2C+Dubai!5e0!3m2!1sen!2sae!4v1700000000000"
+            width="100%" height="100%" style="border:0;display:block;min-height:300px;filter:grayscale(80%) contrast(1.1) brightness(0.8);" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+
+        <!-- Working hours -->
+        <div class="contact-card p-6" style="border-radius:2px;">
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;"><i class="fa-regular fa-clock" style="margin-right:8px;"></i>Working Hours</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:14px;color:#b8b0a0;font-weight:300;">Sunday – Thursday</span>
+              <span style="font-size:14px;color:#f0ece4;font-family:'Cormorant Garamond',serif;font-size:17px;">9:00 AM – 6:00 PM</span>
+            </div>
+            <div style="height:1px;background:rgba(201,168,76,0.1);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:14px;color:#b8b0a0;font-weight:300;">Friday – Saturday</span>
+              <span style="font-size:14px;color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:17px;">Closed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Socials -->
+        <div class="contact-card p-6" style="border-radius:2px;">
+          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;"><i class="fa-solid fa-share-nodes" style="margin-right:8px;"></i>Follow Us</p>
+          <div style="display:flex;gap:16px;">
+            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://wa.me/971507267332" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t px-8 py-8 text-center" style="border-color:rgba(201,168,76,0.1);">
+    <p style="font-size:12px;color:var(--text-muted);font-weight:300;letter-spacing:0.08em;">
+      © 2024 <span style="color:var(--gold);">LuxSpace</span> &nbsp;|&nbsp; Fit Out &nbsp;|&nbsp; Landscaping &nbsp;|&nbsp; Joinery &nbsp;|&nbsp; Dubai, UAE
+    </p>
+  </footer>
+
+  <style>
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('successMsg').style.display = 'block';
+      e.target.reset();
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
