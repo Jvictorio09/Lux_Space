@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxSpace — Portfolio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          dark:      '#1a1a16',
+          charcoal:  '#252520',
+          gold:      '#b8a96a',
+          'gold-light': '#d4c484',
+          'gold-muted': '#7a6e48',
+          cream:     '#f0ede4',
+          'off-white':'#faf9f5',
+          mid:       '#5a5a50',
+          'light-sand':'#e8e5db',
+        },
+        fontFamily: {
+          serif: ['Cormorant Garamond', 'serif'],
+          sans:  ['Barlow', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { font-size: 17px; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    scroll-behavior: smooth;
+    margin: 0;
+    line-height: 1.75;
+  }
+
+  .body-text { font-size: 1rem; line-height: 1.8; }
+  .body-sm   { font-size: 0.88rem; line-height: 1.7; }
+  .label     { font-size: 0.68rem; letter-spacing: 0.22em; font-weight: 600; text-transform: uppercase; }
+  .label-sm  { font-size: 0.6rem;  letter-spacing: 0.2em;  font-weight: 600; text-transform: uppercase; }
+
+  .nlink { position:relative; transition:color 0.3s; }
+  .nlink::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:#b8a96a; transition:width 0.3s; }
+  .nlink:hover::after { width:100%; }
+
+  .orn { display:flex; align-items:center; gap:14px; }
+  .orn::before,.orn::after { content:''; flex:1; height:1px; background:#7a6e48; opacity:0.4; }
+
+  .rev   { opacity:0; transform:translateY(30px); transition:opacity 0.85s ease, transform 0.85s ease; }
+  .rev-l { opacity:0; transform:translateX(-36px); transition:opacity 0.9s ease, transform 0.9s ease; }
+  .rev-r { opacity:0; transform:translateX(36px);  transition:opacity 0.9s ease, transform 0.9s ease; }
+  .rev.in,.rev-l.in,.rev-r.in { opacity:1; transform:none; }
+
+  .gold-rule::after { content:''; display:block; width:52px; height:1px; background:#b8a96a; margin-top:20px; }
+
+  /* ── Project card ── */
+  .proj-card {
+    position:relative; overflow:hidden;
+    cursor:pointer; display:block; text-decoration:none;
+  }
+  .proj-card img {
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform 1.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .proj-card:hover img { transform:scale(1.07); }
+  .proj-card .shade {
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.2) 55%, transparent 100%);
+    transition:background 0.4s ease;
+  }
+  .proj-card:hover .shade {
+    background:linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.58) 60%, rgba(10,10,8,0.06) 100%);
+  }
+  .proj-card .info { position:absolute; bottom:0; left:0; right:0; padding:28px 30px; }
+  .proj-card .meta { transform:translateY(8px); opacity:0.85; transition:all 0.4s ease; }
+  .proj-card:hover .meta { transform:translateY(0); opacity:1; }
+  .proj-card .proj-desc {
+    max-height:0; overflow:hidden; opacity:0;
+    transition:max-height 0.45s ease, opacity 0.4s ease;
+    margin:8px 0 14px;
+  }
+  .proj-card:hover .proj-desc { max-height:90px; opacity:1; }
+  .proj-card .proj-cta {
+    transform:translateY(14px); opacity:0;
+    transition:transform 0.4s ease 0.05s, opacity 0.4s ease 0.05s;
+    display:inline-flex; align-items:center; gap:10px;
+    border:1px solid #b8a96a; color:#b8a96a;
+    padding:9px 20px;
+  }
+  .proj-card:hover .proj-cta { transform:translateY(0); opacity:1; }
+  .proj-card .svc-pill { position:absolute; top:20px; left:20px; padding:5px 14px; font-weight:700; }
+  .proj-card .yr-badge { position:absolute; top:20px; right:20px; font-family:'Cormorant Garamond',serif; font-weight:300; color:rgba(240,237,228,0.4); }
+
+  /* Pill colours */
+  .pill-landscape { background:#253318; color:#92c45e; border:1px solid rgba(146,196,94,0.28); }
+  .pill-interior  { background:#182333; color:#5db4cb; border:1px solid rgba(93,180,203,0.28); }
+  .pill-renovation{ background:#331818; color:#cb6d5d; border:1px solid rgba(203,109,93,0.28); }
+  .pill-fitout    { background:#221833; color:#a86dcb; border:1px solid rgba(168,109,203,0.28); }
+  .pill-outdoor   { background:#2e2a18; color:#cbaa5d; border:1px solid rgba(203,170,93,0.28); }
+  .pill-joinery   { background:#183328; color:#5dcbaa; border:1px solid rgba(93,203,170,0.28); }
+
+  .filter-btn {
+    padding:10px 22px; cursor:pointer; white-space:nowrap;
+    border:1px solid rgba(184,169,106,0.18);
+    color:rgba(104, 86, 31, 0.75); transition:all 0.3s; background:transparent;
+    font-family:'Barlow',sans-serif; font-weight:600;
+    font-size:0.65rem; letter-spacing:0.22em; text-transform:uppercase;
+  }
+  .filter-btn:hover { color:#b8a96a; border-color:rgba(184,169,106,0.45); }
+  .filter-btn.active { color:#1a1a16; background:#b8a96a; border-color:#b8a96a; }
+
+  .sort-sel {
+    background:transparent; border:1px solid rgba(184,169,106,0.18);
+    color:rgba(240,237,228,0.75); padding:10px 16px; cursor:pointer; outline:none;
+    font-family:'Barlow',sans-serif; font-weight:500;
+    font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase;
+  }
+  .sort-sel option { background:#252520; color:rgba(240,237,228,0.9); }
+
+  .view-btn {
+    width:40px; height:40px; display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(184,169,106,0.18); cursor:pointer; transition:all 0.3s;
+    color:rgba(240,237,228,0.35);
+  }
+  .view-btn.active { border-color:#b8a96a; color:#b8a96a; background:rgba(184,169,106,0.1); }
+
+  .filter-scroll { overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
+  .filter-scroll::-webkit-scrollbar { display:none; }
+
+  .wm {
+    font-family:'Cormorant Garamond',serif; font-size:200px; font-weight:300;
+    line-height:1; color:rgba(184,169,106,0.045); letter-spacing:-8px;
+    pointer-events:none; user-select:none; position:absolute;
+  }
+
+  .featured-split { display:grid; grid-template-columns:1fr 1fr; min-height:580px; }
+  @media(max-width:1024px){ .featured-split { grid-template-columns:1fr; } }
+
+  .stat-item { text-align:center; padding:36px 20px; border-right:1px solid rgba(184,169,106,0.1); }
+  .stat-item:last-child { border-right:none; }
+
+  .count-badge { font-size:0.55rem; letter-spacing:0.15em; color:rgba(184,169,106,0.7); padding:2px 7px; border:1px solid rgba(184,169,106,0.25); }
+
+  .bc::after { content:'/'; margin:0 10px; color:rgba(184,169,106,0.3); }
+
+  #cdot  { width:8px; height:8px; background:#b8a96a; border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+  #cring { width:40px; height:40px; border:1px solid rgba(184,169,106,0.45); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.15s ease; }
+
+  .mosaic { overflow:hidden; }
+  .mosaic img { transition:transform 1.1s ease; width:100%; height:100%; object-fit:cover; display:block; }
+  .mosaic:hover img { transform:scale(1.05); }
+
+  .testi { border-left:3px solid rgba(184,169,106,0.25); padding-left:28px; transition:border-color 0.3s; }
+  .testi:hover { border-left-color:#b8a96a; }
+
+  .card-hide { display:none !important; }
+
+  @keyframes drop { 0%{top:-40%} 100%{top:140%} }
+  @media(max-width:768px){ .wm { font-size:100px; } }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<div id="cdot"></div>
+<div id="cring"></div>
+
+
+<!-- ══════════ NAV — dark ══════════ -->
+<nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/97 border-b border-gold/10 backdrop-blur-md">
+  <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
+    <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
+      <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
+    </div>
+    <div>
+      <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
+      <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
+    </div>
+  </a>
+  <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
+    <li><a href="{% url 'home' %}" class="nlink label text-cream/55 hover:text-gold no-underline">HOME</a></li>
+    <li><a href="{% url 'services' %}" class="nlink label text-cream/55 hover:text-gold no-underline">SERVICES</a></li>
+    <li><a href="{% url 'projects' %}" class="nlink label text-gold no-underline">PORTFOLIO</a></li>
+    <li><a href="{% url 'home' %}#statement" class="nlink label text-cream/55 hover:text-gold no-underline">ABOUT</a></li>
+    <li><a href="{% url 'contact' %}" class="nlink label text-cream/55 hover:text-gold no-underline">CONTACT</a></li>
+  </ul>
+  <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold label hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
+    <i class="fa-regular fa-envelope"></i> GET A QUOTE
+  </a>
+  <button class="lg:hidden text-gold text-xl" onclick="document.getElementById('mob-menu').style.display='flex'">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+<div id="mob-menu" style="display:none" class="fixed inset-0 z-40 bg-dark/98 flex-col items-center justify-center gap-8 text-center">
+  <button class="absolute top-6 right-8 text-gold text-2xl" onclick="this.parentElement.style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+  <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">HOME</a>
+  <a href="{% url 'services' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">SERVICES</a>
+  <a href="{% url 'projects' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline">PORTFOLIO</a>
+  <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">ABOUT</a>
+  <a href="{% url 'contact' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">CONTACT</a>
+</div>
+
+
+<!-- ══════════ HERO — dark full-bleed ══════════ -->
+<section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark">
+  <div class="absolute inset-0" id="hero-bg">
+    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85" class="w-full h-full object-cover" alt="">
+  </div>
+  <div class="absolute inset-0" style="background:linear-gradient(to right,rgba(26,26,22,0.92) 0%,rgba(26,26,22,0.65) 30%,rgba(26,26,22,0.35) 60%,rgba(26,26,22,0.15) 85%,rgba(26,26,22,0.05) 100%)"></div>
+  <div class="absolute top-28 left-8 lg:left-16 w-16 h-16 border-t border-l border-gold/20"></div>
+  <div class="absolute top-28 right-8 lg:right-16 w-16 h-16 border-t border-r border-gold/20"></div>
+
+  <div class="absolute top-36 inset-x-0 flex justify-center">
+    <div class="flex items-center label text-cream/75">
+      <a href="{% url 'home' %}" class="bc hover:text-gold transition-colors no-underline text-cream/75">HOME</a>
+      <span class="text-gold">PORTFOLIO</span>
+    </div>
+  </div>
+
+  <div class="absolute top-44 right-8 lg:right-16 hidden lg:flex flex-col gap-7 text-right">
+    <div>
+      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">250<span style="font-size:28px" class="text-gold-muted">+</span></div>
+      <div class="label-sm text-cream/70">PROJECTS</div>
+    </div>
+    <div>
+      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">12</div>
+      <div class="label-sm text-cream/70">YEARS</div>
+    </div>
+    <div>
+      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">6</div>
+      <div class="label-sm text-cream/70">SERVICES</div>
+    </div>
+  </div>
+
+  <div class="relative z-10 px-8 lg:px-16 pb-20 w-full">
+    <div class="max-w-4xl">
+      <div class="orn text-gold label mb-7 max-w-[200px]" style="color:#b8a96a;">OUR PORTFOLIO</div>
+      <h1 class="font-serif text-cream leading-[0.88] mb-7" style="font-size:clamp(68px,10vw,130px);font-weight:300">
+        Every<br><em class="text-gold italic">Project.</em><br>Exceptional.
+      </h1>
+      <p class="text-cream/55 body-text font-light max-w-xl mb-10">
+        250+ completed projects across six disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.
+      </p>
+      <a href="#portfolio" class="inline-flex items-center gap-4 text-gold label no-underline group">
+        <span class="w-10 h-px bg-gold/40 group-hover:w-16 transition-all duration-300"></span>
+        EXPLORE THE PORTFOLIO
+      </a>
+    </div>
+  </div>
+
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <div class="label-sm text-cream/20">SCROLL</div>
+    <div class="w-px h-10 bg-gold/20 relative overflow-hidden">
+      <div class="w-full bg-gold/50 absolute" style="height:40%;animation:drop 2s ease-in-out infinite"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ FEATURED PROJECT — dark image / light content ══════════ -->
+<div class="featured-split" id="portfolio">
+  <div class="relative overflow-hidden min-h-[500px]">
+    <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1200&q=85"
+         class="w-full h-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04]" alt="">
+    <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.55) 0%,rgba(26,26,22,0) 60%)"></div>
+    <div class="absolute top-8 left-8 flex items-center gap-3">
+      <div class="bg-gold text-dark label-sm px-4 py-2">FEATURED</div>
+      <div class="label-sm text-cream/40">PROJECT OF THE YEAR 2024</div>
+    </div>
+    <div class="absolute bottom-8 left-8 pill-landscape svc-pill label-sm">LANDSCAPING</div>
+  </div>
+
+  <!-- Light cream side -->
+  <div class="bg-cream flex flex-col justify-center px-12 lg:px-16 py-16 relative overflow-hidden">
+    <div class="wm" style="top:-40px;right:-20px;color:rgba(184,169,106,0.06)">B</div>
+    <div class="label text-gold-muted mb-3 relative z-10">BOWRAL, NSW — 2024</div>
+    <h2 class="font-serif text-dark font-light leading-tight gold-rule relative z-10" style="font-size:clamp(36px,4vw,58px)">
+      Burrawang Estate<br><em class="text-gold italic">Full Grounds</em>
+    </h2>
+    <p class="text-mid body-text font-light max-w-md mb-8 relative z-10 mt-7">
+      Our most ambitious residential commission to date — 8 hectares of sweeping country estate transformed over 14 months into formal gardens, woodland walks, kitchen gardens, and naturalistic water features.
+    </p>
+    <div class="grid grid-cols-3 gap-4 mb-10 relative z-10">
+      <div>
+        <div class="text-gold font-serif text-4xl font-light">8ha</div>
+        <div class="label-sm text-mid mt-1">TOTAL AREA</div>
+      </div>
+      <div>
+        <div class="text-gold font-serif text-4xl font-light">14m</div>
+        <div class="label-sm text-mid mt-1">BUILD TIME</div>
+      </div>
+      <div>
+        <div class="text-gold font-serif text-4xl font-light">2✦</div>
+        <div class="label-sm text-mid mt-1">AWARDS</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-5 relative z-10">
+      <a href="{% url 'project_detail' %}" class="inline-flex items-center gap-4 bg-dark text-cream label px-10 py-4 hover:bg-charcoal transition-all no-underline">
+        VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+      <a href="{% url 'project_detail' %}" class="text-gold-muted label-sm hover:text-gold transition-colors no-underline">CASE STUDY →</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ STATS — dark ══════════ -->
+<div class="bg-dark grid grid-cols-2 lg:grid-cols-4 divide-x divide-gold/10">
+  <div class="stat-item">
+    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">87</div>
+    <div class="label-sm text-cream/30">LANDSCAPING</div>
+  </div>
+  <div class="stat-item">
+    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">62</div>
+    <div class="label-sm text-cream/30">INTERIOR DESIGN</div>
+  </div>
+  <div class="stat-item">
+    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">48</div>
+    <div class="label-sm text-cream/30">RENOVATION</div>
+  </div>
+  <div class="stat-item">
+    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">53</div>
+    <div class="label-sm text-cream/30">FITOUT + MORE</div>
+  </div>
+</div>
+
+
+<!-- ══════════ FILTER BAR — sticky dark ══════════ -->
+<div class="sticky top-[72px] z-40 bg-dark/97 backdrop-blur-md border-b border-gold/10 px-8 lg:px-16 py-4">
+  <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
+    <div class="filter-scroll flex gap-2 min-w-0">
+      <button class="filter-btn active" onclick="filterCards('all',this)">ALL <span class="count-badge ml-1">12</span></button>
+      <button class="filter-btn" onclick="filterCards('landscaping',this)">LANDSCAPING <span class="count-badge ml-1">4</span></button>
+      <button class="filter-btn" onclick="filterCards('interior',this)">INTERIOR <span class="count-badge ml-1">2</span></button>
+      <button class="filter-btn" onclick="filterCards('renovation',this)">RENOVATION <span class="count-badge ml-1">2</span></button>
+      <button class="filter-btn" onclick="filterCards('fitout',this)">FITOUT <span class="count-badge ml-1">2</span></button>
+      <button class="filter-btn" onclick="filterCards('outdoor',this)">OUTDOOR <span class="count-badge ml-1">1</span></button>
+      <button class="filter-btn" onclick="filterCards('joinery',this)">JOINERY <span class="count-badge ml-1">1</span></button>
+    </div>
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <select class="sort-sel" onchange="sortCards(this.value)">
+        <option value="newest">NEWEST FIRST</option>
+        <option value="oldest">OLDEST FIRST</option>
+        <option value="az">A – Z</option>
+      </select>
+      <div class="flex gap-1">
+        <div class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Grid"><i class="fa-solid fa-grip"></i></div>
+        <div class="view-btn" id="btn-list" onclick="setView('list')" title="List"><i class="fa-solid fa-list"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ PROJECT GRID — light off-white bg ══════════ -->
+<section class="bg-off-white py-12 px-8 lg:px-16 pb-28">
+  <div class="label-sm text-mid/45 mb-6 rev" id="result-count">Showing 12 projects</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="proj-grid">
+
+    <a href="{% url 'project_detail' %}" class="proj-card md:col-span-2 h-[540px] rev" data-service="landscaping" data-year="2024" data-name="Burrawang Estate" style="transition-delay:0s">
+      <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1200&q=80" alt="Burrawang Estate">
+      <div class="shade"></div>
+      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
+      <div class="yr-badge body-sm">2024</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">BOWRAL, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:34px">Burrawang Estate</div>
+          <div class="proj-desc body-sm text-cream/55">8 hectares of sweeping country estate — formal gardens, woodland walks and championship croquet lawn.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[540px] rev" data-service="interior" data-year="2024" data-name="Aria Penthouse" style="transition-delay:0.07s">
+      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="Aria Penthouse">
+      <div class="shade"></div>
+      <div class="svc-pill pill-interior label-sm">INTERIOR</div>
+      <div class="yr-badge body-sm">2024</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">SYDNEY CBD</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Aria Penthouse</div>
+          <div class="proj-desc body-sm text-cream/55">420m² full-floor penthouse — raw stone, smoked oak and hand-blown Venetian glass.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="renovation" data-year="2023" data-name="Paddington Terrace" style="transition-delay:0.04s">
+      <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80" alt="Paddington Terrace">
+      <div class="shade"></div>
+      <div class="svc-pill pill-renovation label-sm">RENOVATION</div>
+      <div class="yr-badge body-sm">2023</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">PADDINGTON, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Paddington Terrace</div>
+          <div class="proj-desc body-sm text-cream/55">Heritage terrace reimagined — Victorian detailing preserved, dramatic rear extension added.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card md:col-span-2 h-[440px] rev" data-service="outdoor" data-year="2023" data-name="Clifftop Retreat" style="transition-delay:0.08s">
+      <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=1200&q=80" alt="Clifftop Retreat">
+      <div class="shade"></div>
+      <div class="svc-pill pill-outdoor label-sm">OUTDOOR</div>
+      <div class="yr-badge body-sm">2023</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">VAUCLUSE, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">Clifftop Retreat</div>
+          <div class="proj-desc body-sm text-cream/55">Coastal hardscape — cantilevered pool terrace, infinity edge and private rock shelf access.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="fitout" data-year="2024" data-name="Nova HQ" style="transition-delay:0.05s">
+      <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80" alt="Nova HQ">
+      <div class="shade"></div>
+      <div class="svc-pill pill-fitout label-sm">FITOUT</div>
+      <div class="yr-badge body-sm">2024</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">NORTH SYDNEY</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Nova HQ</div>
+          <div class="proj-desc body-sm text-cream/55">4-level commercial fitout for a fintech firm — collaboration without sacrificing luxury.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[480px] rev" data-service="landscaping" data-year="2024" data-name="Avalon Estate Garden" style="transition-delay:0.07s">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Avalon Estate">
+      <div class="shade"></div>
+      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
+      <div class="yr-badge body-sm">2024</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">MOSMAN, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Avalon Estate Garden</div>
+          <div class="proj-desc body-sm text-cream/55">Formal box hedging, wisteria pergola walk and reflective lily pond across 1.2 acres.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card md:col-span-2 h-[480px] rev" data-service="joinery" data-year="2023" data-name="The Cellar Library" style="transition-delay:0.06s">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80" alt="The Cellar Library">
+      <div class="shade"></div>
+      <div class="svc-pill pill-joinery label-sm">JOINERY</div>
+      <div class="yr-badge body-sm">2023</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">HUNTER VALLEY</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">The Cellar Library</div>
+          <div class="proj-desc body-sm text-cream/55">Floor-to-ceiling American oak joinery, rolling brass ladder and hand-inlaid parquetry floor.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="interior" data-year="2023" data-name="Kirribilli Residence" style="transition-delay:0.1s">
+      <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80" alt="Kirribilli">
+      <div class="shade"></div>
+      <div class="svc-pill pill-interior label-sm">INTERIOR</div>
+      <div class="yr-badge body-sm">2023</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">KIRRIBILLI, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Kirribilli Residence</div>
+          <div class="proj-desc body-sm text-cream/55">Waterfront family home dressed in quiet luxury — linen, limestone and aged brass throughout.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="landscaping" data-year="2022" data-name="Vineyard Terrace" style="transition-delay:0.05s">
+      <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" alt="Vineyard Terrace">
+      <div class="shade"></div>
+      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
+      <div class="yr-badge body-sm">2022</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">HUNTER VALLEY</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Vineyard Terrace</div>
+          <div class="proj-desc body-sm text-cream/55">Three dramatic terraced gardens cascading through 3 hectares of wine estate.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="renovation" data-year="2022" data-name="Double Bay Makeover" style="transition-delay:0.07s">
+      <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=800&q=80" alt="Double Bay">
+      <div class="shade"></div>
+      <div class="svc-pill pill-renovation label-sm">RENOVATION</div>
+      <div class="yr-badge body-sm">2022</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">DOUBLE BAY, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Double Bay Makeover</div>
+          <div class="proj-desc body-sm text-cream/55">Whole-house renovation stripping decades of decisions to reveal the home's true bones.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="fitout" data-year="2023" data-name="Ember Restaurant" style="transition-delay:0.09s">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Ember Restaurant">
+      <div class="shade"></div>
+      <div class="svc-pill pill-fitout label-sm">FITOUT</div>
+      <div class="yr-badge body-sm">2023</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">SURRY HILLS, NSW</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Ember Restaurant</div>
+          <div class="proj-desc body-sm text-cream/55">85-cover fine dining fitout — custom zellige bar, reclaimed timber and atmospheric lighting.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project_detail.html" class="proj-card md:col-span-2 h-[420px] rev" data-service="landscaping" data-year="2024" data-name="Horizon Sky Garden" style="transition-delay:0.04s">
+      <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1200&q=80" alt="Horizon Sky Garden">
+      <div class="shade"></div>
+      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
+      <div class="yr-badge body-sm">2024</div>
+      <div class="info">
+        <div class="meta">
+          <div class="label-sm text-gold mb-2">SYDNEY CBD</div>
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">Horizon Sky Garden</div>
+          <div class="proj-desc body-sm text-cream/55">400m² penthouse rooftop garden — outdoor kitchen, raised planters and harbour views.</div>
+          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="text-center mt-16 rev">
+    <button class="inline-flex items-center gap-4 border border-mid/25 text-mid label px-14 py-5 hover:border-gold hover:text-gold transition-all duration-300">
+      LOAD MORE PROJECTS <i class="fa-solid fa-plus text-xs"></i>
+    </button>
+    <div class="label-sm text-mid/40 mt-4">Showing 12 of 24 projects</div>
+  </div>
+</section>
+
+
+<!-- ══════════ WHY LUXSPACE — light sand bg ══════════ -->
+<section class="bg-light-sand py-28 px-8 lg:px-16">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-28 items-center">
+    <div class="rev-l">
+      <div class="label text-gold-muted mb-5">WHY LUXSPACE</div>
+      <h2 class="font-serif text-dark font-light leading-tight gold-rule" style="font-size:clamp(40px,4.5vw,62px)">
+        Craft at Every<br><em class="text-gold italic">Scale</em>
+      </h2>
+      <p class="text-mid body-text font-light max-w-md mt-7 mb-6">
+        Every project in our portfolio — from a 400m² penthouse to an 8-hectare estate — is approached with the same obsessive attention to detail, the same respect for materials, and the same commitment to exceeding expectations.
+      </p>
+      <p class="text-mid body-text font-light max-w-md mb-10">
+        We don't complete projects. We create places people never want to leave.
+      </p>
+      <div class="flex flex-wrap gap-10">
+        <div>
+          <div class="font-serif text-gold leading-none mb-1" style="font-size:54px;font-weight:300">98%</div>
+          <div class="label-sm text-mid">CLIENT SATISFACTION</div>
+        </div>
+        <div>
+          <div class="font-serif text-gold leading-none mb-1" style="font-size:54px;font-weight:300">12yr</div>
+          <div class="label-sm text-mid">IN BUSINESS</div>
+        </div>
+        <div>
+          <div class="font-serif text-gold leading-none mb-1" style="font-size:54px;font-weight:300">7✦</div>
+          <div class="label-sm text-mid">INDUSTRY AWARDS</div>
+        </div>
+      </div>
+    </div>
+    <div class="rev-r grid grid-cols-2 gap-3 h-[480px]">
+      <div class="mosaic row-span-2">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80" alt="">
+      </div>
+      <div class="mosaic">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&q=80" alt="">
+      </div>
+      <div class="mosaic">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ TESTIMONIALS — dark ══════════ -->
+<section class="bg-dark py-28 px-8 lg:px-16">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
+      <div class="lg:w-2/5 rev-l">
+        <div class="label text-gold-muted mb-5">CLIENT VOICES</div>
+        <h2 class="font-serif text-cream font-light leading-tight gold-rule" style="font-size:clamp(38px,4vw,56px)">
+          What Our<br><em class="text-gold italic">Clients Say</em>
+        </h2>
+        <div class="flex items-center gap-2 mt-10">
+          <div class="text-gold"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <span class="body-sm text-cream/40 ml-2">4.97 average rating</span>
+        </div>
+      </div>
+      <div class="lg:w-3/5 space-y-10 rev-r">
+        <div class="testi">
+          <p class="font-serif text-cream/80 font-light italic leading-relaxed mb-5" style="font-size:1.25rem">
+            "LuxSpace transformed our barren backyard into something extraordinary. The level of detail — hand-laid stone pathways, espaliered fruit trees — is breathtaking. Twelve months on and it looks even better."
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden bg-charcoal flex-shrink-0">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover" alt="">
+            </div>
+            <div>
+              <div class="label-sm text-cream">SARAH M.</div>
+              <div class="label-sm text-cream/35 mt-0.5">MOSMAN &nbsp;·&nbsp; AVALON ESTATE</div>
+            </div>
+            <div class="ml-auto text-gold text-xs flex-shrink-0"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          </div>
+        </div>
+        <div class="testi">
+          <p class="font-serif text-cream/80 font-light italic leading-relaxed mb-5" style="font-size:1.25rem">
+            "We engaged LuxSpace for our 8-hectare estate and the result exceeded every expectation. They think at every scale simultaneously — from the sweeping view at the gate to the tiniest detail in a planting border."
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden bg-charcoal flex-shrink-0">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover" alt="">
+            </div>
+            <div>
+              <div class="label-sm text-cream">JAMES & HELEN P.</div>
+              <div class="label-sm text-cream/35 mt-0.5">BOWRAL &nbsp;·&nbsp; BURRAWANG ESTATE</div>
+            </div>
+            <div class="ml-auto text-gold text-xs flex-shrink-0"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ AWARDS — cream ══════════ -->
+<div class="bg-cream border-y border-light-sand px-8 lg:px-16 py-14">
+  <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+    <div class="label text-gold-muted">RECOGNISED BY</div>
+    <div class="flex flex-wrap justify-center gap-8 lg:gap-12">
+      <span class="label-sm text-mid/50 hover:text-mid transition-colors cursor-default">HIA AWARDS 2024</span>
+      <span class="hidden lg:inline w-px h-4 bg-mid/15 self-center"></span>
+      <span class="label-sm text-mid/50 hover:text-mid transition-colors cursor-default">AILA LANDSCAPE</span>
+      <span class="hidden lg:inline w-px h-4 bg-mid/15 self-center"></span>
+      <span class="label-sm text-mid/50 hover:text-mid transition-colors cursor-default">DESIGN EXCELLENCE</span>
+      <span class="hidden lg:inline w-px h-4 bg-mid/15 self-center"></span>
+      <span class="label-sm text-mid/50 hover:text-mid transition-colors cursor-default">MASTER BUILDERS</span>
+      <span class="hidden lg:inline w-px h-4 bg-mid/15 self-center"></span>
+      <span class="label-sm text-mid/50 hover:text-mid transition-colors cursor-default">INSIDE OUT MAGAZINE</span>
+    </div>
+    <div class="label text-gold">7 AWARDS</div>
+  </div>
+</div>
+
+
+<!-- ══════════ CTA — dark photo ══════════ -->
+<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')] bg-cover bg-center"></div>
+  <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.93) 0%,rgba(26,26,22,0.78) 50%,rgba(26,26,22,0.90) 100%)"></div>
+  <div class="relative z-10 text-center px-8 max-w-2xl">
+    <div class="orn text-gold label mb-8 max-w-[250px] mx-auto">START YOUR PROJECT</div>
+    <h2 class="font-serif text-cream font-light leading-tight mb-6" style="font-size:clamp(44px,6vw,80px)">
+      Inspired by<br>What You've <em class="text-gold italic">Seen?</em>
+    </h2>
+    <p class="text-cream/50 body-text font-light mb-12">
+      Every project begins with a single conversation. Tell us your vision.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#" class="inline-flex items-center justify-center gap-3 bg-gold text-dark label px-12 py-5 hover:bg-gold-light transition-all no-underline">
+        <i class="fa-regular fa-calendar"></i> BOOK A CONSULTATION
+      </a>
+      <a href="{% url 'services' %}" class="inline-flex items-center justify-center gap-3 border border-cream/30 text-cream label px-12 py-5 hover:border-cream transition-all no-underline">
+        EXPLORE SERVICES
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER — dark -->
+<footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+  <div>
+    <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
+    <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
+  </div>
+  <div class="flex gap-6 text-cream/30">
+    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
+  </div>
+  <div class="label-sm text-cream/25">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
+</footer>
+
+
+<script>
+// Scroll reveals
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.rev,.rev-l,.rev-r').forEach(el => obs.observe(el));
+
+// Parallax
+window.addEventListener('scroll', () => {
+  const bg = document.getElementById('hero-bg');
+  if(bg) bg.style.transform = `scale(1.1) translateY(${window.pageYOffset * 0.27}px)`;
+});
+
+// Cursor
+const cdot = document.getElementById('cdot');
+const cring = document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cdot.style.left=mx+'px'; cdot.style.top=my+'px'; });
+(function anim(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; cring.style.left=rx+'px'; cring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+
+// Filter
+function filterCards(service, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let count = 0;
+  document.querySelectorAll('#proj-grid .proj-card').forEach(card => {
+    const match = service==='all' || card.dataset.service===service;
+    if(match){ card.classList.remove('card-hide'); count++; }
+    else { card.classList.add('card-hide'); }
+  });
+  document.getElementById('result-count').textContent = `Showing ${count} project${count!==1?'s':''}`;
+}
+
+// Sort
+function sortCards(val) {
+  const grid = document.getElementById('proj-grid');
+  const cards = [...grid.querySelectorAll('.proj-card')];
+  cards.sort((a,b) => {
+    if(val==='newest') return parseInt(b.dataset.year)-parseInt(a.dataset.year);
+    if(val==='oldest') return parseInt(a.dataset.year)-parseInt(b.dataset.year);
+    if(val==='az')     return a.dataset.name.localeCompare(b.dataset.name);
+  });
+  cards.forEach(c => grid.appendChild(c));
+}
+
+// View toggle
+function setView(v) {
+  const grid = document.getElementById('proj-grid');
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  if(v==='list'){
+    grid.className = 'flex flex-col gap-3';
+    document.getElementById('btn-list').classList.add('active');
+    grid.querySelectorAll('.proj-card').forEach(c => { c.style.height='170px'; c.style.display='flex'; });
+    grid.querySelectorAll('.proj-card img').forEach(i => { i.style.width='260px'; i.style.flexShrink='0'; i.style.height='170px'; });
+  } else {
+    grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+    document.getElementById('btn-grid').classList.add('active');
+    grid.querySelectorAll('.proj-card').forEach(c => { c.style.height=''; c.style.display=''; });
+    grid.querySelectorAll('.proj-card img').forEach(i => { i.style.width=''; i.style.flexShrink=''; i.style.height=''; });
+  }
+}
+</script>
+
+</body>
+</html>

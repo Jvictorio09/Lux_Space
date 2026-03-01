@@ -92,7 +92,7 @@
   <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
     <li><a href="{% url 'home' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">HOME</a></li>
     <li><a href="#overview" class="nlink text-gold text-[11px] tracking-[2.5px] font-medium no-underline">SERVICES</a></li>
-    <li><a href="{% url 'home' %}#projects" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">PORTFOLIO</a></li>
+    <li><a href="{% url 'projects' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">PORTFOLIO</a></li>
     <li><a href="{% url 'home' %}#statement" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">ABOUT</a></li>
     <li><a href="{% url 'home' %}#contact" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">CONTACT</a></li>
   </ul>
@@ -151,17 +151,16 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0.5">
 
     <!-- 01 Landscaping — wide -->
-    <div class="svc-card relative overflow-hidden cursor-pointer lg:col-span-2 h-[500px] rev"
-         onclick="document.getElementById('d-landscape').scrollIntoView({behavior:'smooth'})">
+    <div class="svc-card relative overflow-hidden cursor-pointer lg:col-span-2 h-[500px] rev">
       <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" class="w-full h-full object-cover" alt="">
       <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
       <div class="absolute bottom-0 inset-x-0 p-10">
         <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">01</div>
         <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(30px,3.5vw,46px)">Landscaping</h3>
         <p class="card-desc text-cream/50 text-[12px] tracking-[1px] leading-relaxed mb-4">Sculpting living environments of breathtaking beauty and enduring character.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-5 py-2.5">
+        <a href="{% url 'service_detail' %}" class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-5 py-2.5 no-underline">
           VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
+        </a>
       </div>
     </div>
 
