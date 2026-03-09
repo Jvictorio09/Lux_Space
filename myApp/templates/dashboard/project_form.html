@@ -1,0 +1,84 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}LuxSpace — Edit Project{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div>
+    <h1>Edit project</h1>
+    <small>{{ project.title }}</small>
+  </div>
+  <a href="{% url 'dashboard_projects' %}" class="btn-outline">← All projects</a>
+</div>
+
+<div class="card">
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Service</label>
+          {{ form.service }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Status</label>
+          {{ form.status }}
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Title</label>
+        {{ form.title }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Slug</label>
+        {{ form.slug }}
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Location</label>
+          {{ form.location }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Year</label>
+          {{ form.year }}
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Summary</label>
+        {{ form.summary }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Full description</label>
+        {{ form.description }}
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Hero image URL</label>
+        {{ form.hero_image }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Card / thumbnail image URL</label>
+        {{ form.thumbnail_image }}
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          {{ form.is_featured }}
+          <span style="font-size:12px; color:#555;">Show as featured project</span>
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Display order</label>
+          {{ form.display_order }}
+        </div>
+      </div>
+
+      <button type="submit">Save changes</button>
+    </form>
+</div>
+{% endblock %}
+
+
+

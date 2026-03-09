@@ -1,38 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuxSpace — Burrawang Estate</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% extends "base.html" %}
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          dark:        '#1a1a16',
-          charcoal:    '#252520',
-          gold:        '#b8a96a',
-          'gold-light':'#d4c484',
-          'gold-muted':'#7a6e48',
-          cream:       '#f0ede4',
-          'off-white': '#faf9f5',
-          mid:         '#5a5a50',
-          'light-sand':'#e8e5db',
-        },
-        fontFamily: {
-          serif: ['Cormorant Garamond','serif'],
-          sans:  ['Barlow','sans-serif'],
-        },
-      }
-    }
-  }
-</script>
+{% block title %}LuxSpace — {{ project.title }}{% endblock %}
+{% block body_class %}bg-off-white overflow-x-hidden{% endblock %}
 
-<style>
+{% block cursor %}
+<div id="cdot"></div>
+<div id="cring"></div>
+{% endblock %}
+
+{% block extra_css %}
   *, *::before, *::after { box-sizing: border-box; }
 
   /* ─── TYPOGRAPHY SYSTEM ───────────────────────────── */
@@ -184,17 +160,12 @@
 
   /* ─── PILL ────────────────────────────────────────── */
   .pill-landscape { background:#253318; color:#92c45e; border:1px solid rgba(146,196,94,0.28); }
-</style>
-</head>
+{% endblock %}
 
-<body class="bg-off-white overflow-x-hidden">
+{% block content %}
 
 <!-- Progress bar -->
 <div id="progress-bar"></div>
-
-<!-- Cursor -->
-<div id="cdot"></div>
-<div id="cring"></div>
 
 <!-- Lightbox -->
 <div id="lightbox">
@@ -217,49 +188,11 @@
 
 
 <!-- ════════════════════════════════════════════
-     NAV — dark
-════════════════════════════════════════════ -->
-<nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/97 border-b border-gold/10 backdrop-blur-md">
-  <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
-    <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
-      <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
-    </div>
-    <div>
-      <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
-      <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
-    </div>
-  </a>
-  <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
-    <li><a href="{% url 'home' %}" class="nlink label text-cream/55 hover:text-gold no-underline">HOME</a></li>
-    <li><a href="{% url 'services' %}" class="nlink label text-cream/55 hover:text-gold no-underline">SERVICES</a></li>
-    <li><a href="{% url 'projects' %}" class="nlink label text-gold no-underline">PORTFOLIO</a></li>
-    <li><a href="{% url 'home' %}#statement" class="nlink label text-cream/55 hover:text-gold no-underline">ABOUT</a></li>
-    <li><a href="{% url 'contact' %}" class="nlink label text-cream/55 hover:text-gold no-underline">CONTACT</a></li>
-  </ul>
-  <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold label hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
-    <i class="fa-regular fa-envelope"></i> GET A QUOTE
-  </a>
-  <button class="lg:hidden text-gold text-xl" onclick="document.getElementById('mob-menu').style.display='flex'">
-    <i class="fa-solid fa-bars"></i>
-  </button>
-</nav>
-
-<div id="mob-menu" style="display:none" class="fixed inset-0 z-40 bg-dark/98 flex-col items-center justify-center gap-8 text-center">
-  <button class="absolute top-6 right-8 text-gold text-2xl" onclick="this.parentElement.style.display='none'"><i class="fa-solid fa-xmark"></i></button>
-  <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">HOME</a>
-  <a href="{% url 'services' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">SERVICES</a>
-  <a href="{% url 'projects' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline">PORTFOLIO</a>
-  <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">ABOUT</a>
-  <a href="{% url 'contact' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">CONTACT</a>
-</div>
-
-
-<!-- ════════════════════════════════════════════
      HERO — dark, full bleed cinematic
 ════════════════════════════════════════════ -->
 <section class="relative h-screen min-h-[720px] flex items-end overflow-hidden bg-dark" id="hero">
   <div class="absolute inset-0" id="hero-bg">
-    <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1920&q=90" class="w-full h-full object-cover" alt="Burrawang Estate">
+    <img src="{{ project.hero_image|default:project.card_image }}" class="w-full h-full object-cover" alt="{{ project.title }}">
   </div>
   <!-- Layered gradients for depth -->
   <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,26,22,0.15) 0%, rgba(26,26,22,0) 25%, rgba(26,26,22,0.6) 65%, rgba(26,26,22,0.98) 100%)"></div>
@@ -274,58 +207,57 @@
     <div class="flex items-center label text-cream/35 flex-wrap justify-center gap-1">
       <a href="{% url 'home' %}" class="bc hover:text-gold transition-colors no-underline text-cream/35">HOME</a>
       <a href="{% url 'projects' %}" class="bc hover:text-gold transition-colors no-underline text-cream/35">PORTFOLIO</a>
-      <span class="text-gold">BURRAWANG ESTATE</span>
+      <span class="text-gold">{{ project.title|upper }}</span>
     </div>
   </div>
 
   <!-- Award ribbon — top right -->
+  {% if project.is_featured %}
   <div class="absolute top-40 right-8 lg:right-16 hidden lg:flex flex-col items-end gap-2 text-right mt-8">
     <div class="bg-gold px-5 py-2.5">
-      <div class="label-xs text-dark">PROJECT OF THE YEAR</div>
-      <div class="label-xs text-dark/60">HIA AWARDS 2024</div>
+      <div class="label-xs text-dark">FEATURED PROJECT</div>
+      {% if project.year %}
+      <div class="label-xs text-dark/60">{{ project.year }}</div>
+      {% endif %}
     </div>
-    <div class="label-xs text-cream/25">WINNER — BEST LANDSCAPING</div>
   </div>
+  {% endif %}
 
   <!-- Hero content -->
   <div class="relative z-10 px-8 lg:px-16 pb-16 w-full max-w-5xl">
     <!-- Service + category -->
     <div class="flex items-center gap-4 mb-6">
-      <div class="pill-landscape label-xs px-4 py-2">LANDSCAPING</div>
+      <div class="pill-{{ project.service.slug }} label-xs px-4 py-2">{{ project.service.short_label }}</div>
       <div class="w-8 h-px bg-gold/40"></div>
-      <div class="label text-cream/40">RESIDENTIAL ESTATE</div>
+      {% if project.location %}
+      <div class="label text-cream/40">{{ project.location|upper }}</div>
+      {% endif %}
     </div>
 
     <h1 class="font-serif text-cream font-light leading-[0.88] mb-5" style="font-size:clamp(58px,9vw,118px)">
-      Burrawang<br><em class="text-gold italic">Estate</em>
+      {{ project.title|truncatewords:2 }}<br><em class="text-gold italic">{{ project.title|truncatewords:10|slice:"-8:" }}</em>
     </h1>
 
     <p class="body-copy text-cream/55 max-w-2xl mb-10">
-      Eight hectares of untamed country estate — reimagined over fourteen months into one of Australia's most celebrated private landscapes.
+      {{ project.summary|default:project.description|truncatewords:25 }}
     </p>
 
     <!-- Quick stats strip -->
+    {% if project.year %}
     <div class="flex flex-wrap gap-8 lg:gap-14 mb-12">
+      {% if project.location %}
       <div>
-        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">8ha</div>
-        <div class="label-xs text-cream/30">TOTAL AREA</div>
+        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">{{ project.location|truncatewords:1 }}</div>
+        <div class="label-xs text-cream/30">LOCATION</div>
       </div>
       <div class="w-px h-14 bg-gold/15 self-center hidden lg:block"></div>
+      {% endif %}
       <div>
-        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">14</div>
-        <div class="label-xs text-cream/30">MONTHS BUILD</div>
-      </div>
-      <div class="w-px h-14 bg-gold/15 self-center hidden lg:block"></div>
-      <div>
-        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">320</div>
-        <div class="label-xs text-cream/30">PLANT VARIETIES</div>
-      </div>
-      <div class="w-px h-14 bg-gold/15 self-center hidden lg:block"></div>
-      <div>
-        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">2✦</div>
-        <div class="label-xs text-cream/30">AWARDS WON</div>
+        <div class="font-serif text-gold leading-none mb-1" style="font-size:46px;font-weight:300">{{ project.year }}</div>
+        <div class="label-xs text-cream/30">YEAR</div>
       </div>
     </div>
+    {% endif %}
 
     <a href="#brief" class="inline-flex items-center gap-4 text-gold label no-underline group">
       <span class="w-10 h-px bg-gold/40 group-hover:w-16 transition-all duration-300"></span>
@@ -353,17 +285,17 @@
     <div class="lg:col-span-7 rev-l">
       <div class="label text-gold-muted mb-5">THE PROJECT</div>
       <h2 class="font-serif text-dark font-light leading-tight gold-rule mb-8" style="font-size:clamp(38px,4vw,60px)">
-        A Landscape<br>Worthy of <em class="text-gold italic">Legacy</em>
+        {{ project.title }}<br><em class="text-gold italic">Project Overview</em>
       </h2>
-      <p class="body-copy text-mid mb-6">
-        The Burrawang Estate commission began with a deceptively simple brief: make the grounds feel as extraordinary as the house. The 110-year-old homestead sat within 8 hectares of paddock, overgrown gardens and remnant bushland — beautiful in potential, neglected in reality.
-      </p>
-      <p class="body-copy text-mid mb-6">
-        Our design director spent three days on site before a single sketch was made — walking the land at different times of day, studying light, tracing historic garden walls half-buried in the soil, and listening to the clients talk about the generations they hoped would enjoy what we created.
-      </p>
+      {% if project.description %}
+      <div class="body-copy text-mid">
+        {{ project.description|linebreaks }}
+      </div>
+      {% elif project.summary %}
       <p class="body-copy text-mid">
-        The result is a landscape designed for time — structured enough to feel considered, natural enough to feel inevitable, and resilient enough to improve with every passing year.
+        {{ project.summary }}
       </p>
+      {% endif %}
     </div>
 
     <!-- Right: project details sidebar -->
@@ -372,58 +304,38 @@
         <div class="label text-gold-muted mb-8">PROJECT DETAILS</div>
 
         <div class="space-y-6">
-          <div class="flex justify-between items-start border-b border-mid/10 pb-5">
-            <span class="label-xs text-mid">CLIENT</span>
-            <span class="body-sm text-dark text-right font-medium">James & Helen P.</span>
-          </div>
+          {% if project.location %}
           <div class="flex justify-between items-start border-b border-mid/10 pb-5">
             <span class="label-xs text-mid">LOCATION</span>
-            <span class="body-sm text-dark text-right font-medium">Burrawang, NSW<br><span class="text-mid font-normal">Southern Highlands</span></span>
+            <span class="body-sm text-dark text-right font-medium">{{ project.location }}</span>
           </div>
+          {% endif %}
           <div class="flex justify-between items-start border-b border-mid/10 pb-5">
             <span class="label-xs text-mid">SERVICE</span>
-            <span class="body-sm text-dark text-right font-medium">Full Landscaping</span>
+            <span class="body-sm text-dark text-right font-medium">{{ project.service.name }}</span>
           </div>
+          {% if project.year %}
           <div class="flex justify-between items-start border-b border-mid/10 pb-5">
-            <span class="label-xs text-mid">DURATION</span>
-            <span class="body-sm text-dark text-right font-medium">14 months<br><span class="text-mid font-normal">Sept 2022 – Nov 2023</span></span>
+            <span class="label-xs text-mid">YEAR</span>
+            <span class="body-sm text-dark text-right font-medium">{{ project.year }}</span>
           </div>
+          {% endif %}
+          {% if project.created_at %}
           <div class="flex justify-between items-start border-b border-mid/10 pb-5">
-            <span class="label-xs text-mid">SITE AREA</span>
-            <span class="body-sm text-dark text-right font-medium">8.3 hectares</span>
+            <span class="label-xs text-mid">COMPLETED</span>
+            <span class="body-sm text-dark text-right font-medium">{{ project.created_at|date:"M Y" }}</span>
           </div>
-          <div class="flex justify-between items-start border-b border-mid/10 pb-5">
-            <span class="label-xs text-mid">TEAM SIZE</span>
-            <span class="body-sm text-dark text-right font-medium">18 specialists</span>
-          </div>
+          {% endif %}
+          {% if project.is_featured %}
           <div class="flex justify-between items-start">
-            <span class="label-xs text-mid">RECOGNITION</span>
-            <span class="body-sm text-dark text-right font-medium">HIA Award 2024<br>AILA Commendation</span>
+            <span class="label-xs text-mid">STATUS</span>
+            <span class="body-sm text-dark text-right font-medium">Featured Project</span>
           </div>
+          {% endif %}
         </div>
 
-        <div class="mt-10 pt-8 border-t border-mid/10">
-          <a href="#" class="flex items-center justify-between group cursor-pointer">
-            <div>
-              <div class="label-xs text-mid mb-1">LEAD DESIGNER</div>
-              <div class="body-sm text-dark font-medium">Marcus Alderton</div>
-              <div class="label-xs text-mid mt-0.5">Principal Landscape Architect</div>
-            </div>
-            <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-gold/20 group-hover:border-gold transition-all">
-              <img src="https://randomuser.me/api/portraits/men/52.jpg" class="w-full h-full object-cover" alt="">
-            </div>
-          </a>
-        </div>
       </div>
 
-      <!-- Tags -->
-      <div class="flex flex-wrap gap-2 mt-4">
-        <span class="label-xs text-mid px-4 py-2 border border-mid/20">FORMAL GARDENS</span>
-        <span class="label-xs text-mid px-4 py-2 border border-mid/20">WOODLAND</span>
-        <span class="label-xs text-mid px-4 py-2 border border-mid/20">WATER FEATURES</span>
-        <span class="label-xs text-mid px-4 py-2 border border-mid/20">KITCHEN GARDEN</span>
-        <span class="label-xs text-mid px-4 py-2 border border-mid/20">LIGHTING</span>
-      </div>
     </div>
   </div>
 </section>
@@ -465,47 +377,50 @@
     </div>
 
     <div class="gallery-grid" id="gallery-grid">
-
-      <div class="g-wide zoom cursor-pointer" onclick="openLB(0)">
-        <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1200&q=85" alt="Formal garden approach">
+      {% for image in project_images %}
+      {% if forloop.counter0 == 0 %}
+      <div class="g-wide zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
+        {% if image.caption %}
         <div class="absolute inset-0 bg-dark/0 hover:bg-dark/20 transition-all flex items-end p-5">
-          <span class="label-xs text-cream/0 hover:text-cream/60 transition-all">Formal Garden — Western Wing</span>
+          <span class="label-xs text-cream/0 hover:text-cream/60 transition-all">{{ image.caption }}</span>
         </div>
+        {% endif %}
       </div>
-
-      <div class="g-tall zoom cursor-pointer" onclick="openLB(1)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700&q=85" alt="Woodland walk">
+      {% elif forloop.counter0 == 1 %}
+      <div class="g-tall zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
       </div>
-
-      <div class="g-mid zoom cursor-pointer" onclick="openLB(2)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1588167056547-c183313da396?w=700&q=85" alt="Kitchen garden">
+      {% elif forloop.counter0 == 2 %}
+      <div class="g-mid zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
       </div>
-
-      <div class="g-small zoom cursor-pointer" onclick="openLB(3)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=85" alt="Rose garden detail">
+      {% elif forloop.counter0 <= 4 %}
+      <div class="g-small zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
       </div>
-
-      <div class="g-small zoom cursor-pointer" onclick="openLB(4)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=85" alt="Irrigation channel">
+      {% elif forloop.counter0 == 5 %}
+      <div class="g-wide2 zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
       </div>
-
-      <div class="g-small zoom cursor-pointer" onclick="openLB(5)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=85" alt="Stone pathway">
+      {% else %}
+      <div class="g-small zoom cursor-pointer" onclick="openLB({{ forloop.counter0 }})" style="position:relative">
+        <img src="{{ image.image_url }}" alt="{{ image.caption|default:project.title }}">
       </div>
-
-      <div class="g-wide2 zoom cursor-pointer" onclick="openLB(6)" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=1200&q=85" alt="Evening view">
+      {% endif %}
+      {% empty %}
+      <div class="col-span-12 text-center py-20">
+        <p class="text-cream/50 body-text">No gallery images available for this project.</p>
       </div>
-
+      {% endfor %}
     </div>
 
     <!-- Gallery counter -->
+    {% if project_images %}
     <div class="flex items-center justify-between mt-6">
-      <div class="label-xs text-cream/25">7 OF 32 IMAGES SHOWN</div>
-      <button class="inline-flex items-center gap-3 border border-gold/25 text-gold label px-8 py-3.5 hover:bg-gold hover:text-dark transition-all">
-        VIEW ALL PHOTOS <i class="fa-solid fa-images text-sm"></i>
-      </button>
+      <div class="label-xs text-cream/25">{{ project_images|length }} IMAGE{{ project_images|length|pluralize }} AVAILABLE</div>
     </div>
+    {% endif %}
 
   </div>
 </section>
@@ -798,33 +713,21 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-4">
-      <a href="project_detail.html" class="rel-card h-[400px] rev" style="transition-delay:0s">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Avalon Estate">
+      {% for related in related_projects %}
+      <a href="{% url 'project_detail' related.slug %}" class="rel-card h-[400px] rev" style="transition-delay:{% widthratio forloop.counter0 12.5 1 %}s">
+        <img src="{{ related.card_image }}" alt="{{ related.title }}">
         <div class="shade"></div>
-        <div class="absolute top-5 left-5 pill-landscape label-xs px-3 py-1.5">LANDSCAPING</div>
+        <div class="absolute top-5 left-5 pill-{{ related.service.slug }} label-xs px-3 py-1.5">{{ related.service.short_label }}</div>
         <div class="absolute bottom-0 inset-x-0 p-7">
-          <div class="label-xs text-gold mb-2">MOSMAN, NSW · 2024</div>
-          <div class="font-serif text-cream font-light text-2xl leading-tight">Avalon Estate Garden</div>
+          <div class="label-xs text-gold mb-2">{% if related.location %}{{ related.location|upper }}{% endif %}{% if related.year %} · {{ related.year }}{% endif %}</div>
+          <div class="font-serif text-cream font-light text-2xl leading-tight">{{ related.title }}</div>
         </div>
       </a>
-      <a href="project_detail.html" class="rel-card h-[400px] rev" style="transition-delay:0.08s">
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" alt="Vineyard Terrace">
-        <div class="shade"></div>
-        <div class="absolute top-5 left-5 pill-landscape label-xs px-3 py-1.5">LANDSCAPING</div>
-        <div class="absolute bottom-0 inset-x-0 p-7">
-          <div class="label-xs text-gold mb-2">HUNTER VALLEY · 2023</div>
-          <div class="font-serif text-cream font-light text-2xl leading-tight">Vineyard Terrace Gardens</div>
-        </div>
-      </a>
-      <a href="project_detail.html" class="rel-card h-[400px] rev" style="transition-delay:0.14s">
-        <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=800&q=80" alt="Clifftop Retreat">
-        <div class="shade"></div>
-        <div class="absolute top-5 left-5" style="background:#2e2a18;color:#cbaa5d;border:1px solid rgba(203,170,93,0.28);padding:5px 12px;" class="label-xs">OUTDOOR</div>
-        <div class="absolute bottom-0 inset-x-0 p-7">
-          <div class="label-xs text-gold mb-2">VAUCLUSE, NSW · 2023</div>
-          <div class="font-serif text-cream font-light text-2xl leading-tight">Clifftop Retreat</div>
-        </div>
-      </a>
+      {% empty %}
+      <div class="col-span-3 text-center py-20">
+        <p class="text-mid body-text">No related projects available.</p>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -856,22 +759,9 @@
 </section>
 
 
-<!-- FOOTER — dark -->
-<footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
-  <div>
-    <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
-    <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
-  </div>
-  <div class="flex gap-6 text-cream/30">
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
-  </div>
-  <div class="label-xs text-cream/25">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
-</footer>
+{% endblock %}
 
-
+{% block extra_js %}
 <script>
 // ── Scroll reveals ──────────────────────────────
 const obs = new IntersectionObserver(entries => {
@@ -927,13 +817,11 @@ document.querySelectorAll('a,button').forEach(el => {
 
 // ── Gallery lightbox ────────────────────────────
 const lbImages = [
-  { src:'https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1600&q=90', cap:'Formal Garden — Western Wing' },
-  { src:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=90', cap:'Woodland Walk' },
-  { src:'https://images.unsplash.com/photo-1588167056547-c183313da396?w=1200&q=90', cap:'Kitchen Garden' },
-  { src:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=90', cap:'Rose Garden Detail' },
-  { src:'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1200&q=90', cap:'Irrigation Channel' },
-  { src:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=90', cap:'Stone Pathway' },
-  { src:'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=1600&q=90', cap:'Evening View — Main Terrace' },
+  {% for image in project_images %}
+  { src:'{{ image.image_url|escapejs }}', cap:'{{ image.caption|default:project.title|escapejs }}' }{% if not forloop.last %},{% endif %}
+  {% empty %}
+  { src:'', cap:'' }
+  {% endfor %}
 ];
 let lbCurrent = 0;
 
@@ -967,5 +855,4 @@ document.getElementById('lightbox').addEventListener('click', e => {
   if(e.target === document.getElementById('lightbox')) closeLB();
 });
 </script>
-</body>
-</html>
+{% endblock %}

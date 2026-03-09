@@ -1,0 +1,108 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}LuxSpace — Edit Service{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div>
+    <h1>Edit service</h1>
+    <small>{{ service.name }}</small>
+  </div>
+  <a href="{% url 'dashboard_services' %}" class="btn-outline">← All services</a>
+</div>
+
+<div class="card">
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Name</label>
+          {{ form.name }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Slug</label>
+          {{ form.slug }}
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Short label</label>
+          {{ form.short_label }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Order label</label>
+          {{ form.order_label }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Display order</label>
+          {{ form.display_order }}
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Hero kicker</label>
+          {{ form.hero_kicker }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Hero eyebrow</label>
+          {{ form.hero_eyebrow }}
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Hero title</label>
+        {{ form.hero_title }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Hero emphasis word</label>
+        {{ form.hero_emphasis }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Hero intro text</label>
+        {{ form.hero_intro }}
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Hero background image URL</label>
+        {{ form.hero_background_image }}
+      </div>
+
+      <div>
+        <label style="font-size:12px; color:#555;">Overview heading</label>
+        {{ form.overview_heading }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Overview body (primary)</label>
+        {{ form.overview_body_primary }}
+      </div>
+      <div>
+        <label style="font-size:12px; color:#555;">Overview body (secondary)</label>
+        {{ form.overview_body_secondary }}
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Primary CTA label</label>
+          {{ form.cta_primary_label }}
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Secondary CTA label</label>
+          {{ form.cta_secondary_label }}
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:16px;">
+        {{ form.is_active }}
+        <span style="font-size:12px; color:#555;">Service is active / visible</span>
+      </div>
+
+      <button type="submit">Save changes</button>
+    </form>
+</div>
+{% endblock %}
+
+
+

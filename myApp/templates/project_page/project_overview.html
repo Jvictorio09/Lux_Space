@@ -1,38 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuxSpace — Portfolio</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% extends "base.html" %}
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          dark:      '#1a1a16',
-          charcoal:  '#252520',
-          gold:      '#b8a96a',
-          'gold-light': '#d4c484',
-          'gold-muted': '#7a6e48',
-          cream:     '#f0ede4',
-          'off-white':'#faf9f5',
-          mid:       '#5a5a50',
-          'light-sand':'#e8e5db',
-        },
-        fontFamily: {
-          serif: ['Cormorant Garamond', 'serif'],
-          sans:  ['Barlow', 'sans-serif'],
-        },
-      }
-    }
-  }
-</script>
+{% block title %}LuxSpace — Portfolio{% endblock %}
 
-<style>
+{% block body_class %}overflow-x-hidden{% endblock %}
+
+{% block cursor %}
+<div id="cdot"></div>
+<div id="cring"></div>
+{% endblock %}
+
+{% block extra_css %}
   *, *::before, *::after { box-sizing: border-box; }
 
   html { font-size: 17px; }
@@ -47,10 +24,6 @@
   .body-sm   { font-size: 0.88rem; line-height: 1.7; }
   .label     { font-size: 0.68rem; letter-spacing: 0.22em; font-weight: 600; text-transform: uppercase; }
   .label-sm  { font-size: 0.6rem;  letter-spacing: 0.2em;  font-weight: 600; text-transform: uppercase; }
-
-  .nlink { position:relative; transition:color 0.3s; }
-  .nlink::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:#b8a96a; transition:width 0.3s; }
-  .nlink:hover::after { width:100%; }
 
   .orn { display:flex; align-items:center; gap:14px; }
   .orn::before,.orn::after { content:''; flex:1; height:1px; background:#7a6e48; opacity:0.4; }
@@ -150,8 +123,6 @@
 
   .count-badge { font-size:0.55rem; letter-spacing:0.15em; color:rgba(184,169,106,0.7); padding:2px 7px; border:1px solid rgba(184,169,106,0.25); }
 
-  .bc::after { content:'/'; margin:0 10px; color:rgba(184,169,106,0.3); }
-
   #cdot  { width:8px; height:8px; background:#b8a96a; border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
   #cring { width:40px; height:40px; border:1px solid rgba(184,169,106,0.45); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.15s ease; }
 
@@ -166,49 +137,9 @@
 
   @keyframes drop { 0%{top:-40%} 100%{top:140%} }
   @media(max-width:768px){ .wm { font-size:100px; } }
-</style>
-</head>
-<body class="overflow-x-hidden">
+{% endblock %}
 
-<div id="cdot"></div>
-<div id="cring"></div>
-
-
-<!-- ══════════ NAV — dark ══════════ -->
-<nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/97 border-b border-gold/10 backdrop-blur-md">
-  <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
-    <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
-      <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
-    </div>
-    <div>
-      <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
-      <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
-    </div>
-  </a>
-  <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
-    <li><a href="{% url 'home' %}" class="nlink label text-cream/55 hover:text-gold no-underline">HOME</a></li>
-    <li><a href="{% url 'services' %}" class="nlink label text-cream/55 hover:text-gold no-underline">SERVICES</a></li>
-    <li><a href="{% url 'projects' %}" class="nlink label text-gold no-underline">PORTFOLIO</a></li>
-    <li><a href="{% url 'home' %}#statement" class="nlink label text-cream/55 hover:text-gold no-underline">ABOUT</a></li>
-    <li><a href="{% url 'contact' %}" class="nlink label text-cream/55 hover:text-gold no-underline">CONTACT</a></li>
-  </ul>
-  <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold label hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
-    <i class="fa-regular fa-envelope"></i> GET A QUOTE
-  </a>
-  <button class="lg:hidden text-gold text-xl" onclick="document.getElementById('mob-menu').style.display='flex'">
-    <i class="fa-solid fa-bars"></i>
-  </button>
-</nav>
-
-<div id="mob-menu" style="display:none" class="fixed inset-0 z-40 bg-dark/98 flex-col items-center justify-center gap-8 text-center">
-  <button class="absolute top-6 right-8 text-gold text-2xl" onclick="this.parentElement.style.display='none'"><i class="fa-solid fa-xmark"></i></button>
-  <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">HOME</a>
-  <a href="{% url 'services' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">SERVICES</a>
-  <a href="{% url 'projects' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline">PORTFOLIO</a>
-  <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">ABOUT</a>
-  <a href="{% url 'contact' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors">CONTACT</a>
-</div>
-
+{% block content %}
 
 <!-- ══════════ HERO — dark full-bleed ══════════ -->
 <section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark">
@@ -228,7 +159,7 @@
 
   <div class="absolute top-44 right-8 lg:right-16 hidden lg:flex flex-col gap-7 text-right">
     <div>
-      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">250<span style="font-size:28px" class="text-gold-muted">+</span></div>
+      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">{{ total_projects }}<span style="font-size:28px" class="text-gold-muted">+</span></div>
       <div class="label-sm text-cream/70">PROJECTS</div>
     </div>
     <div>
@@ -236,7 +167,7 @@
       <div class="label-sm text-cream/70">YEARS</div>
     </div>
     <div>
-      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">6</div>
+      <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">{{ services|length }}</div>
       <div class="label-sm text-cream/70">SERVICES</div>
     </div>
   </div>
@@ -248,7 +179,7 @@
         Every<br><em class="text-gold italic">Project.</em><br>Exceptional.
       </h1>
       <p class="text-cream/55 body-text font-light max-w-xl mb-10">
-        250+ completed projects across six disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.
+        {{ total_projects }}+ completed projects across {{ services|length }} disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.
       </p>
       <a href="#portfolio" class="inline-flex items-center gap-4 text-gold label no-underline group">
         <span class="w-10 h-px bg-gold/40 group-hover:w-16 transition-all duration-300"></span>
@@ -267,70 +198,52 @@
 
 
 <!-- ══════════ FEATURED PROJECT — dark image / light content ══════════ -->
+{% if featured_project %}
 <div class="featured-split" id="portfolio">
   <div class="relative overflow-hidden min-h-[500px]">
-    <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1200&q=85"
-         class="w-full h-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04]" alt="">
+    <img src="{{ featured_project.hero_image|default:featured_project.card_image }}"
+         class="w-full h-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04]" alt="{{ featured_project.title }}">
     <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.55) 0%,rgba(26,26,22,0) 60%)"></div>
     <div class="absolute top-8 left-8 flex items-center gap-3">
       <div class="bg-gold text-dark label-sm px-4 py-2">FEATURED</div>
-      <div class="label-sm text-cream/40">PROJECT OF THE YEAR 2024</div>
+      {% if featured_project.year %}
+      <div class="label-sm text-cream/40">PROJECT OF THE YEAR {{ featured_project.year }}</div>
+      {% endif %}
     </div>
-    <div class="absolute bottom-8 left-8 pill-landscape svc-pill label-sm">LANDSCAPING</div>
+    <div class="absolute bottom-8 left-8 pill-{{ featured_project.service.slug }} svc-pill label-sm">{{ featured_project.service.short_label }}</div>
   </div>
 
   <!-- Light cream side -->
   <div class="bg-cream flex flex-col justify-center px-12 lg:px-16 py-16 relative overflow-hidden">
-    <div class="wm" style="top:-40px;right:-20px;color:rgba(184,169,106,0.06)">B</div>
-    <div class="label text-gold-muted mb-3 relative z-10">BOWRAL, NSW — 2024</div>
+    <div class="wm" style="top:-40px;right:-20px;color:rgba(184,169,106,0.06)">{{ featured_project.title|first|upper }}</div>
+    <div class="label text-gold-muted mb-3 relative z-10">
+      {% if featured_project.location %}{{ featured_project.location }}{% endif %}{% if featured_project.year %} — {{ featured_project.year }}{% endif %}
+    </div>
     <h2 class="font-serif text-dark font-light leading-tight gold-rule relative z-10" style="font-size:clamp(36px,4vw,58px)">
-      Burrawang Estate<br><em class="text-gold italic">Full Grounds</em>
+      {{ featured_project.title|truncatewords:3 }}<br><em class="text-gold italic">{{ featured_project.title|truncatewords:10|slice:"-7:" }}</em>
     </h2>
     <p class="text-mid body-text font-light max-w-md mb-8 relative z-10 mt-7">
-      Our most ambitious residential commission to date — 8 hectares of sweeping country estate transformed over 14 months into formal gardens, woodland walks, kitchen gardens, and naturalistic water features.
+      {{ featured_project.summary|default:featured_project.description|truncatewords:30 }}
     </p>
-    <div class="grid grid-cols-3 gap-4 mb-10 relative z-10">
-      <div>
-        <div class="text-gold font-serif text-4xl font-light">8ha</div>
-        <div class="label-sm text-mid mt-1">TOTAL AREA</div>
-      </div>
-      <div>
-        <div class="text-gold font-serif text-4xl font-light">14m</div>
-        <div class="label-sm text-mid mt-1">BUILD TIME</div>
-      </div>
-      <div>
-        <div class="text-gold font-serif text-4xl font-light">2✦</div>
-        <div class="label-sm text-mid mt-1">AWARDS</div>
-      </div>
-    </div>
     <div class="flex items-center gap-5 relative z-10">
-      <a href="{% url 'project_detail' %}" class="inline-flex items-center gap-4 bg-dark text-cream label px-10 py-4 hover:bg-charcoal transition-all no-underline">
+      <a href="{% url 'project_detail' featured_project.slug %}" class="inline-flex items-center gap-4 bg-dark text-cream label px-10 py-4 hover:bg-charcoal transition-all no-underline">
         VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
       </a>
-      <a href="{% url 'project_detail' %}" class="text-gold-muted label-sm hover:text-gold transition-colors no-underline">CASE STUDY →</a>
+      <a href="{% url 'project_detail' featured_project.slug %}" class="text-gold-muted label-sm hover:text-gold transition-colors no-underline">CASE STUDY →</a>
     </div>
   </div>
 </div>
+{% endif %}
 
 
 <!-- ══════════ STATS — dark ══════════ -->
 <div class="bg-dark grid grid-cols-2 lg:grid-cols-4 divide-x divide-gold/10">
+  {% for service, count in service_counts|slice:":4" %}
   <div class="stat-item">
-    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">87</div>
-    <div class="label-sm text-cream/30">LANDSCAPING</div>
+    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">{{ count }}</div>
+    <div class="label-sm text-cream/30">{{ service.short_label }}</div>
   </div>
-  <div class="stat-item">
-    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">62</div>
-    <div class="label-sm text-cream/30">INTERIOR DESIGN</div>
-  </div>
-  <div class="stat-item">
-    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">48</div>
-    <div class="label-sm text-cream/30">RENOVATION</div>
-  </div>
-  <div class="stat-item">
-    <div class="font-serif text-gold leading-none mb-2" style="font-size:68px;font-weight:300">53</div>
-    <div class="label-sm text-cream/30">FITOUT + MORE</div>
-  </div>
+  {% endfor %}
 </div>
 
 
@@ -338,13 +251,10 @@
 <div class="sticky top-[72px] z-40 bg-dark/97 backdrop-blur-md border-b border-gold/10 px-8 lg:px-16 py-4">
   <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
     <div class="filter-scroll flex gap-2 min-w-0">
-      <button class="filter-btn active" onclick="filterCards('all',this)">ALL <span class="count-badge ml-1">12</span></button>
-      <button class="filter-btn" onclick="filterCards('landscaping',this)">LANDSCAPING <span class="count-badge ml-1">4</span></button>
-      <button class="filter-btn" onclick="filterCards('interior',this)">INTERIOR <span class="count-badge ml-1">2</span></button>
-      <button class="filter-btn" onclick="filterCards('renovation',this)">RENOVATION <span class="count-badge ml-1">2</span></button>
-      <button class="filter-btn" onclick="filterCards('fitout',this)">FITOUT <span class="count-badge ml-1">2</span></button>
-      <button class="filter-btn" onclick="filterCards('outdoor',this)">OUTDOOR <span class="count-badge ml-1">1</span></button>
-      <button class="filter-btn" onclick="filterCards('joinery',this)">JOINERY <span class="count-badge ml-1">1</span></button>
+      <button class="filter-btn active" onclick="filterCards('all',this)">ALL <span class="count-badge ml-1">{{ total_projects }}</span></button>
+      {% for service, count in service_counts %}
+      <button class="filter-btn" onclick="filterCards('{{ service.slug }}',this)">{{ service.short_label }} <span class="count-badge ml-1">{{ count }}</span></button>
+      {% endfor %}
     </div>
     <div class="flex items-center gap-3 flex-shrink-0">
       <select class="sort-sel" onchange="sortCards(this.value)">
@@ -363,188 +273,42 @@
 
 <!-- ══════════ PROJECT GRID — light off-white bg ══════════ -->
 <section class="bg-off-white py-12 px-8 lg:px-16 pb-28">
-  <div class="label-sm text-mid/45 mb-6 rev" id="result-count">Showing 12 projects</div>
+  <div class="label-sm text-mid/45 mb-6 rev" id="result-count">Showing {{ total_projects }} project{{ total_projects|pluralize }}</div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="proj-grid">
 
-    <a href="{% url 'project_detail' %}" class="proj-card md:col-span-2 h-[540px] rev" data-service="landscaping" data-year="2024" data-name="Burrawang Estate" style="transition-delay:0s">
-      <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1200&q=80" alt="Burrawang Estate">
+    {% for project in projects %}
+    {% with service_slug=project.service.slug %}
+    <a href="{% url 'project_detail' project.slug %}" 
+       class="proj-card {% if forloop.first and project.is_featured %}md:col-span-2{% endif %} rev" 
+       data-service="{{ service_slug }}" 
+       data-year="{{ project.year|default:project.created_at|date:'Y' }}" 
+       data-name="{{ project.title }}"
+       style="height:{% if forloop.first and project.is_featured %}540{% else %}440{% endif %}px; transition-delay:{% widthratio forloop.counter0 20 1 %}s">
+      <img src="{{ project.card_image }}" alt="{{ project.title }}">
       <div class="shade"></div>
-      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
-      <div class="yr-badge body-sm">2024</div>
+      <div class="svc-pill pill-{{ service_slug }} label-sm">{{ project.service.short_label }}</div>
+      {% if project.year %}
+      <div class="yr-badge body-sm">{{ project.year }}</div>
+      {% endif %}
       <div class="info">
         <div class="meta">
-          <div class="label-sm text-gold mb-2">BOWRAL, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:34px">Burrawang Estate</div>
-          <div class="proj-desc body-sm text-cream/55">8 hectares of sweeping country estate — formal gardens, woodland walks and championship croquet lawn.</div>
+          {% if project.location %}
+          <div class="label-sm text-gold mb-2">{{ project.location|upper }}</div>
+          {% endif %}
+          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:{% if forloop.first and project.is_featured %}34{% else %}28{% endif %}px">{{ project.title }}</div>
+          {% if project.summary %}
+          <div class="proj-desc body-sm text-cream/55">{{ project.summary|truncatewords:20 }}</div>
+          {% endif %}
           <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
         </div>
       </div>
     </a>
-
-    <a href="project_detail.html" class="proj-card h-[540px] rev" data-service="interior" data-year="2024" data-name="Aria Penthouse" style="transition-delay:0.07s">
-      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="Aria Penthouse">
-      <div class="shade"></div>
-      <div class="svc-pill pill-interior label-sm">INTERIOR</div>
-      <div class="yr-badge body-sm">2024</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">SYDNEY CBD</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Aria Penthouse</div>
-          <div class="proj-desc body-sm text-cream/55">420m² full-floor penthouse — raw stone, smoked oak and hand-blown Venetian glass.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="renovation" data-year="2023" data-name="Paddington Terrace" style="transition-delay:0.04s">
-      <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80" alt="Paddington Terrace">
-      <div class="shade"></div>
-      <div class="svc-pill pill-renovation label-sm">RENOVATION</div>
-      <div class="yr-badge body-sm">2023</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">PADDINGTON, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Paddington Terrace</div>
-          <div class="proj-desc body-sm text-cream/55">Heritage terrace reimagined — Victorian detailing preserved, dramatic rear extension added.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card md:col-span-2 h-[440px] rev" data-service="outdoor" data-year="2023" data-name="Clifftop Retreat" style="transition-delay:0.08s">
-      <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=1200&q=80" alt="Clifftop Retreat">
-      <div class="shade"></div>
-      <div class="svc-pill pill-outdoor label-sm">OUTDOOR</div>
-      <div class="yr-badge body-sm">2023</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">VAUCLUSE, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">Clifftop Retreat</div>
-          <div class="proj-desc body-sm text-cream/55">Coastal hardscape — cantilevered pool terrace, infinity edge and private rock shelf access.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="fitout" data-year="2024" data-name="Nova HQ" style="transition-delay:0.05s">
-      <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80" alt="Nova HQ">
-      <div class="shade"></div>
-      <div class="svc-pill pill-fitout label-sm">FITOUT</div>
-      <div class="yr-badge body-sm">2024</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">NORTH SYDNEY</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Nova HQ</div>
-          <div class="proj-desc body-sm text-cream/55">4-level commercial fitout for a fintech firm — collaboration without sacrificing luxury.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[480px] rev" data-service="landscaping" data-year="2024" data-name="Avalon Estate Garden" style="transition-delay:0.07s">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Avalon Estate">
-      <div class="shade"></div>
-      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
-      <div class="yr-badge body-sm">2024</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">MOSMAN, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Avalon Estate Garden</div>
-          <div class="proj-desc body-sm text-cream/55">Formal box hedging, wisteria pergola walk and reflective lily pond across 1.2 acres.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card md:col-span-2 h-[480px] rev" data-service="joinery" data-year="2023" data-name="The Cellar Library" style="transition-delay:0.06s">
-      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80" alt="The Cellar Library">
-      <div class="shade"></div>
-      <div class="svc-pill pill-joinery label-sm">JOINERY</div>
-      <div class="yr-badge body-sm">2023</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">HUNTER VALLEY</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">The Cellar Library</div>
-          <div class="proj-desc body-sm text-cream/55">Floor-to-ceiling American oak joinery, rolling brass ladder and hand-inlaid parquetry floor.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[440px] rev" data-service="interior" data-year="2023" data-name="Kirribilli Residence" style="transition-delay:0.1s">
-      <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80" alt="Kirribilli">
-      <div class="shade"></div>
-      <div class="svc-pill pill-interior label-sm">INTERIOR</div>
-      <div class="yr-badge body-sm">2023</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">KIRRIBILLI, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Kirribilli Residence</div>
-          <div class="proj-desc body-sm text-cream/55">Waterfront family home dressed in quiet luxury — linen, limestone and aged brass throughout.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="landscaping" data-year="2022" data-name="Vineyard Terrace" style="transition-delay:0.05s">
-      <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" alt="Vineyard Terrace">
-      <div class="shade"></div>
-      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
-      <div class="yr-badge body-sm">2022</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">HUNTER VALLEY</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Vineyard Terrace</div>
-          <div class="proj-desc body-sm text-cream/55">Three dramatic terraced gardens cascading through 3 hectares of wine estate.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="renovation" data-year="2022" data-name="Double Bay Makeover" style="transition-delay:0.07s">
-      <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=800&q=80" alt="Double Bay">
-      <div class="shade"></div>
-      <div class="svc-pill pill-renovation label-sm">RENOVATION</div>
-      <div class="yr-badge body-sm">2022</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">DOUBLE BAY, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Double Bay Makeover</div>
-          <div class="proj-desc body-sm text-cream/55">Whole-house renovation stripping decades of decisions to reveal the home's true bones.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card h-[420px] rev" data-service="fitout" data-year="2023" data-name="Ember Restaurant" style="transition-delay:0.09s">
-      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Ember Restaurant">
-      <div class="shade"></div>
-      <div class="svc-pill pill-fitout label-sm">FITOUT</div>
-      <div class="yr-badge body-sm">2023</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">SURRY HILLS, NSW</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:28px">Ember Restaurant</div>
-          <div class="proj-desc body-sm text-cream/55">85-cover fine dining fitout — custom zellige bar, reclaimed timber and atmospheric lighting.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
-
-    <a href="project_detail.html" class="proj-card md:col-span-2 h-[420px] rev" data-service="landscaping" data-year="2024" data-name="Horizon Sky Garden" style="transition-delay:0.04s">
-      <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1200&q=80" alt="Horizon Sky Garden">
-      <div class="shade"></div>
-      <div class="svc-pill pill-landscape label-sm">LANDSCAPING</div>
-      <div class="yr-badge body-sm">2024</div>
-      <div class="info">
-        <div class="meta">
-          <div class="label-sm text-gold mb-2">SYDNEY CBD</div>
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:32px">Horizon Sky Garden</div>
-          <div class="proj-desc body-sm text-cream/55">400m² penthouse rooftop garden — outdoor kitchen, raised planters and harbour views.</div>
-          <div class="proj-cta label-sm">VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i></div>
-        </div>
-      </div>
-    </a>
+    {% endwith %}
+    {% empty %}
+    <div class="col-span-3 text-center py-20">
+      <p class="text-mid body-text">No projects available yet.</p>
+    </div>
+    {% endfor %}
 
   </div>
 
@@ -552,7 +316,7 @@
     <button class="inline-flex items-center gap-4 border border-mid/25 text-mid label px-14 py-5 hover:border-gold hover:text-gold transition-all duration-300">
       LOAD MORE PROJECTS <i class="fa-solid fa-plus text-xs"></i>
     </button>
-    <div class="label-sm text-mid/40 mt-4">Showing 12 of 24 projects</div>
+    <div class="label-sm text-mid/40 mt-4">Showing {{ total_projects }} project{{ total_projects|pluralize }}</div>
   </div>
 </section>
 
@@ -695,23 +459,9 @@
   </div>
 </section>
 
+{% endblock %}
 
-<!-- FOOTER — dark -->
-<footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
-  <div>
-    <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
-    <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
-  </div>
-  <div class="flex gap-6 text-cream/30">
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
-  </div>
-  <div class="label-sm text-cream/25">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
-</footer>
-
-
+{% block extra_js %}
 <script>
 // Scroll reveals
 const obs = new IntersectionObserver(entries => {
@@ -774,6 +524,4 @@ function setView(v) {
   }
 }
 </script>
-
-</body>
-</html>
+{% endblock %}

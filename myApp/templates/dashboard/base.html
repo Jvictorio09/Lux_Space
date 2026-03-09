@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LuxSpace Dashboard{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f7;
+      color: #333333;
+    }
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 230px;
+      background: #ffffff;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px 18px;
+    }
+    .sidebar .brand {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .sidebar .brand span {
+      color: #c9a84c;
+    }
+    .sidebar .menu-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #999;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .nav-link {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #333;
+    }
+    .nav-link:hover {
+      background: #f0f0f0;
+    }
+    .nav-link.current {
+      background: #e3ecff;
+      color: #174ea6;
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      padding: 24px 32px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .top-bar h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 400;
+    }
+    .top-bar small {
+      display: block;
+      font-size: 12px;
+      color: #777;
+    }
+    .btn-outline {
+      border: 1px solid #d0d0d0;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #555;
+      background: #ffffff;
+    }
+    .btn-outline:hover {
+      background: #f3f3f3;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 16px 18px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #ececec;
+      text-align: left;
+    }
+    th {
+      background: #fafafa;
+      font-weight: 600;
+      color: #555;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    tr:hover td {
+      background: #f9f9f9;
+    }
+    form input[type="text"],
+    form input[type="number"],
+    form textarea,
+    form select,
+    form input[type="url"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #cccccc;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+    form textarea {
+      resize: vertical;
+    }
+    form button[type="submit"] {
+      background: #174ea6;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    form button[type="submit"]:hover {
+      background: #0f3b82;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">LUX<span>SPACE</span></div>
+      <div class="menu-label">Dashboard</div>
+      <ul class="nav-list">
+        <li>
+          <a href="{% url 'dashboard_home' %}"
+             class="nav-link{% if request.path == '/dashboard/' %} current{% endif %}">
+            Overview
+          </a>
+        </li>
+      </ul>
+      <div class="menu-label">Content</div>
+      <ul class="nav-list">
+        <li>
+          <a href="{% url 'dashboard_services' %}"
+             class="nav-link{% if '/dashboard/services' in request.path %} current{% endif %}">
+            Services
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'dashboard_projects' %}"
+             class="nav-link{% if '/dashboard/projects' in request.path %} current{% endif %}">
+            Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'dashboard_gallery' %}"
+             class="nav-link{% if '/dashboard/gallery' in request.path %} current{% endif %}">
+            Gallery
+          </a>
+        </li>
+      </ul>
+      <div class="menu-label">Account</div>
+      <ul class="nav-list">
+        <li>
+          <a href="{% url 'dashboard_logout' %}" class="nav-link">Sign out</a>
+        </li>
+      </ul>
+    </aside>
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+
+

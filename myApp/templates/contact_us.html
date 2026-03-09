@@ -204,28 +204,43 @@
   <div class="decor-circle" style="width:300px;height:300px;bottom:100px;left:-100px;"></div>
   <div class="decor-circle" style="width:180px;height:180px;top:40%;right:10%;"></div>
 
-  <!-- HEADER / NAV BAR -->
-  <header class="logo-bar relative z-10 px-8 py-6 flex items-center justify-between border-b border-white border-opacity-5">
-    <div class="flex items-center gap-4">
-      <!-- Logo mark (SVG mimic of the brand mark) -->
-      <div style="width:44px;height:44px;background:#3a3a2a;border:1px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <polygon points="4,20 12,4 20,20" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-          <polygon points="2,22 12,2 22,22 2,22" stroke="rgba(201,168,76,0.3)" stroke-width="0.5" fill="none"/>
-        </svg>
+  <!-- Global NAV matching base.html -->
+  <nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/95 border-b border-gold/10 backdrop-blur-md">
+    <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
+      <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
+        <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
       </div>
-      <a href="{% url 'home' %}" style="text-decoration:none;">
-        <div class="serif text-xl font-light tracking-widest text-white leading-none" style="letter-spacing:0.3em;">LUX<span style="color:var(--gold)">SPACE</span></div>
-        <div style="font-size:8px;letter-spacing:0.25em;color:var(--text-muted);margin-top:3px;">FIT OUT &nbsp;|&nbsp; LANDSCAPING &nbsp;|&nbsp; JOINERY</div>
-      </a>
-    </div>
-    <nav class="hidden md:flex gap-8">
-      <a href="{% url 'home' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Home</a>
-      <a href="{% url 'services' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Services</a>
-      <a href="{% url 'projects' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Projects</a>
-      <a href="{% url 'contact' %}" style="font-size:11px;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--gold);padding-bottom:2px;">Contact</a>
-    </nav>
-  </header>
+      <div>
+        <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
+        <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
+      </div>
+    </a>
+    <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
+      <li><a href="{% url 'home' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">HOME</a></li>
+      <li><a href="{% url 'services' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">SERVICES</a></li>
+      <li><a href="{% url 'projects' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">PORTFOLIO</a></li>
+      <li><a href="{% url 'home' %}#statement" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">ABOUT</a></li>
+      <li><a href="{% url 'contact' %}" class="nlink text-gold text-[11px] tracking-[2.5px] font-medium no-underline">CONTACT</a></li>
+    </ul>
+    <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold text-[10px] tracking-[2.5px] font-semibold hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
+      <i class="fa-regular fa-envelope text-xs"></i> GET A QUOTE
+    </a>
+    <button class="lg:hidden text-gold text-xl" id="mob-menu-btn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </nav>
+
+  <!-- Mobile menu matching base.html -->
+  <div id="mob-menu" class="fixed inset-0 z-40 bg-dark/98 hidden flex-col items-center justify-center gap-8 text-center">
+    <button class="absolute top-6 right-8 text-gold text-2xl" onclick="document.getElementById('mob-menu').classList.add('hidden')">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">HOME</a>
+    <a href="{% url 'services' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">SERVICES</a>
+    <a href="{% url 'projects' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">PORTFOLIO</a>
+    <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">ABOUT</a>
+    <a href="{% url 'contact' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline" onclick="document.getElementById('mob-menu').classList.add('hidden')">CONTACT</a>
+  </div>
 
   <!-- HERO SECTION -->
   <section class="relative z-10 text-center px-6 pt-20 pb-16">
@@ -372,11 +387,19 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="relative z-10 border-t px-8 py-8 text-center" style="border-color:rgba(201,168,76,0.1);">
-    <p style="font-size:12px;color:var(--text-muted);font-weight:300;letter-spacing:0.08em;">
-      © 2024 <span style="color:var(--gold);">LuxSpace</span> &nbsp;|&nbsp; Fit Out &nbsp;|&nbsp; Landscaping &nbsp;|&nbsp; Joinery &nbsp;|&nbsp; Dubai, UAE
-    </p>
+  <!-- Global FOOTER matching base.html -->
+  <footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10 mt-8">
+    <div>
+      <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
+      <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
+    </div>
+    <div class="flex gap-6 text-cream/30">
+      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
+    </div>
+    <div class="text-cream/25 text-[10px] tracking-[2px]">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
   </footer>
 
   <style>
@@ -393,6 +416,16 @@
       setTimeout(() => {
         document.getElementById('successMsg').style.display = 'none';
       }, 5000);
+    }
+
+    // Mobile nav toggle (match base.js behaviour)
+    const mobMenuBtn = document.getElementById('mob-menu-btn');
+    const mobMenu = document.getElementById('mob-menu');
+    if (mobMenuBtn && mobMenu) {
+      mobMenuBtn.addEventListener('click', () => {
+        mobMenu.classList.remove('hidden');
+        mobMenu.classList.add('flex');
+      });
     }
   </script>
 </body>

@@ -1,56 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuxSpace — Landscaping</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% extends "base.html" %}
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          dark:     '#1a1a16',
-          charcoal: '#252520',
-          gold:     '#b8a96a',
-          'gold-light': '#d4c484',
-          'gold-muted': '#7a6e48',
-          cream:    '#f0ede4',
-          'off-white': '#faf9f5',
-          mid:      '#5a5a50',
-          'light-sand': '#e8e5db',
-        },
-        fontFamily: {
-          serif: ['Cormorant Garamond', 'serif'],
-          sans:  ['Barlow', 'sans-serif'],
-        },
-      }
-    }
-  }
-</script>
+{% block title %}LuxSpace — Landscaping{% endblock %}
 
-<style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Barlow', sans-serif; scroll-behavior: smooth; margin: 0; }
-
-  /* Nav */
-  .nlink { position:relative; transition:color 0.3s; }
-  .nlink::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:#b8a96a; transition:width 0.3s; }
-  .nlink:hover::after { width:100%; }
-
-  /* Ornament divider */
-  .orn { display:flex; align-items:center; gap:14px; }
-  .orn::before,.orn::after { content:''; flex:1; height:1px; background:#7a6e48; opacity:0.45; }
-
-  /* Scroll reveals */
-  .rev     { opacity:0; transform:translateY(36px); transition:opacity 0.85s ease, transform 0.85s ease; }
-  .rev-l   { opacity:0; transform:translateX(-40px); transition:opacity 0.9s ease, transform 0.9s ease; }
-  .rev-r   { opacity:0; transform:translateX(40px);  transition:opacity 0.9s ease, transform 0.9s ease; }
-  .rev.in, .rev-l.in, .rev-r.in { opacity:1; transform:none; }
-
+{% block extra_css %}
   /* Hero parallax */
   #hero-bg { transform: scale(1.1); transition: transform 0.1s linear; will-change: transform; }
 
@@ -86,18 +38,9 @@
   .process-step::before { content:attr(data-num); font-family:'Cormorant Garamond',serif; font-size:120px; font-weight:300; color:rgba(184,169,106,0.05); position:absolute; top:-20px; left:-10px; line-height:1; pointer-events:none; }
   .step-line { position:absolute; top:22px; left:50%; width:100%; height:1px; background:linear-gradient(to right, rgba(184,169,106,0.4), rgba(184,169,106,0.1)); }
 
-  /* Watermark */
-  .wm { font-family:'Cormorant Garamond',serif; font-size:200px; font-weight:300; line-height:1; color:rgba(184,169,106,0.04); letter-spacing:-10px; pointer-events:none; user-select:none; position:absolute; }
-
-  /* Gold underline */
-  .gold-after::after { content:''; display:block; width:56px; height:1px; background:#b8a96a; margin-top:20px; }
-
   /* Testimonial card */
   .testi-card { border-left: 2px solid rgba(184,169,106,0.3); transition: border-color 0.3s; }
   .testi-card:hover { border-left-color: #b8a96a; }
-
-  /* Breadcrumb slash */
-  .bc-slash::after { content:'/'; margin: 0 10px; color:rgba(184,169,106,0.3); }
 
   /* Project filter btn */
   .filter-btn { transition: all 0.3s; border: 1px solid rgba(184,169,106,0.2); color: rgba(90,90,80,0.7); font-size: 10px; letter-spacing: 2px; padding: 8px 20px; cursor: pointer; }
@@ -106,71 +49,26 @@
   /* Stat counter */
   .stat-num { font-family:'Cormorant Garamond',serif; font-size:72px; font-weight:300; line-height:1; color:#b8a96a; }
 
-  /* Horizontal scroll for tabs on mobile */
-  .tabs-scroll { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
-  .tabs-scroll::-webkit-scrollbar { display: none; }
+  /* Horizontal scroll / wrap for service tabs */
+  .tabs-scroll {
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
 
   /* Image mosaic hover */
   .mosaic-item { overflow: hidden; }
   .mosaic-item img { transition: transform 1.2s ease; }
   .mosaic-item:hover img { transform: scale(1.06); }
 
-  /* Cursor dot */
-  #cursor-dot { width:8px; height:8px; background:#b8a96a; border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform 0.1s; display:none; }
-  #cursor-ring { width:36px; height:36px; border:1px solid rgba(184,169,106,0.5); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.15s ease; display:none; }
-  body:hover #cursor-dot, body:hover #cursor-ring { display:block; }
-
   /* Gradient text */
   .text-gradient { background: linear-gradient(135deg, #b8a96a 0%, #d4c484 50%, #b8a96a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-  /* Mobile nav */
   @media (max-width: 768px) {
-    .wm { font-size: 100px; }
     .stat-num { font-size: 52px; }
   }
-</style>
-</head>
-<body class="bg-off-white text-dark overflow-x-hidden">
+{% endblock %}
 
-<!-- Custom cursor -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
-<!-- ════════════════════════════════════
-     NAV
-════════════════════════════════════ -->
-<nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/97 border-b border-gold/10 backdrop-blur-md">
-  <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
-    <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
-      <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
-    </div>
-    <div>
-      <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
-      <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
-    </div>
-  </a>
-  <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
-    <li><a href="{% url 'home' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">HOME</a></li>
-    <li><a href="{% url 'services' %}" class="nlink text-gold text-[11px] tracking-[2.5px] font-medium no-underline">SERVICES</a></li>
-    <li><a href="{% url 'projects' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">PORTFOLIO</a></li>
-    <li><a href="{% url 'home' %}#statement" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">ABOUT</a></li>
-    <li><a href="{% url 'contact' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">CONTACT</a></li>
-  </ul>
-  <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold text-[10px] tracking-[2.5px] font-semibold hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
-    <i class="fa-regular fa-envelope text-xs"></i> GET A QUOTE
-  </a>
-  <button class="lg:hidden text-gold text-xl" id="mob-menu-btn"><i class="fa-solid fa-bars"></i></button>
-</nav>
-
-<!-- Mobile menu -->
-<div id="mob-menu" class="fixed inset-0 z-40 bg-dark/98 hidden flex-col items-center justify-center gap-8 text-center">
-  <button class="absolute top-6 right-8 text-gold text-2xl" onclick="document.getElementById('mob-menu').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
-  <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">HOME</a>
-  <a href="{% url 'services' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline" onclick="document.getElementById('mob-menu').classList.add('hidden')">SERVICES</a>
-  <a href="{% url 'projects' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">PORTFOLIO</a>
-  <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">ABOUT</a>
-  <a href="{% url 'contact' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">CONTACT</a>
-</div>
+{% block content %}
 
 
 <!-- ════════════════════════════════════
@@ -188,35 +86,15 @@
   <div class="absolute top-28 right-8 lg:right-16 w-14 h-14 border-t border-r border-gold/25"></div>
 
   <!-- Breadcrumb -->
-  <div class="absolute top-28 inset-x-0 flex justify-center">
-    <div class="flex items-center text-[10px] tracking-[2px] text-cream/40 font-medium mt-8">
-      <a href="{% url 'home' %}" class="bc-slash hover:text-gold transition-colors no-underline">HOME</a>
-      <a href="{% url 'services' %}" class="bc-slash hover:text-gold transition-colors no-underline">SERVICES</a>
-      <span class="text-gold">LANDSCAPING</span>
-    </div>
-  </div>
-
-  <!-- Service switcher tabs — horizontal scroll on mobile -->
-  <div class="absolute top-0 bottom-auto left-0 right-0 mt-48 lg:mt-44">
-    <div class="tabs-scroll px-8 lg:px-16">
-      <div class="flex gap-8 lg:gap-12 min-w-max">
-        <a href="#" class="svc-tab active text-[10px] tracking-[2.5px] font-semibold no-underline">01 LANDSCAPING</a>
-        <a href="#" class="svc-tab text-cream/40 text-[10px] tracking-[2.5px] font-semibold no-underline" onclick="switchService('Interior Design', this)">02 INTERIOR DESIGN</a>
-        <a href="#" class="svc-tab text-cream/40 text-[10px] tracking-[2.5px] font-semibold no-underline">03 RENOVATION</a>
-        <a href="#" class="svc-tab text-cream/40 text-[10px] tracking-[2.5px] font-semibold no-underline">04 DESIGN & FITOUT</a>
-        <a href="#" class="svc-tab text-cream/40 text-[10px] tracking-[2.5px] font-semibold no-underline">05 OUTDOOR WORKS</a>
-        <a href="#" class="svc-tab text-cream/40 text-[10px] tracking-[2.5px] font-semibold no-underline">06 JOINERY</a>
-      </div>
-    </div>
-  </div>
+  
 
   <!-- Hero content -->
   <div class="relative z-10 px-8 lg:px-16 pb-20 w-full">
     <div class="max-w-5xl">
       <div class="flex items-center gap-5 mb-6">
-        <div class="text-gold font-serif text-[11px] tracking-[4px] font-semibold opacity-80">SERVICE 01</div>
-        <div class="w-12 h-px bg-gold/40"></div>
-        <div class="text-cream/40 text-[10px] tracking-[3px]">EST. 2013</div>
+        <div class="text-white font-serif text-[11px] tracking-[4px] font-semibold opacity-90">SERVICE 01</div>
+        <div class="w-12 h-px bg-white/50"></div>
+        <div class="text-white text-[10px] tracking-[3px] opacity-80">EST. 2013</div>
       </div>
       <h1 class="font-serif text-cream leading-[0.88] mb-6" style="font-size:clamp(70px,11vw,140px);font-weight:300">
         Land<em class="text-gold italic">scaping</em>
@@ -820,73 +698,29 @@
 </section>
 
 
-<!-- FOOTER -->
-<footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
-  <div>
-    <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
-    <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
-  </div>
-  <div class="flex gap-6 text-cream/30">
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-    <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
-  </div>
-  <div class="text-cream/25 text-[10px] tracking-[2px]">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
-</footer>
+{% endblock %}
 
-
+{% block extra_js %}
 <script>
-  // ── Scroll reveals ──
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.rev, .rev-l, .rev-r').forEach(el => obs.observe(el));
-
-  // ── Parallax hero ──
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const heroBg = document.getElementById('hero-bg');
-    if (heroBg) heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.3}px)`;
-  });
-
-  // ── Custom cursor ──
-  const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-  });
-  function animateRing() {
-    ringX += (mouseX - ringX) * 0.12;
-    ringY += (mouseY - ringY) * 0.12;
-    ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
   // ── Project filter ──
   function filterProjects(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.proj-card').forEach(card => {
       if (cat === 'all' || card.dataset.cat === cat) {
-        card.style.opacity = '1'; card.style.transform = 'scale(1)';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
         card.style.display = '';
       } else {
-        card.style.opacity = '0'; card.style.transform = 'scale(0.97)';
-        setTimeout(() => { if (card.dataset.cat !== cat && cat !== 'all') card.style.display = 'none'; }, 300);
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.97)';
+        setTimeout(() => {
+          if (card.dataset.cat !== cat && cat !== 'all') {
+            card.style.display = 'none';
+          }
+        }, 300);
       }
     });
   }
-
-  // ── Mobile menu ──
-  document.getElementById('mob-menu-btn').addEventListener('click', () => {
-    document.getElementById('mob-menu').classList.remove('hidden');
-    document.getElementById('mob-menu').classList.add('flex');
-  });
 </script>
-
-</body>
-</html>
+{% endblock %}

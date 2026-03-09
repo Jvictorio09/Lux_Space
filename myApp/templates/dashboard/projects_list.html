@@ -1,0 +1,62 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}LuxSpace — Manage Projects{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div>
+    <h1>Projects</h1>
+    <small>Manage the portfolio items used across the site.</small>
+  </div>
+</div>
+
+<div class="card">
+  <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Year</th>
+            <th>Featured</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for proj in projects %}
+          <tr>
+            <td style="font-size:12px; color:#555;">{{ proj.service.short_label }}</td>
+            <td>{{ proj.title }}</td>
+            <td style="font-size:12px; color:#555;">{{ proj.location }}</td>
+            <td style="font-size:12px; color:#555;">{{ proj.year }}</td>
+            <td>
+              {% if proj.is_featured %}
+                <span style="color:#b67b00; font-size:12px;">Featured</span>
+              {% else %}
+                <span style="color:#999; font-size:12px;">No</span>
+              {% endif %}
+            </td>
+            <td style="font-size:12px; color:#555;">{{ proj.get_status_display }}</td>
+            <td style="text-align:right;">
+              <a href="{% url 'dashboard_project_edit' proj.pk %}" style="font-size:12px;">
+                Edit
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" style="padding:12px; text-align:center; color:#777;">
+              No projects found. Seed demo content or create projects in admin first.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+{% endblock %}
+
+
+

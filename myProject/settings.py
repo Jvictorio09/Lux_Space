@@ -12,8 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+from dotenv import load_dotenv
+import dj_database_url
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -56,6 +61,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Note: Content Security Policy (CSP) is configured via meta tag in base.html template.
+# The Tailwind CDN requires 'unsafe-eval' which is a security risk.
+# For production, consider compiling Tailwind CSS and serving as static files to avoid this.
+
 ROOT_URLCONF = 'myProject.urls'
 
 TEMPLATES = [
@@ -74,17 +83,31 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = "dashboard_login"
+LOGIN_REDIRECT_URL = "dashboard_home"
+
 WSGI_APPLICATION = 'myProject.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# Always use DATABASE_URL (even in local development)
+# For local PostgreSQL: postgresql://user:password@localhost:5432/dbname
+# For local SQLite: sqlite:///path/to/db.sqlite3
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    # Default to local SQLite if DATABASE_URL is not set
+    # You can override this by setting DATABASE_URL in your .env file
+    DATABASE_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    print("WARNING: DATABASE_URL not set. Using default SQLite database.")
+    print(f"To use a different database, set DATABASE_URL in your .env file")
+    print(f"Example for PostgreSQL: DATABASE_URL=postgresql://user:password@localhost:5432/luxspace")
+
+# Always use DATABASE_URL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600),
 }
 
 
@@ -128,3 +151,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cloudinary config (used for gallery uploads)
+CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")

@@ -1,0 +1,50 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}LuxSpace — Dashboard{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div>
+    <h1>Dashboard</h1>
+    <small>Welcome, {{ request.user.get_short_name|default:request.user.username }}</small>
+  </div>
+</div>
+
+<div style="display:flex; gap:16px; margin-bottom:20px;">
+  <div class="card" style="flex:1;">
+    <div style="font-size:12px; text-transform:uppercase; color:#777; margin-bottom:4px;">Services</div>
+    <div style="font-size:26px; font-weight:600;">{{ service_count }}</div>
+    <div style="font-size:12px; color:#777;">Disciplines configured.</div>
+  </div>
+  <div class="card" style="flex:1;">
+    <div style="font-size:12px; text-transform:uppercase; color:#777; margin-bottom:4px;">Projects</div>
+    <div style="font-size:26px; font-weight:600;">{{ project_count }}</div>
+    <div style="font-size:12px; color:#777;">Total projects in portfolio.</div>
+  </div>
+  <div class="card" style="flex:1;">
+    <div style="font-size:12px; text-transform:uppercase; color:#777; margin-bottom:4px;">Featured</div>
+    <div style="font-size:26px; font-weight:600;">{{ featured_count }}</div>
+    <div style="font-size:12px; color:#777;">Highlighted projects.</div>
+  </div>
+</div>
+
+<div style="display:flex; gap:16px;">
+  <div class="card" style="flex:1;">
+    <h2 style="margin:0 0 6px 0; font-size:18px;">Services</h2>
+    <p style="margin:0 0 10px 0; font-size:13px; color:#555;">
+      Edit hero copy, order and visibility for each service.
+    </p>
+    <a href="{% url 'dashboard_services' %}" class="btn-outline">Manage services</a>
+  </div>
+  <div class="card" style="flex:1;">
+    <h2 style="margin:0 0 6px 0; font-size:18px;">Projects</h2>
+    <p style="margin:0 0 10px 0; font-size:13px; color:#555;">
+      Add and update portfolio projects and featured flags.
+    </p>
+    <a href="{% url 'dashboard_projects' %}" class="btn-outline">Manage projects</a>
+  </div>
+</div>
+{% endblock %}
+
+
+

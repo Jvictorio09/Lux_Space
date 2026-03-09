@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxSpace — Dashboard Login</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f7;
+      color: #333;
+    }
+    .box {
+      width: 100%;
+      max-width: 360px;
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 20px 22px 24px;
+    }
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .sub {
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 4px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #cccccc;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 4px;
+      background: #174ea6;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background: #0f3b82;
+    }
+    .error {
+      font-size: 12px;
+      color: #b00020;
+      margin-bottom: 8px;
+    }
+    .footer {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #777;
+      text-align: center;
+    }
+    .footer a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>LuxSpace</h1>
+    <div class="sub">Client dashboard login</div>
+
+    {% if form.errors %}
+      <div class="error">Your username and password didn’t match. Please try again.</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <label for="id_username">Email or username</label>
+      <input type="text" name="username" id="id_username" required autofocus>
+
+      <label for="id_password">Password</label>
+      <input type="password" name="password" id="id_password" required>
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <div class="footer">
+      Use your existing LuxSpace admin credentials.
+    </div>
+  </div>
+</body>
+</html>
+
+
+
