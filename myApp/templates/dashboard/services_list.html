@@ -6,15 +6,33 @@
 <div class="top-bar">
   <div>
     <h1>Services</h1>
-    <small>Manage the disciplines that appear on the website.</small>
+    <small>Manage the disciplines that appear on the website. Drag to reorder, then click Save order.</small>
   </div>
+  {% if services %}
+  <form method="post" id="reorder-form" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="reorder_ids" id="reorder-ids" value="">
+    <button type="submit" style="background:#0d7d4a; padding:8px 16px; border:none; border-radius:4px; color:#fff; font-size:13px; cursor:pointer; font-weight:600;">Save order</button>
+  </form>
+  {% endif %}
 </div>
+
+{% if messages %}
+<div style="margin-bottom:18px;">
+  {% for message in messages %}
+  <div style="padding:12px 16px; margin-bottom:8px; border-radius:4px; font-size:13px; {% if message.tags == 'error' %}background:#fee; border:1px solid #fcc; color:#c33;{% elif message.tags == 'success' %}background:#efe; border:1px solid #cfc; color:#3c3;{% else %}background:#eef; border:1px solid #ccf; color:#33c;{% endif %}">
+    {% if message.tags == 'error' %}⚠️ {% elif message.tags == 'success' %}✓ {% endif %}{{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 
 <div class="card">
   <div style="overflow-x:auto;">
       <table>
         <thead>
           <tr>
+            <th style="width:36px;"></th>
             <th>Order</th>
             <th>Label</th>
             <th>Name</th>
@@ -24,10 +42,11 @@
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="services-tbody">
           {% for svc in services %}
-          <tr>
-            <td>{{ svc.display_order }}</td>
+          <tr class="service-row" data-id="{{ svc.pk }}" draggable="true" style="cursor:grab;">
+            <td style="color:#999; cursor:grab; user-select:none;" title="Drag to reorder">⋮⋮</td>
+            <td class="order-num">{{ svc.display_order }}</td>
             <td>{{ svc.order_label }} {{ svc.short_label }}</td>
             <td>{{ svc.name }}</td>
             <td style="font-size:12px; color:#777;">{{ svc.slug }}</td>
@@ -42,14 +61,12 @@
               {{ svc.hero_title }}
             </td>
             <td style="text-align:right;">
-              <a href="{% url 'dashboard_service_edit' svc.pk %}" style="font-size:12px;">
-                Edit
-              </a>
+              <a href="{% url 'dashboard_service_edit' svc.pk %}" style="font-size:12px;">Edit</a>
             </td>
           </tr>
           {% empty %}
           <tr>
-            <td colspan="7" style="padding:12px; text-align:center; color:#777;">
+            <td colspan="8" style="padding:12px; text-align:center; color:#777;">
               No services found. Seed demo content or create services in admin first.
             </td>
           </tr>
@@ -58,6 +75,53 @@
       </table>
   </div>
 </div>
+
+{% if services %}
+<script>
+(function() {
+  const tbody = document.getElementById('services-tbody');
+  const form = document.getElementById('reorder-form');
+  const input = document.getElementById('reorder-ids');
+  const rows = tbody.querySelectorAll('.service-row');
+
+  function updateOrder() {
+    const ids = Array.from(tbody.querySelectorAll('.service-row')).map(r => r.dataset.id);
+    input.value = ids.join(',');
+    form.style.display = ids.length ? 'block' : 'none';
+    tbody.querySelectorAll('.service-row').forEach((r, i) => {
+      const num = r.querySelector('.order-num');
+      if (num) num.textContent = i + 1;
+    });
+  }
+
+  let dragged = null;
+  rows.forEach(row => {
+    row.addEventListener('dragstart', function(e) {
+      dragged = row;
+      row.style.opacity = '0.5';
+      row.style.cursor = 'grabbing';
+    });
+    row.addEventListener('dragend', function() {
+      row.style.opacity = '';
+      row.style.cursor = 'grab';
+      dragged = null;
+      updateOrder();
+    });
+    row.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      if (!dragged || dragged === row) return;
+      const after = e.offsetY > row.offsetHeight / 2;
+      const ref = after ? row.nextElementSibling : row;
+      if (ref !== dragged) tbody.insertBefore(dragged, ref);
+    });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      updateOrder();
+    });
+  });
+})();
+</script>
+{% endif %}
 {% endblock %}
 
 

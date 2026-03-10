@@ -71,6 +71,15 @@ class Service(models.Model):
         default="VIEW PROJECTS",
         help_text="Label for secondary hero CTA button.",
     )
+    cta_heading = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Bottom CTA section heading, e.g. 'Ready to Transform Your Landscape?'.",
+    )
+    cta_intro = models.TextField(
+        blank=True,
+        help_text="Bottom CTA paragraph under heading.",
+    )
 
     is_active = models.BooleanField(default=True)
     display_order = models.PositiveIntegerField(default=1)
@@ -88,6 +97,13 @@ class Service(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_hero_name_parts(self):
+        """Returns (before, emphasis) for hero h1 e.g. ('Land', 'scaping')."""
+        if not self.hero_emphasis or len(self.hero_emphasis) >= len(self.name):
+            return (self.name, None)
+        cut = len(self.name) - len(self.hero_emphasis)
+        return (self.name[:cut], self.name[cut:])
 
 
 class Project(models.Model):
@@ -127,6 +143,45 @@ class Project(models.Model):
     thumbnail_image = models.URLField(
         blank=True,
         help_text="Image used on cards; falls back to hero image if empty.",
+    )
+
+    # Detail page content (optional — sections hidden when empty)
+    pull_quote = models.TextField(blank=True)
+    pull_quote_author = models.CharField(max_length=120, blank=True)
+
+    testimonial_quote = models.TextField(blank=True)
+    testimonial_author = models.CharField(max_length=120, blank=True)
+    testimonial_location = models.CharField(max_length=160, blank=True)
+    testimonial_avatar_url = models.URLField(blank=True)
+
+    challenges = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of {title, description}.",
+    )
+    solutions = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of {title, description}. Should match challenges length.",
+    )
+    process_phases = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of {phase_label, duration, title, description, icon, is_last}.",
+    )
+    outcome_intro = models.TextField(
+        blank=True,
+        help_text="Paragraph above outcome stats.",
+    )
+    outcome_stats = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of {value, label}.",
+    )
+    awards = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of {name, title, organization, icon}.",
     )
 
     is_featured = models.BooleanField(default=False, db_column="featured")

@@ -2,7 +2,7 @@
 Utility functions for image compression and Cloudinary operations.
 """
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 
 
@@ -38,20 +38,10 @@ def smart_compress_to_bytes(file_obj, max_size_mb=9.3, max_width=5000):
     # Open image with Pillow
     img = Image.open(file_obj)
     
-    # Auto-rotate based on EXIF orientation
+    # Auto-rotate based on EXIF orientation (avoids ORIENTATION import issues across Pillow versions)
     try:
-        from PIL.ExifTags import ORIENTATION
-        exif = img._getexif()
-        if exif is not None:
-            orientation = exif.get(ORIENTATION)
-            if orientation == 3:
-                img = img.rotate(180, expand=True)
-            elif orientation == 6:
-                img = img.rotate(270, expand=True)
-            elif orientation == 8:
-                img = img.rotate(90, expand=True)
-    except (AttributeError, KeyError, TypeError):
-        # No EXIF data or can't read it
+        img = ImageOps.exif_transpose(img)
+    except (AttributeError, TypeError, ValueError):
         pass
     
     # Convert to RGB if necessary (removes alpha channel, needed for WebP)

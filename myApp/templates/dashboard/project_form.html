@@ -8,7 +8,10 @@
     <h1>Edit project</h1>
     <small>{{ project.title }}</small>
   </div>
-  <a href="{% url 'dashboard_projects' %}" class="btn-outline">← All projects</a>
+  <div style="display:flex; gap:8px;">
+    <a href="{% url 'dashboard_project_gallery' project.pk %}" class="btn-outline">Manage gallery</a>
+    <a href="{% url 'dashboard_projects' %}" class="btn-outline">← All projects</a>
+  </div>
 </div>
 
 <div class="card">
@@ -55,13 +58,57 @@
         {{ form.description }}
       </div>
 
-      <div>
-        <label style="font-size:12px; color:#555;">Hero image URL</label>
-        {{ form.hero_image }}
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px;">
+        <div>
+          <label style="font-size:12px; color:#555;">Hero image</label>
+          <div style="display:flex; gap:12px; align-items:flex-start; margin-top:6px;">
+            <div id="hero-preview" style="width:80px; height:56px; flex-shrink:0; background:#eee; border-radius:4px; overflow:hidden; border:1px solid #ddd;">
+              <img id="hero-preview-img" src="{{ form.hero_image.value|default:'' }}" alt="" style="width:100%; height:100%; object-fit:cover; display:{{ form.hero_image.value|yesno:'block,none' }};">
+            </div>
+            <div style="flex:1; min-width:0;">
+              <button type="button" onclick="openGalleryModal('hero')" class="btn-gallery-pick" style="display:block; width:100%; margin-bottom:6px; padding:6px 10px; font-size:12px; background:#174ea6; color:#fff; border:none; border-radius:4px; cursor:pointer;">Select from gallery</button>
+              <input type="url" name="hero_image" id="id_hero_image" value="{{ form.hero_image.value|default:'' }}" placeholder="Or paste URL" style="width:100%; padding:6px 8px; border:1px solid #ccc; border-radius:4px; font-size:13px;">
+            </div>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:12px; color:#555;">Card / thumbnail image</label>
+          <div style="display:flex; gap:12px; align-items:flex-start; margin-top:6px;">
+            <div id="thumb-preview" style="width:80px; height:56px; flex-shrink:0; background:#eee; border-radius:4px; overflow:hidden; border:1px solid #ddd;">
+              <img id="thumb-preview-img" src="{{ form.thumbnail_image.value|default:'' }}" alt="" style="width:100%; height:100%; object-fit:cover; display:{{ form.thumbnail_image.value|yesno:'block,none' }};">
+            </div>
+            <div style="flex:1; min-width:0;">
+              <button type="button" onclick="openGalleryModal('thumbnail')" class="btn-gallery-pick" style="display:block; width:100%; margin-bottom:6px; padding:6px 10px; font-size:12px; background:#174ea6; color:#fff; border:none; border-radius:4px; cursor:pointer;">Select from gallery</button>
+              <input type="url" name="thumbnail_image" id="id_thumbnail_image" value="{{ form.thumbnail_image.value|default:'' }}" placeholder="Or paste URL" style="width:100%; padding:6px 8px; border:1px solid #ccc; border-radius:4px; font-size:13px;">
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <label style="font-size:12px; color:#555;">Card / thumbnail image URL</label>
-        {{ form.thumbnail_image }}
+
+      <!-- Gallery selection modal -->
+      <div id="gallery-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; padding:24px; flex-direction:column;" onclick="if(event.target===this)closeGalleryModal()">
+        <div style="background:#fff; border-radius:8px; max-width:720px; width:100%; max-height:85vh; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,0.2);" onclick="event.stopPropagation()">
+          <div style="padding:16px 20px; border-bottom:1px solid #e0e0e0; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-size:16px;">Select image for <span id="modal-for-label">hero</span></h3>
+            <button type="button" onclick="closeGalleryModal()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#666;">×</button>
+          </div>
+          <div style="padding:20px; overflow-y:auto; max-height:60vh;">
+            {% if gallery_images %}
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:12px;">
+              {% for img in gallery_images %}
+              <div class="gallery-modal-item" data-url="{{ img.image_url }}" role="button" tabindex="0" onclick="selectGalleryImage('{{ img.image_url|escapejs }}')" onkeydown="if(event.key==='Enter')selectGalleryImage('{{ img.image_url|escapejs }}')" style="cursor:pointer; border:2px solid #e0e0e0; border-radius:6px; overflow:hidden; transition:border-color 0.2s;">
+                <div style="aspect-ratio:4/3; background:#f0f0f0;">
+                  <img src="{{ img.image_url }}" alt="{{ img.caption|default:'' }}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                {% if img.caption %}<div style="font-size:11px; padding:6px; color:#555; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ img.caption|truncatechars:25 }}</div>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#777; font-size:13px;">No gallery images yet. <a href="{% url 'dashboard_project_gallery' project.pk %}">Add images in the gallery</a> first.</p>
+            {% endif %}
+          </div>
+        </div>
       </div>
 
       <div style="display:flex; gap:12px; margin-bottom:12px;">
@@ -78,6 +125,57 @@
       <button type="submit">Save changes</button>
     </form>
 </div>
+
+<script>
+(function() {
+  let selectingFor = null;
+
+  window.openGalleryModal = function(field) {
+    selectingFor = field; // 'hero' or 'thumbnail'
+    document.getElementById('modal-for-label').textContent = field === 'hero' ? 'hero' : 'card/thumbnail';
+    document.getElementById('gallery-modal').style.display = 'flex';
+  };
+
+  window.closeGalleryModal = function() {
+    selectingFor = null;
+    document.getElementById('gallery-modal').style.display = 'none';
+  };
+
+  window.selectGalleryImage = function(url) {
+    if (!selectingFor || !url) return;
+    const input = selectingFor === 'hero' ? document.getElementById('id_hero_image') : document.getElementById('id_thumbnail_image');
+    const preview = selectingFor === 'hero' ? document.getElementById('hero-preview-img') : document.getElementById('thumb-preview-img');
+    if (input) input.value = url;
+    if (preview) {
+      preview.src = url;
+      preview.style.display = url ? 'block' : 'none';
+    }
+    closeGalleryModal();
+  };
+
+  // Update preview when user types URL manually
+  document.getElementById('id_hero_image').addEventListener('input', function() {
+    const img = document.getElementById('hero-preview-img');
+    img.src = this.value;
+    img.style.display = this.value ? 'block' : 'none';
+  });
+  document.getElementById('id_thumbnail_image').addEventListener('input', function() {
+    const img = document.getElementById('thumb-preview-img');
+    img.src = this.value;
+    img.style.display = this.value ? 'block' : 'none';
+  });
+
+  // Hover effect on modal items
+  document.querySelectorAll('.gallery-modal-item').forEach(el => {
+    el.addEventListener('mouseenter', function() { this.style.borderColor = '#174ea6'; });
+    el.addEventListener('mouseleave', function() { this.style.borderColor = '#e0e0e0'; });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeGalleryModal();
+  });
+})();
+</script>
 {% endblock %}
 
 

@@ -22,6 +22,8 @@ class ServiceForm(forms.ModelForm):
             "overview_body_secondary",
             "cta_primary_label",
             "cta_secondary_label",
+            "cta_heading",
+            "cta_intro",
             "is_active",
             "display_order",
         ]
@@ -29,6 +31,7 @@ class ServiceForm(forms.ModelForm):
             "hero_intro": forms.Textarea(attrs={"rows": 3}),
             "overview_body_primary": forms.Textarea(attrs={"rows": 4}),
             "overview_body_secondary": forms.Textarea(attrs={"rows": 4}),
+            "cta_intro": forms.Textarea(attrs={"rows": 2}),
         }
 
 
@@ -106,5 +109,20 @@ class GalleryUploadForm(forms.Form):
         help_text="You can select one or many images.",
         required=True,
     )
+
+
+class ProjectImageURLForm(forms.Form):
+    """Add a project gallery image by URL."""
+
+    image_url = forms.URLField(
+        required=True,
+        widget=forms.URLInput(attrs={"placeholder": "https://..."}),
+    )
+    caption = forms.CharField(
+        required=False,
+        max_length=255,
+        widget=forms.TextInput(attrs={"placeholder": "Optional caption"}),
+    )
+    is_hero = forms.BooleanField(required=False, initial=False)
 
 

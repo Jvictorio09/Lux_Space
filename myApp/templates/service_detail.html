@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}LuxSpace — Landscaping{% endblock %}
+{% block title %}LuxSpace — {{ service.name }}{% endblock %}
 
 {% block extra_css %}
   /* Hero parallax */
@@ -77,7 +77,7 @@
 <section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark" id="hero">
   <!-- Parallax bg -->
   <div id="hero-bg" class="absolute inset-0">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=85" class="w-full h-full object-cover" alt="">
+    <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=85' }}" class="w-full h-full object-cover" alt="">
   </div>
   <!-- Gradient overlays -->
   <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,26,22,0.3) 0%, rgba(26,26,22,0.1) 40%, rgba(26,26,22,0.85) 80%, rgba(26,26,22,0.97) 100%)"></div>
@@ -92,22 +92,22 @@
   <div class="relative z-10 px-8 lg:px-16 pb-20 w-full">
     <div class="max-w-5xl">
       <div class="flex items-center gap-5 mb-6">
-        <div class="text-white font-serif text-[11px] tracking-[4px] font-semibold opacity-90">SERVICE 01</div>
-        <div class="w-12 h-px bg-white/50"></div>
-        <div class="text-white text-[10px] tracking-[3px] opacity-80">EST. 2013</div>
+        {% if service.hero_kicker %}<div class="text-white font-serif text-[11px] tracking-[4px] font-semibold opacity-90">{{ service.hero_kicker }}</div>{% endif %}
+        {% if service.hero_kicker and service.hero_eyebrow %}<div class="w-12 h-px bg-white/50"></div>{% endif %}
+        {% if service.hero_eyebrow %}<div class="text-white text-[10px] tracking-[3px] opacity-80">{{ service.hero_eyebrow }}</div>{% endif %}
       </div>
       <h1 class="font-serif text-cream leading-[0.88] mb-6" style="font-size:clamp(70px,11vw,140px);font-weight:300">
-        Land<em class="text-gold italic">scaping</em>
+        {% with parts=service.get_hero_name_parts %}
+        {% if parts.1 %}{{ parts.0 }}<em class="text-gold italic">{{ parts.1 }}</em>{% else %}{{ service.name }}{% endif %}
+        {% endwith %}
       </h1>
-      <p class="text-cream/45 text-[14px] tracking-[1px] leading-loose font-light max-w-xl mb-10">
-        Sculpting living environments of breathtaking beauty — where nature meets architecture in perfect harmony.
-      </p>
+      {% if service.hero_intro %}<p class="text-cream/45 text-[14px] tracking-[1px] leading-loose font-light max-w-xl mb-10">{{ service.hero_intro }}</p>{% endif %}
       <div class="flex items-center gap-8">
         <a href="#overview" class="inline-flex items-center gap-4 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-10 py-4 hover:bg-gold-light transition-all duration-300 no-underline">
-          EXPLORE SERVICE <i class="fa-solid fa-arrow-down text-xs"></i>
+          {{ service.cta_primary_label|default:"EXPLORE SERVICE" }} <i class="fa-solid fa-arrow-down text-xs"></i>
         </a>
         <a href="#projects" class="inline-flex items-center gap-3 text-cream/50 text-[10px] tracking-[2.5px] font-medium hover:text-gold transition-colors no-underline group">
-          <span class="w-8 h-px bg-cream/30 group-hover:bg-gold group-hover:w-12 transition-all duration-300"></span>VIEW PROJECTS
+          <span class="w-8 h-px bg-cream/30 group-hover:bg-gold group-hover:w-12 transition-all duration-300"></span>{{ service.cta_secondary_label|default:"VIEW PROJECTS" }}
         </a>
       </div>
     </div>
@@ -136,15 +136,9 @@
     <!-- Left: text -->
     <div class="lg:col-span-5 rev-l">
       <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-8 max-w-[180px]">OUR APPROACH</div>
-      <h2 class="font-serif text-cream font-light leading-tight mb-6 gold-after" style="font-size:clamp(42px,4.5vw,62px)">
-        Where Nature<br>Becomes <em class="text-gold italic">Art</em>
-      </h2>
-      <p class="text-cream/45 text-[14px] leading-loose font-light mb-6">
-        We believe outdoor spaces deserve the same meticulous consideration as any fine interior. Our landscaping philosophy begins not with plants and paving, but with a deep understanding of how you wish to live — how light moves through your space, how the seasons should feel, and what the land wants to become.
-      </p>
-      <p class="text-cream/35 text-[13px] leading-loose font-light mb-10">
-        Every project is a collaboration between our horticultural specialists, landscape architects, and master craftsmen. The result is an environment that feels both inevitable and extraordinary.
-      </p>
+      {% if service.overview_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 gold-after" style="font-size:clamp(42px,4.5vw,62px)">{{ service.overview_heading|linebreaksbr }}</h2>{% endif %}
+      {% if service.overview_body_primary %}<p class="text-cream/45 text-[14px] leading-loose font-light mb-6">{{ service.overview_body_primary }}</p>{% endif %}
+      {% if service.overview_body_secondary %}<p class="text-cream/35 text-[13px] leading-loose font-light mb-10">{{ service.overview_body_secondary }}</p>{% endif %}
       <a href="#projects" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
         SEE OUR WORK <i class="fa-solid fa-arrow-down text-xs"></i>
       </a>
@@ -190,7 +184,7 @@
           Every Detail.<br><em class="text-gold italic">Considered.</em>
         </h2>
         <p class="text-mid text-[14px] leading-loose font-light max-w-sm mb-10">
-          Our landscaping service encompasses the full spectrum — from initial site analysis and concept design through to installation, planting, and ongoing maintenance programmes.
+          Our {{ service.name|lower }} service encompasses the full spectrum — from initial site analysis and concept design through to installation, planting, and ongoing maintenance programmes.
         </p>
         <!-- Stats strip -->
         <div class="grid grid-cols-3 gap-px bg-light-sand overflow-hidden">
@@ -324,149 +318,54 @@
       <div class="rev-l">
         <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-6 max-w-[200px]">OUR WORK</div>
         <h2 class="font-serif text-dark font-light leading-tight gold-after" style="font-size:clamp(44px,5vw,72px)">
-          Landscaping<br><em class="text-gold italic">Projects</em>
+          {{ service.name }}<br><em class="text-gold italic">Projects</em>
         </h2>
       </div>
       <div class="rev-r text-right">
         <p class="text-mid text-[13px] leading-loose font-light max-w-xs mb-6">
           Each project is a unique dialogue between our vision and the land — resulting in environments of lasting beauty.
         </p>
-        <a href="#" class="inline-flex items-center gap-3 text-gold text-[10px] tracking-[2.5px] font-semibold no-underline hover:gap-5 transition-all group">
+        <a href="{% url 'projects' %}" class="inline-flex items-center gap-3 text-gold text-[10px] tracking-[2.5px] font-semibold no-underline hover:gap-5 transition-all group">
           VIEW ALL PROJECTS <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
     </div>
 
-    <!-- Filter buttons -->
-    <div class="flex flex-wrap gap-3 mb-12 rev" id="filter-btns">
-      <button class="filter-btn active" onclick="filterProjects('all', this)">ALL PROJECTS</button>
-      <button class="filter-btn" onclick="filterProjects('residential', this)">RESIDENTIAL</button>
-      <button class="filter-btn" onclick="filterProjects('commercial', this)">COMMERCIAL</button>
-      <button class="filter-btn" onclick="filterProjects('estate', this)">ESTATE</button>
-      <button class="filter-btn" onclick="filterProjects('rooftop', this)">ROOFTOP</button>
-    </div>
-
-    <!-- Projects grid — Masonry-style -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-auto" id="projects-grid">
-
-      <!-- Project 1 — HERO (wide + tall) -->
-      <div class="proj-card md:col-span-8 h-[580px] rev group" data-cat="residential">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" class="w-full h-full object-cover" alt="">
+    <!-- Projects grid — Dynamic from DB -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto" id="projects-grid">
+      {% for project in projects %}
+      <div class="proj-card h-[420px] rev group" style="transition-delay:{% widthratio forloop.counter0 10 1 %}s">
+        <img src="{{ project.card_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80' }}" class="w-full h-full object-cover" alt="{{ project.title }}">
         <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.2) 50%,rgba(12,12,9,0) 100%)"></div>
-        <!-- Tag appears on hover -->
-        <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">RESIDENTIAL</div>
-        <!-- Info -->
+        {% if project.is_featured %}
+        <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">FEATURED</div>
+        {% endif %}
         <div class="absolute bottom-0 inset-x-0 p-8 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">MOSMAN, NSW — 2024</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(26px,3vw,42px)">The Avalon Estate Garden</h3>
-          <p class="text-cream/50 text-[12px] leading-relaxed max-w-md mb-5 hidden lg:block">A sweeping 1.2-acre private garden featuring formal box hedging, a wisteria-draped pergola walk, and a reflective lily pond at its heart.</p>
+          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">{% if project.location %}{{ project.location|upper }}{% endif %}{% if project.year %} — {{ project.year }}{% endif %}</div>
+          <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(26px,3vw,42px)">{{ project.title }}</h3>
+          {% if project.summary %}<p class="text-cream/50 text-[12px] leading-relaxed max-w-md mb-5 hidden lg:block">{{ project.summary }}</p>{% endif %}
           <div class="proj-cta flex items-center gap-6">
-            <a href="#" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-6 py-3 hover:bg-gold hover:text-dark transition-all no-underline">
+            <a href="{% url 'project_detail' project.slug %}" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-6 py-3 hover:bg-gold hover:text-dark transition-all no-underline">
               VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
             </a>
-            <div class="flex gap-3 text-cream/40 text-sm">
-              <span class="hover:text-gold cursor-pointer transition-colors"><i class="fa-regular fa-heart"></i></span>
-              <span class="hover:text-gold cursor-pointer transition-colors"><i class="fa-solid fa-expand"></i></span>
-            </div>
           </div>
         </div>
       </div>
-
-      <!-- Project 2 — tall right -->
-      <div class="proj-card md:col-span-4 h-[580px] rev group" data-cat="estate" style="transition-delay:0.08s">
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" class="w-full h-full object-cover" alt="">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.2) 55%,rgba(12,12,9,0) 100%)"></div>
-        <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">ESTATE</div>
-        <div class="absolute bottom-0 inset-x-0 p-7 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">HUNTER VALLEY — 2023</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3 text-2xl">Vineyard Terrace Gardens</h3>
-          <p class="text-cream/50 text-[12px] leading-relaxed mb-4 hidden lg:block">Three dramatic terraced gardens cascading through 3 hectares of estate grounds.</p>
-          <div class="proj-cta">
-            <a href="#" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-5 py-2.5 hover:bg-gold hover:text-dark transition-all no-underline">
-              VIEW <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
+      {% empty %}
+      <div class="col-span-12 text-center py-20 rev">
+        <p class="text-mid body-text">No projects yet for this service.</p>
+        <a href="{% url 'projects' %}" class="inline-flex items-center gap-3 text-gold text-[10px] tracking-[2.5px] font-semibold mt-6 no-underline">
+          BROWSE ALL PROJECTS <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
       </div>
-
-      <!-- Project 3 — medium left -->
-      <div class="proj-card md:col-span-4 h-[420px] rev group" data-cat="rooftop" style="transition-delay:0.1s">
-        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80" class="w-full h-full object-cover" alt="">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.3) 55%,rgba(12,12,9,0) 100%)"></div>
-        <div class="proj-tag absolute top-6 left-6 bg-dark/80 border border-gold text-gold text-[8px] tracking-[2px] font-bold px-3 py-1.5">ROOFTOP</div>
-        <div class="absolute bottom-0 inset-x-0 p-7 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">SYDNEY CBD — 2024</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3 text-2xl">Horizon Sky Garden</h3>
-          <p class="text-cream/50 text-[12px] leading-relaxed mb-4 hidden lg:block">A 400m² penthouse rooftop garden with harbour views.</p>
-          <div class="proj-cta">
-            <a href="#" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-5 py-2.5 hover:bg-gold hover:text-dark transition-all no-underline">
-              VIEW <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 4 — medium centre -->
-      <div class="proj-card md:col-span-4 h-[420px] rev group" data-cat="residential" style="transition-delay:0.15s">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" class="w-full h-full object-cover" alt="">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.3) 55%,rgba(12,12,9,0) 100%)"></div>
-        <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">RESIDENTIAL</div>
-        <div class="absolute bottom-0 inset-x-0 p-7 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">VAUCLUSE, NSW — 2023</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3 text-2xl">The Clifftop Sanctuary</h3>
-          <p class="text-cream/50 text-[12px] leading-relaxed mb-4 hidden lg:block">Coastal native planting cascading to private rock shelf.</p>
-          <div class="proj-cta">
-            <a href="#" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-5 py-2.5 hover:bg-gold hover:text-dark transition-all no-underline">
-              VIEW <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 5 — medium right -->
-      <div class="proj-card md:col-span-4 h-[420px] rev group" data-cat="commercial" style="transition-delay:0.2s">
-        <img src="https://images.unsplash.com/photo-1588167056547-c183313da396?w=800&q=80" class="w-full h-full object-cover" alt="">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.3) 55%,rgba(12,12,9,0) 100%)"></div>
-        <div class="proj-tag absolute top-6 left-6 bg-dark/80 border border-gold text-gold text-[8px] tracking-[2px] font-bold px-3 py-1.5">COMMERCIAL</div>
-        <div class="absolute bottom-0 inset-x-0 p-7 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">NORTH SYDNEY — 2024</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3 text-2xl">Atrium Wellness Garden</h3>
-          <p class="text-cream/50 text-[12px] leading-relaxed mb-4 hidden lg:block">Biophilic design for a 6-storey corporate headquarters.</p>
-          <div class="proj-cta">
-            <a href="#" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-5 py-2.5 hover:bg-gold hover:text-dark transition-all no-underline">
-              VIEW <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 6 — wide bottom banner -->
-      <div class="proj-card md:col-span-12 h-[400px] rev group" data-cat="estate" style="transition-delay:0.1s">
-        <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1800&q=80" class="w-full h-full object-cover object-center" alt="">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to right,rgba(12,12,9,0.92) 0%,rgba(12,12,9,0.4) 50%,rgba(12,12,9,0.1) 100%)"></div>
-        <div class="proj-tag absolute top-8 left-8 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">FEATURED ESTATE PROJECT</div>
-        <div class="absolute inset-y-0 left-0 flex flex-col justify-center px-10 lg:px-16 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-3">BOWRAL, NSW — 2023</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(28px,3.5vw,52px)">Burrawang Estate — <em class="text-gold italic">Full Grounds</em></h3>
-          <p class="text-cream/50 text-[13px] leading-relaxed max-w-lg mb-6 hidden lg:block">A landmark 8-hectare country estate commission spanning formal gardens, a working kitchen garden, woodland walks, and a championship croquet lawn — our most ambitious residential project to date.</p>
-          <div class="proj-cta flex items-center gap-6">
-            <a href="#" class="inline-flex items-center gap-4 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-10 py-4 hover:bg-gold-light transition-all no-underline">
-              FULL CASE STUDY <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
-            <div class="text-cream/40 text-[10px] tracking-[2px]">8 HA &nbsp;·&nbsp; 14 MONTHS &nbsp;·&nbsp; AWARD WINNER</div>
-          </div>
-        </div>
-      </div>
-
+      {% endfor %}
     </div>
 
-    <!-- Load more -->
+    {% if projects %}
     <div class="text-center mt-16 rev">
-      <button class="inline-flex items-center gap-4 border border-mid/30 text-mid text-[10px] tracking-[3px] font-semibold px-12 py-5 hover:border-gold hover:text-gold transition-all duration-300">
-        LOAD MORE PROJECTS <i class="fa-solid fa-plus text-xs"></i>
-      </button>
-      <div class="text-mid/40 text-[10px] tracking-[2px] mt-4">Showing 6 of 23 landscaping projects</div>
+      <div class="text-mid/40 text-[10px] tracking-[2px]">Showing {{ projects|length }} {{ service.name|lower }} project{{ projects|length|pluralize }}</div>
     </div>
+    {% endif %}
   </div>
 </section>
 
@@ -474,6 +373,7 @@
 <!-- ════════════════════════════════════
      FEATURED PROJECT SPOTLIGHT
 ════════════════════════════════════ -->
+{% if featured_project %}
 <section class="bg-dark py-28 px-8 lg:px-16 relative overflow-hidden">
   <div class="wm" style="bottom:-60px;left:-30px">B</div>
   <div class="max-w-7xl mx-auto">
@@ -485,78 +385,54 @@
         </h2>
       </div>
       <p class="text-cream/35 text-[13px] leading-loose font-light max-w-sm rev-r">
-        A deeper look into our flagship Burrawang Estate project — from concept sketches to the finished landscape.
+        A deeper look into {{ featured_project.title }} — from concept to completion.
       </p>
     </div>
 
-    <!-- Spotlight content -->
     <div class="grid lg:grid-cols-3 gap-4 h-auto lg:h-[600px]">
-      <!-- Main image -->
       <div class="lg:col-span-2 mosaic-item relative h-80 lg:h-full">
-        <img src="https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1400&q=80" class="w-full h-full object-cover" alt="">
+        <img src="{{ featured_project.card_image|default:'https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1400&q=80' }}" class="w-full h-full object-cover" alt="{{ featured_project.title }}">
         <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
-        <!-- Overlay label -->
         <div class="absolute bottom-8 left-8">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-1">BURRAWANG ESTATE</div>
-          <div class="font-serif text-cream text-3xl font-light">Formal Garden Wing</div>
+          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-1">{{ featured_project.location|default:featured_project.service.short_label|upper }}</div>
+          <div class="font-serif text-cream text-3xl font-light">{{ featured_project.title }}</div>
         </div>
-        <!-- Play button for video -->
-        <div class="absolute inset-0 flex items-center justify-center">
-          <button class="w-16 h-16 border-2 border-white/30 rounded-full flex items-center justify-center backdrop-blur hover:border-gold hover:bg-gold/20 transition-all group">
-            <i class="fa-solid fa-play text-white/60 text-sm ml-1 group-hover:text-gold"></i>
-          </button>
-        </div>
+        <a href="{% url 'project_detail' featured_project.slug %}" class="absolute inset-0 flex items-center justify-center">
+          <span class="w-16 h-16 border-2 border-white/30 rounded-full flex items-center justify-center backdrop-blur hover:border-gold hover:bg-gold/20 transition-all group">
+            <i class="fa-solid fa-arrow-right text-white/60 text-sm ml-1 group-hover:text-gold"></i>
+          </span>
+        </a>
       </div>
 
-      <!-- Right info panels -->
       <div class="flex flex-col gap-4">
-        <!-- Detail image -->
+        {% if featured_project.images.first %}
         <div class="mosaic-item relative flex-1 min-h-48">
-          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" class="w-full h-full object-cover" alt="">
+          <img src="{{ featured_project.images.first.image_url }}" class="w-full h-full object-cover" alt="">
           <div class="absolute inset-0 bg-dark/30"></div>
-          <div class="absolute bottom-5 left-5 right-5">
-            <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-0.5">WOODLAND WALK</div>
-            <div class="text-cream/60 text-[11px]">340m naturalistic trail</div>
-          </div>
         </div>
-
-        <!-- Stats panel -->
+        {% endif %}
         <div class="bg-charcoal p-7 grid grid-cols-2 gap-4">
-          <div>
-            <div class="font-serif text-gold text-3xl font-light">8ha</div>
-            <div class="text-cream/30 text-[9px] tracking-[2px] mt-1">TOTAL AREA</div>
-          </div>
-          <div>
-            <div class="font-serif text-gold text-3xl font-light">14m</div>
-            <div class="text-cream/30 text-[9px] tracking-[2px] mt-1">BUILD TIME</div>
-          </div>
-          <div>
-            <div class="font-serif text-gold text-3xl font-light">320</div>
-            <div class="text-cream/30 text-[9px] tracking-[2px] mt-1">PLANT VARIETIES</div>
-          </div>
-          <div>
-            <div class="font-serif text-gold text-3xl font-light">2✦</div>
-            <div class="text-cream/30 text-[9px] tracking-[2px] mt-1">AWARDS WON</div>
-          </div>
+          {% if featured_project.location %}<div><div class="font-serif text-gold text-3xl font-light">{{ featured_project.location }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">LOCATION</div></div>{% endif %}
+          {% if featured_project.year %}<div><div class="font-serif text-gold text-3xl font-light">{{ featured_project.year }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">YEAR</div></div>{% endif %}
+          {% if featured_project.outcome_stats %}{% for stat in featured_project.outcome_stats|slice:":2" %}<div><div class="font-serif text-gold text-3xl font-light">{{ stat.value }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">{{ stat.label }}</div></div>{% endfor %}{% endif %}
         </div>
-
-        <!-- CTA -->
-        <a href="#" class="bg-gold text-dark text-[10px] tracking-[3px] font-bold flex items-center justify-center gap-4 py-5 hover:bg-gold-light transition-all no-underline">
+        <a href="{% url 'project_detail' featured_project.slug %}" class="bg-gold text-dark text-[10px] tracking-[3px] font-bold flex items-center justify-center gap-4 py-5 hover:bg-gold-light transition-all no-underline">
           READ FULL CASE STUDY <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
     </div>
   </div>
 </section>
+{% endif %}
 
 
 <!-- ════════════════════════════════════
-     TESTIMONIALS
+     TESTIMONIALS — from projects with testimonial_quote
 ════════════════════════════════════ -->
+{% if has_testimonials %}
 <section class="bg-cream py-28 px-8 lg:px-16">
   <div class="max-w-7xl mx-auto">
     <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
-      <!-- Left -->
       <div class="lg:w-1/3 rev-l">
         <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-8 max-w-[200px]">CLIENT VOICES</div>
         <h2 class="font-serif text-dark font-light leading-tight mb-6 gold-after" style="font-size:clamp(38px,4vw,54px)">
@@ -565,56 +441,39 @@
         <p class="text-mid text-[13px] leading-loose font-light">
           Our work speaks for itself — but sometimes our clients say it better.
         </p>
-        <div class="flex items-center gap-1 mt-8">
-          <div class="text-gold text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-          <span class="text-mid text-[11px] tracking-[1px] ml-2">4.97 / 5.00 average</span>
-        </div>
       </div>
 
-      <!-- Right: testimonials -->
       <div class="lg:w-2/3 space-y-8 rev-r">
-
+        {% for project in projects %}
+        {% if project.testimonial_quote %}
         <div class="testi-card pl-8 py-2">
-          <div class="font-serif text-dark text-xl font-light italic leading-relaxed mb-5">
-            "LuxSpace transformed our barren backyard into an extraordinary formal garden. The level of detail — from the hand-laid stone pathways to the espaliered fruit trees — is simply breathtaking. Twelve months on and it looks even better."
-          </div>
+          <div class="font-serif text-dark text-xl font-light italic leading-relaxed mb-5">{{ project.testimonial_quote }}</div>
           <div class="flex items-center gap-4">
+            {% if project.testimonial_avatar_url %}
             <div class="w-11 h-11 rounded-full bg-light-sand overflow-hidden">
-              <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover" alt="">
+              <img src="{{ project.testimonial_avatar_url }}" class="w-full h-full object-cover" alt="{{ project.testimonial_author }}">
             </div>
+            {% endif %}
             <div>
-              <div class="text-dark text-[12px] tracking-[1.5px] font-semibold">SARAH M.</div>
-              <div class="text-mid text-[10px] tracking-[1.5px]">MOSMAN, NSW &nbsp;·&nbsp; AVALON ESTATE GARDEN</div>
+              {% if project.testimonial_author %}<div class="text-dark text-[12px] tracking-[1.5px] font-semibold">{{ project.testimonial_author }}</div>{% endif %}
+              {% if project.testimonial_location %}<div class="text-mid text-[10px] tracking-[1.5px]">{{ project.testimonial_location }}</div>{% endif %}
             </div>
             <div class="ml-auto text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
           </div>
         </div>
-
-        <div class="testi-card pl-8 py-2">
-          <div class="font-serif text-dark text-xl font-light italic leading-relaxed mb-5">
-            "We engaged LuxSpace for our 8-hectare estate and the result exceeded our most ambitious expectations. Their team has a rare ability to think at every scale simultaneously — from the sweeping view from the drive to the tiniest detail in a planting border."
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="w-11 h-11 rounded-full bg-light-sand overflow-hidden">
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover" alt="">
-            </div>
-            <div>
-              <div class="text-dark text-[12px] tracking-[1.5px] font-semibold">JAMES & HELEN P.</div>
-              <div class="text-mid text-[10px] tracking-[1.5px]">BOWRAL, NSW &nbsp;·&nbsp; BURRAWANG ESTATE</div>
-            </div>
-            <div class="ml-auto text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-          </div>
-        </div>
-
+        {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
 </section>
+{% endif %}
 
 
 <!-- ════════════════════════════════════
      OTHER SERVICES — Cross-sell
 ════════════════════════════════════ -->
+{% if other_services %}
 <section class="bg-charcoal py-24 px-8 lg:px-16">
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-14 rev">
@@ -622,54 +481,21 @@
       <h2 class="font-serif text-cream font-light" style="font-size:clamp(36px,4vw,52px)">Our Other <em class="text-gold italic">Services</em></h2>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-      <a href="#" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:0.0s">
-        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="">
+      {% for svc in other_services %}
+      <a href="{% url 'service_detail' svc.slug %}" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:{% widthratio forloop.counter0 20 1 %}s">
+        <img src="{{ svc.hero_background_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ svc.name }}">
         <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">02</div>
-          <div class="font-serif text-cream text-lg font-light">Interior Design</div>
+          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">{{ svc.order_label }}</div>
+          <div class="font-serif text-cream text-lg font-light">{{ svc.name }}</div>
           <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
         </div>
       </a>
-      <a href="#" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:0.05s">
-        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="">
-        <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">03</div>
-          <div class="font-serif text-cream text-lg font-light">Renovation</div>
-          <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
-        </div>
-      </a>
-      <a href="#" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:0.1s">
-        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="">
-        <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">04</div>
-          <div class="font-serif text-cream text-lg font-light">Design & Fitout</div>
-          <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
-        </div>
-      </a>
-      <a href="#" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:0.15s">
-        <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="">
-        <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">05</div>
-          <div class="font-serif text-cream text-lg font-light">Outdoor Works</div>
-          <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
-        </div>
-      </a>
-      <a href="#" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:0.2s">
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="">
-        <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">06</div>
-          <div class="font-serif text-cream text-lg font-light">Joinery</div>
-          <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
-        </div>
-      </a>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
 
 <!-- ════════════════════════════════════
@@ -680,17 +506,13 @@
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.94) 0%,rgba(26,26,22,0.80) 50%,rgba(26,26,22,0.90) 100%)"></div>
   <div class="relative z-10 text-center px-8 max-w-2xl">
     <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 max-w-[250px] mx-auto rev">BEGIN YOUR PROJECT</div>
-    <h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">
-      Ready to Transform<br>Your <em class="text-gold italic">Landscape?</em>
-    </h2>
-    <p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">
-      Every extraordinary garden begins with a conversation. Tell us about your land and your vision.
-    </p>
+    {% if service.cta_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">{{ service.cta_heading|linebreaksbr }}</h2>{% else %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">Ready to Transform<br>Your <em class="text-gold italic">Landscape?</em></h2>{% endif %}
+    {% if service.cta_intro %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">{{ service.cta_intro }}</p>{% else %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">Every extraordinary garden begins with a conversation. Tell us about your land and your vision.</p>{% endif %}
     <div class="flex flex-col sm:flex-row gap-4 justify-center rev">
-      <a href="#" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all no-underline">
+      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all no-underline">
         <i class="fa-regular fa-calendar"></i> BOOK A SITE VISIT
       </a>
-      <a href="#" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all no-underline">
+      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all no-underline">
         <i class="fa-regular fa-envelope"></i> GET A QUOTE
       </a>
     </div>
@@ -701,26 +523,4 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  // ── Project filter ──
-  function filterProjects(cat, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.proj-card').forEach(card => {
-      if (cat === 'all' || card.dataset.cat === cat) {
-        card.style.opacity = '1';
-        card.style.transform = 'scale(1)';
-        card.style.display = '';
-      } else {
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.97)';
-        setTimeout(() => {
-          if (card.dataset.cat !== cat && cat !== 'all') {
-            card.style.display = 'none';
-          }
-        }, 300);
-      }
-    });
-  }
-</script>
 {% endblock %}

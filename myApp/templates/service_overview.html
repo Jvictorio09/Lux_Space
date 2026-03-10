@@ -53,7 +53,7 @@
     <div class="rev">
       <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-4">OUR EXPERTISE</p>
       <h2 class="font-serif text-dark leading-tight gold-after" style="font-size:clamp(44px,5vw,70px);font-weight:300">
-        Six <em class="text-gold italic">Disciplines</em><br>of Excellence
+        {{ services|length }} <em class="text-gold italic">Disciplines</em><br>of Excellence
       </h2>
     </div>
     <p class="text-mid text-[13px] leading-loose font-light max-w-sm rev">
@@ -63,96 +63,22 @@
 
   <!-- Cards grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0.5">
-
-    <!-- 01 Landscaping — wide -->
-    <div class="svc-card relative overflow-hidden cursor-pointer lg:col-span-2 h-[500px] rev">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" class="w-full h-full object-cover" alt="">
+    {% for service in services %}
+    <div class="svc-card relative overflow-hidden cursor-pointer h-[450px] rev" onclick="document.getElementById('d-{{ service.slug }}').scrollIntoView({behavior:'smooth'})">
+      <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80' }}" class="w-full h-full object-cover" alt="{{ service.name }}">
       <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-10">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">01</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(30px,3.5vw,46px)">Landscaping</h3>
-        <p class="card-desc text-cream/50 text-[12px] tracking-[1px] leading-relaxed mb-4">Sculpting living environments of breathtaking beauty and enduring character.</p>
-        <a href="{% url 'service_detail' 'landscaping' %}" class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-5 py-2.5 no-underline">
+      <div class="absolute bottom-0 inset-x-0 p-8">
+        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">{{ service.order_label }}</div>
+        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">{{ service.name }}</h3>
+        <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">{{ service.hero_intro|truncatewords:20 }}</p>
+        <a href="{% url 'service_detail' service.slug %}" class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2 no-underline">
           VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
     </div>
-
-    <!-- 02 Interior -->
-    <div class="svc-card relative overflow-hidden cursor-pointer h-[500px] rev"
-         onclick="document.getElementById('d-interior').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" class="w-full h-full object-cover" alt="">
-      <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-8">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">02</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">Interior Design</h3>
-        <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">Spaces curated to inspire, comfort and endure.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2">
-          VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- 03 Renovation -->
-    <div class="svc-card relative overflow-hidden cursor-pointer h-[450px] rev"
-         onclick="document.getElementById('d-renovation').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80" class="w-full h-full object-cover" alt="">
-      <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-8">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">03</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">Renovation</h3>
-        <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">Reimagining the familiar into the extraordinary.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2">
-          VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- 04 Design & Fitout -->
-    <div class="svc-card relative overflow-hidden cursor-pointer h-[450px] rev"
-         onclick="document.getElementById('d-fitout').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80" class="w-full h-full object-cover" alt="">
-      <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-8">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">04</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">Design & Fitout</h3>
-        <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">Concept to completion — bespoke fitout delivered.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2">
-          VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- 05 Outdoor Works -->
-    <div class="svc-card relative overflow-hidden cursor-pointer h-[450px] rev"
-         onclick="document.getElementById('d-outdoor').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=800&q=80" class="w-full h-full object-cover" alt="">
-      <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-8">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">05</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">Outdoor Works</h3>
-        <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">Hardscape excellence beyond the threshold.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2">
-          VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- 06 Joinery — wide -->
-    <div class="svc-card relative overflow-hidden cursor-pointer lg:col-span-2 h-[450px] rev"
-         onclick="document.getElementById('d-joinery').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=80" class="w-full h-full object-cover" alt="">
-      <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
-      <div class="absolute bottom-0 inset-x-0 p-10">
-        <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">06</div>
-        <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(30px,3.5vw,46px)">Joinery</h3>
-        <p class="card-desc text-cream/50 text-[12px] tracking-[1px] leading-relaxed mb-4">Bespoke cabinetry and millwork crafted with precision and pride.</p>
-        <div class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-5 py-2.5">
-          VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
-        </div>
-      </div>
-    </div>
-
+    {% empty %}
+    <p class="text-mid col-span-full py-12">No services yet. Run <code>python manage.py seed_demo_content</code> or add services in the dashboard.</p>
+    {% endfor %}
   </div>
 </section>
 
@@ -172,7 +98,7 @@
     <div class="text-cream/35 text-[9px] tracking-[3px] font-medium">CLIENT SATISFACTION</div>
   </div>
   <div class="py-16 px-10 text-center rev">
-    <div class="font-serif text-gold leading-none mb-3" style="font-size:68px;font-weight:300">6</div>
+    <div class="font-serif text-gold leading-none mb-3" style="font-size:68px;font-weight:300">{{ services|length }}</div>
     <div class="text-cream/35 text-[9px] tracking-[3px] font-medium">SPECIALIST DIVISIONS</div>
   </div>
 </div>
@@ -199,188 +125,28 @@
      ██ PART 2 — SERVICE DETAILS
 ════════════════════════════════════ -->
 
-<!-- DETAIL 1 — LANDSCAPING -->
-<div id="d-landscape" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="zoom-wrap relative">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Landscaping">
+{% for service in services %}
+<div id="d-{{ service.slug }}" class="grid lg:grid-cols-2 min-h-[90vh]">
+  <div class="zoom-wrap relative {% if forloop.counter0|divisibleby:2 %}order-1{% else %}order-1 lg:order-2{% endif %}">
+    <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80' }}" class="w-full h-full object-cover min-h-96" alt="{{ service.name }}">
     <div class="absolute inset-0 bg-gradient-to-r from-transparent to-dark/15"></div>
     <div class="absolute bottom-8 left-8 bg-dark/80 backdrop-blur border border-gold/30 px-5 py-3">
-      <div class="text-gold text-[9px] tracking-[3px] font-bold">SERVICE 01</div>
-      <div class="font-serif text-cream text-xl font-light mt-0.5">Landscaping</div>
+      <div class="text-gold text-[9px] tracking-[3px] font-bold">{{ service.hero_kicker|default:service.order_label }}</div>
+      <div class="font-serif text-cream text-xl font-light mt-0.5">{{ service.name }}</div>
     </div>
   </div>
-  <div class="bg-dark flex flex-col justify-center px-16 py-24 relative overflow-hidden">
-    <div class="wm">01</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-r">LANDSCAPING</p>
-    <h3 class="font-serif text-cream font-light leading-tight mb-2 rev-r" style="font-size:clamp(42px,4vw,64px)">Living<br><em class="text-gold italic">Masterpieces</em></h3>
+  <div class="bg-dark flex flex-col justify-center px-16 py-24 relative overflow-hidden {% if forloop.counter0|divisibleby:2 %}order-2{% else %}order-2 lg:order-1{% endif %}">
+    <div class="wm">{{ service.order_label }}</div>
+    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-r">{{ service.short_label }}</p>
+    <h3 class="font-serif text-cream font-light leading-tight mb-2 rev-r" style="font-size:clamp(42px,4vw,64px)">{{ service.overview_heading|default:service.hero_title|linebreaksbr }}</h3>
     <div class="w-14 h-px bg-gold mt-6 mb-8 rev-r"></div>
-    <p class="text-cream/50 text-[14px] leading-loose font-light max-w-md mb-8 rev-r">
-      We transform raw land into living works of art. Our landscaping division blends horticultural expertise with architectural vision — creating outdoor environments as beautiful as they are enduring. Every project begins with the land's unique character before sculpting it to perfection.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-r">
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-seedling text-gold w-4 text-xs"></i> Garden Design & Master Planning</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-leaf text-gold w-4 text-xs"></i> Planting & Turf Installation</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-droplet text-gold w-4 text-xs"></i> Irrigation & Drainage Systems</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-lightbulb text-gold w-4 text-xs"></i> Landscape Lighting Design</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-recycle text-gold w-4 text-xs"></i> Sustainable Landscape Solutions</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
+    <p class="text-cream/50 text-[14px] leading-loose font-light max-w-md mb-8 rev-r">{{ service.overview_body_primary|default:service.hero_intro }}</p>
+    <a href="{% url 'service_detail' service.slug %}" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
+      EXPLORE SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
     </a>
   </div>
 </div>
-
-<!-- DETAIL 2 — INTERIOR -->
-<div id="d-interior" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="bg-off-white flex flex-col justify-center px-16 py-24 relative overflow-hidden order-2 lg:order-1">
-    <div class="wm">02</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-l">INTERIOR DESIGN</p>
-    <h3 class="font-serif text-dark font-light leading-tight mb-2 rev-l" style="font-size:clamp(42px,4vw,64px)">Spaces That<br><em class="text-gold italic">Inspire</em></h3>
-    <div class="w-14 h-px bg-gold mt-6 mb-8 rev-l"></div>
-    <p class="text-mid text-[14px] leading-loose font-light max-w-md mb-8 rev-l">
-      Our interior design philosophy is rooted in the belief that exceptional spaces shape exceptional lives. We curate environments where every material, proportion, and detail is deliberate — creating interiors that are both functional and deeply evocative, tailored exclusively to each client's vision.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-l">
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-couch text-gold w-4 text-xs"></i> Luxury Residential Interiors</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-building text-gold w-4 text-xs"></i> Commercial & Hospitality Design</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-cube text-gold w-4 text-xs"></i> 3D Visualisation & Mood Boarding</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-palette text-gold w-4 text-xs"></i> Material & Finishes Specification</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-chair text-gold w-4 text-xs"></i> Furniture Procurement & Styling</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-l">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
-    </a>
-  </div>
-  <div class="zoom-wrap relative order-1 lg:order-2">
-    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Interior">
-    <div class="absolute bottom-8 right-8 bg-off-white/90 backdrop-blur border border-gold/25 px-5 py-3">
-      <div class="text-gold-muted text-[9px] tracking-[3px] font-bold">SERVICE 02</div>
-      <div class="font-serif text-dark text-xl font-light mt-0.5">Interior Design</div>
-    </div>
-  </div>
-</div>
-
-<!-- DETAIL 3 — RENOVATION -->
-<div id="d-renovation" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="zoom-wrap relative">
-    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Renovation">
-    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-charcoal/20"></div>
-    <div class="absolute bottom-8 left-8 bg-charcoal/80 backdrop-blur border border-gold/30 px-5 py-3">
-      <div class="text-gold text-[9px] tracking-[3px] font-bold">SERVICE 03</div>
-      <div class="font-serif text-cream text-xl font-light mt-0.5">Renovation</div>
-    </div>
-  </div>
-  <div class="bg-charcoal flex flex-col justify-center px-16 py-24 relative overflow-hidden">
-    <div class="wm">03</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-r">RENOVATION</p>
-    <h3 class="font-serif text-cream font-light leading-tight mb-2 rev-r" style="font-size:clamp(42px,4vw,64px)">Reimagining<br>the <em class="text-gold italic">Familiar</em></h3>
-    <div class="w-14 h-px bg-gold mt-6 mb-8 rev-r"></div>
-    <p class="text-cream/50 text-[14px] leading-loose font-light max-w-md mb-8 rev-r">
-      Renovation is transformation — not just of spaces, but of the lives lived within them. We approach every renovation project with fresh eyes and deep respect for what exists, identifying where to preserve, where to enhance, and where to completely reimagine. The result is always more than what was there before.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-r">
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-house text-gold w-4 text-xs"></i> Full-Scale Home Renovation</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-kitchen-set text-gold w-4 text-xs"></i> Kitchen & Bathroom Transformation</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-ruler-combined text-gold w-4 text-xs"></i> Structural Alterations & Extensions</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-landmark text-gold w-4 text-xs"></i> Heritage & Period Restoration</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-clipboard-list text-gold w-4 text-xs"></i> Project Management End-to-End</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
-    </a>
-  </div>
-</div>
-
-<!-- DETAIL 4 — DESIGN & FITOUT -->
-<div id="d-fitout" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="bg-light-sand flex flex-col justify-center px-16 py-24 relative overflow-hidden order-2 lg:order-1">
-    <div class="wm">04</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-l">DESIGN & FITOUT</p>
-    <h3 class="font-serif text-dark font-light leading-tight mb-2 rev-l" style="font-size:clamp(42px,4vw,64px)">Concept<br>to <em class="text-gold italic">Completion</em></h3>
-    <div class="w-14 h-px bg-gold mt-6 mb-8 rev-l"></div>
-    <p class="text-mid text-[14px] leading-loose font-light max-w-md mb-8 rev-l">
-      Our design and fitout service is the full expression of what LuxSpace can achieve. From the initial concept sketch to the final installation, we manage every detail with precision. We bring together architecture, interior design, and construction under one roof — delivering spaces that exceed expectations at every turn.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-l">
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-briefcase text-gold w-4 text-xs"></i> Commercial Office Fitout</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-store text-gold w-4 text-xs"></i> Retail & Hospitality Fitout</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-drafting-compass text-gold w-4 text-xs"></i> Design Development & Documentation</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-people-group text-gold w-4 text-xs"></i> Builder & Contractor Coordination</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-check-double text-gold w-4 text-xs"></i> Turnkey Delivery Solutions</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-l">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
-    </a>
-  </div>
-  <div class="zoom-wrap relative order-1 lg:order-2">
-    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Design & Fitout">
-    <div class="absolute bottom-8 right-8 bg-light-sand/90 backdrop-blur border border-gold/25 px-5 py-3">
-      <div class="text-gold-muted text-[9px] tracking-[3px] font-bold">SERVICE 04</div>
-      <div class="font-serif text-dark text-xl font-light mt-0.5">Design & Fitout</div>
-    </div>
-  </div>
-</div>
-
-<!-- DETAIL 5 — OUTDOOR WORKS -->
-<div id="d-outdoor" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="zoom-wrap relative">
-    <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Outdoor Works">
-    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-dark/20"></div>
-    <div class="absolute bottom-8 left-8 bg-dark/80 backdrop-blur border border-gold/30 px-5 py-3">
-      <div class="text-gold text-[9px] tracking-[3px] font-bold">SERVICE 05</div>
-      <div class="font-serif text-cream text-xl font-light mt-0.5">Outdoor Works</div>
-    </div>
-  </div>
-  <div class="bg-dark flex flex-col justify-center px-16 py-24 relative overflow-hidden">
-    <div class="wm">05</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-r">OUTDOOR WORKS</p>
-    <h3 class="font-serif text-cream font-light leading-tight mb-2 rev-r" style="font-size:clamp(42px,4vw,64px)">Beyond the<br><em class="text-gold italic">Threshold</em></h3>
-    <div class="w-14 h-px bg-gold mt-6 mb-8 rev-r"></div>
-    <p class="text-cream/50 text-[14px] leading-loose font-light max-w-md mb-8 rev-r">
-      The finest properties extend seamlessly into their surroundings. Our outdoor works team specialises in crafting the hardscape elements that define a property's character — from elegant stone pathways and structural retaining walls to bespoke water features and alfresco entertainment areas of unparalleled quality.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-r">
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-patio-umbrella text-gold w-4 text-xs" style="font-family:'Font Awesome 6 Free'"></i><i class="fa-solid fa-grip text-gold w-4 text-xs"></i> Paving, Decking & Patios</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-border-all text-gold w-4 text-xs"></i> Retaining Walls & Structural Works</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-water text-gold w-4 text-xs"></i> Water Features & Pools</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-fire-burner text-gold w-4 text-xs"></i> Alfresco & Outdoor Kitchen Design</div>
-      <div class="flex items-center gap-3.5 text-cream/60 text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-umbrella text-gold w-4 text-xs"></i> Pergolas, Gazebos & Shade Structures</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
-    </a>
-  </div>
-</div>
-
-<!-- DETAIL 6 — JOINERY -->
-<div id="d-joinery" class="grid lg:grid-cols-2 min-h-[90vh]">
-  <div class="bg-cream flex flex-col justify-center px-16 py-24 relative overflow-hidden order-2 lg:order-1">
-    <div class="wm">06</div>
-    <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-3 rev-l">JOINERY</p>
-    <h3 class="font-serif text-dark font-light leading-tight mb-2 rev-l" style="font-size:clamp(42px,4vw,64px)">Crafted With<br><em class="text-gold italic">Precision</em></h3>
-    <div class="w-14 h-px bg-gold mt-6 mb-8 rev-l"></div>
-    <p class="text-mid text-[14px] leading-loose font-light max-w-md mb-8 rev-l">
-      True luxury lives in the details, and nothing speaks to quality more eloquently than bespoke joinery. Our master craftsmen create custom cabinetry, built-in furniture, and architectural millwork to exact specifications — combining traditional techniques with contemporary design to produce pieces that are genuinely one-of-a-kind.
-    </p>
-    <div class="space-y-3.5 mb-10 rev-l">
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-door-open text-gold w-4 text-xs"></i> Custom Cabinetry & Wardrobes</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-table text-gold w-4 text-xs"></i> Kitchen Joinery & Benchtops</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-tv text-gold w-4 text-xs"></i> Built-in Entertainment & Library Units</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-vector-square text-gold w-4 text-xs"></i> Architectural Doors & Window Frames</div>
-      <div class="flex items-center gap-3.5 text-mid text-[12px] tracking-[1.5px] font-medium"><i class="fa-solid fa-shop text-gold w-4 text-xs"></i> Commercial Joinery & Shopfitting</div>
-    </div>
-    <a href="#" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-l">
-      ENQUIRE NOW <i class="fa-solid fa-arrow-right text-xs"></i>
-    </a>
-  </div>
-  <div class="zoom-wrap relative order-1 lg:order-2">
-    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80" class="w-full h-full object-cover min-h-96" alt="Joinery">
-    <div class="absolute bottom-8 right-8 bg-cream/90 backdrop-blur border border-gold/25 px-5 py-3">
-      <div class="text-gold-muted text-[9px] tracking-[3px] font-bold">SERVICE 06</div>
-      <div class="font-serif text-dark text-xl font-light mt-0.5">Joinery</div>
-    </div>
-  </div>
-</div>
+{% endfor %}
 
 
 <!-- ════════════════════════════════════
@@ -398,10 +164,10 @@
       Every exceptional space begins with a single conversation. Share your vision with our team.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center rev">
-      <a href="#" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all duration-300 no-underline">
+      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all duration-300 no-underline">
         <i class="fa-regular fa-calendar"></i> BOOK A CONSULTATION
       </a>
-      <a href="#" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all duration-300 no-underline">
+      <a href="{% url 'projects' %}" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all duration-300 no-underline">
         <i class="fa-regular fa-images"></i> VIEW OUR PORTFOLIO
       </a>
     </div>

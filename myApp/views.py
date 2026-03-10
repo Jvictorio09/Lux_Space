@@ -2,10 +2,11 @@ from django.contrib.auth import logout
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Max
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import GalleryUploadForm, ProjectForm, ServiceForm
-from .models import GalleryImage, Project, Service
+from .forms import GalleryUploadForm, ProjectForm, ProjectImageURLForm, ServiceForm
+from .models import GalleryImage, Project, ProjectImage, Service
 from .utils import smart_compress_to_bytes, generate_public_id
 from django.conf import settings
 from io import BytesIO
@@ -20,14 +21,16 @@ def home(request):
     """
     Render the main LuxSpace landing page.
     """
-    return render(request, "index.html")
+    services_qs = Service.objects.filter(is_active=True).order_by("display_order", "name")
+    return render(request, "index.html", {"services": services_qs})
 
 
 def services(request):
     """
     Render the services overview page.
+    Order matches dashboard (display_order, name).
     """
-    services_qs = Service.objects.filter(is_active=True).order_by("display_order")
+    services_qs = Service.objects.filter(is_active=True).order_by("display_order", "name")
     return render(request, "service_overview.html", {"services": services_qs})
 
 
@@ -43,16 +46,23 @@ def service_detail(request, slug):
     Render an individual service detail page, e.g. Landscaping.
     """
     service = get_object_or_404(Service, slug=slug, is_active=True)
-    services_for_tabs = Service.objects.filter(is_active=True).order_by("display_order")
+    services_for_tabs = Service.objects.filter(is_active=True).order_by("display_order", "name")
     projects = (
         Project.objects.filter(service=service, status="published")
         .order_by("display_order", "-created_at")
         .select_related("service")
+        .prefetch_related("images")
     )
+    featured_project = projects.filter(is_featured=True).first() or projects.first()
+    other_services = services_for_tabs.exclude(id=service.id)[:5]
+    has_testimonials = any(p.testimonial_quote for p in projects)
     context = {
         "service": service,
         "services_for_tabs": services_for_tabs,
         "projects": projects,
+        "featured_project": featured_project,
+        "other_services": other_services,
+        "has_testimonials": has_testimonials,
     }
     return render(request, "service_detail.html", context)
 
@@ -66,8 +76,8 @@ def projects(request):
         .select_related("service")
         .order_by("display_order", "-created_at")
     )
-    services_qs = Service.objects.filter(is_active=True).order_by("display_order")
-    
+    services_qs = Service.objects.filter(is_active=True).order_by("display_order", "name")
+
     # Get featured project (first featured project, or first project if none featured)
     featured_project = projects_qs.filter(is_featured=True).first()
     if not featured_project:
@@ -150,6 +160,23 @@ def dashboard_logout(request):
 @login_required
 def dashboard_services(request):
     services = Service.objects.order_by("display_order", "name")
+    if request.method == "POST" and "reorder_ids" in request.POST:
+        ids_str = request.POST.get("reorder_ids", "").strip()
+        if ids_str:
+            try:
+                ids = [int(x.strip()) for x in ids_str.split(",") if x.strip()]
+                # Assign display_order 1, 2, 3, ... in exact submitted order (so first id = 1)
+                for i, pk in enumerate(ids):
+                    Service.objects.filter(pk=pk).update(display_order=i + 1)
+                # Any service not in the list gets a higher display_order so they appear after
+                others = Service.objects.exclude(pk__in=ids).order_by("display_order", "name")
+                for j, svc in enumerate(others):
+                    svc.display_order = len(ids) + 1 + j
+                    svc.save()
+                messages.success(request, "Order saved.")
+            except (ValueError, TypeError):
+                messages.error(request, "Invalid order.")
+        return redirect("dashboard_services")
     return render(request, "dashboard/services_list.html", {"services": services})
 
 
@@ -181,6 +208,7 @@ def dashboard_projects(request):
 @login_required
 def dashboard_project_edit(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    gallery_images = project.images.all().order_by("display_order", "id")
     if request.method == "POST":
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
@@ -191,7 +219,134 @@ def dashboard_project_edit(request, pk):
     return render(
         request,
         "dashboard/project_form.html",
-        {"form": form, "project": project},
+        {"form": form, "project": project, "gallery_images": gallery_images},
+    )
+
+
+@login_required
+def dashboard_project_gallery(request, pk):
+    """Manage project gallery images: add by URL, upload files, delete."""
+    project = get_object_or_404(Project, pk=pk)
+    images = project.images.all().order_by("display_order", "id")
+
+    # Reorder: save new order (from drag-and-drop)
+    if request.method == "POST" and "reorder_ids" in request.POST:
+        ids_str = request.POST.get("reorder_ids", "").strip()
+        if ids_str:
+            try:
+                ids = [int(x.strip()) for x in ids_str.split(",") if x.strip()]
+                valid = project.images.filter(pk__in=ids)
+                id_to_obj = {obj.pk: obj for obj in valid}
+                for i, pk in enumerate(ids):
+                    if pk in id_to_obj:
+                        id_to_obj[pk].display_order = i + 1
+                        id_to_obj[pk].save()
+                messages.success(request, "Order saved.")
+            except (ValueError, TypeError):
+                messages.error(request, "Invalid order.")
+        return redirect("dashboard_project_gallery", pk=project.pk)
+
+    # Move image to a specific position (1-based), e.g. "Add to top 10"
+    if request.method == "POST" and "move_to_position" in request.POST:
+        img_id = request.POST.get("move_to_position")
+        target = request.POST.get("target_position", "1")
+        try:
+            target_pos = max(1, min(int(target), project.images.count()))
+            img = ProjectImage.objects.get(pk=img_id, project=project)
+            ordered = list(project.images.order_by("display_order", "id"))
+            idx = next((i for i, im in enumerate(ordered) if im.pk == int(img_id)), -1)
+            if idx < 0:
+                raise ProjectImage.DoesNotExist
+            target_idx = target_pos - 1
+            if idx != target_idx:
+                # Remove img from list, insert at target
+                ordered.pop(idx)
+                ordered.insert(target_idx, img)
+                for i, im in enumerate(ordered):
+                    im.display_order = i + 1
+                    im.save()
+                messages.success(request, f"Moved to position #{target_pos}.")
+        except (ProjectImage.DoesNotExist, ValueError, TypeError):
+            messages.error(request, "Could not move image.")
+        return redirect("dashboard_project_gallery", pk=project.pk)
+
+    # Delete image
+    if request.method == "POST":
+        if "delete_id" in request.POST:
+            img_id = request.POST.get("delete_id")
+            try:
+                img = ProjectImage.objects.get(pk=img_id, project=project)
+                img.delete()
+                messages.success(request, "Image removed.")
+            except ProjectImage.DoesNotExist:
+                messages.error(request, "Image not found.")
+            return redirect("dashboard_project_gallery", pk=project.pk)
+
+        # Add by URL
+        url_form = ProjectImageURLForm(request.POST)
+        if url_form.is_valid():
+            max_order = project.images.aggregate(
+                m=Max("display_order")
+            ).get("m") or 0
+            ProjectImage.objects.create(
+                project=project,
+                image_url=url_form.cleaned_data["image_url"],
+                caption=url_form.cleaned_data.get("caption", ""),
+                is_hero=url_form.cleaned_data.get("is_hero", False),
+                display_order=max_order + 1,
+            )
+            messages.success(request, "Image added.")
+            return redirect("dashboard_project_gallery", pk=project.pk)
+
+        # File upload (Cloudinary)
+        files = request.FILES.getlist("images")
+        if files:
+            cloudinary.config(
+                cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+                api_key=settings.CLOUDINARY_API_KEY,
+                api_secret=settings.CLOUDINARY_API_SECRET,
+                secure=True,
+            )
+            max_order = project.images.aggregate(
+                m=Max("display_order")
+            ).get("m") or 0
+            uploaded = 0
+            for f in files:
+                try:
+                    file_size_mb = f.size / (1024 * 1024)
+                    if file_size_mb > 9.3:
+                        file_to_upload = smart_compress_to_bytes(f)
+                    else:
+                        f.seek(0)
+                        file_to_upload = BytesIO(f.read())
+                    public_id = generate_public_id(f.name)
+                    result = cloudinary.uploader.upload(
+                        file_to_upload,
+                        folder="luxspace/projects",
+                        public_id=public_id,
+                        resource_type="image",
+                        access_mode="public",
+                    )
+                    url = result.get("secure_url") or result.get("url")
+                    if url and url.startswith("http"):
+                        ProjectImage.objects.create(
+                            project=project,
+                            image_url=url,
+                            caption="",
+                            display_order=max_order + uploaded + 1,
+                        )
+                        uploaded += 1
+                except Exception as e:
+                    messages.error(request, f"Upload failed: {e}")
+            if uploaded:
+                messages.success(request, f"Uploaded {uploaded} image(s).")
+            return redirect("dashboard_project_gallery", pk=project.pk)
+
+    url_form = ProjectImageURLForm()
+    return render(
+        request,
+        "dashboard/project_gallery.html",
+        {"project": project, "images": images, "url_form": url_form},
     )
 
 

@@ -39,10 +39,10 @@
               {% endif %}
             </td>
             <td style="font-size:12px; color:#555;">{{ proj.get_status_display }}</td>
-            <td style="text-align:right;">
-              <a href="{% url 'dashboard_project_edit' proj.pk %}" style="font-size:12px;">
-                Edit
-              </a>
+            <td style="text-align:right; white-space:nowrap;">
+              <a href="{% url 'dashboard_project_edit' proj.pk %}" style="font-size:12px;">Edit</a>
+              <span style="color:#ccc; margin:0 6px;">|</span>
+              <a href="{% url 'dashboard_project_gallery' proj.pk %}" style="font-size:12px;">Gallery</a>
             </td>
           </tr>
           {% empty %}

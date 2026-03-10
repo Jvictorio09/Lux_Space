@@ -10,14 +10,33 @@
 {% endblock %}
 
 {% block extra_css %}
+  @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@200;300;400;500;600&display=swap');
+
   *, *::before, *::after { box-sizing: border-box; }
 
   html { font-size: 17px; }
   body {
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Jost', sans-serif;
     scroll-behavior: smooth;
     margin: 0;
     line-height: 1.75;
+  }
+
+  /* ── FONT OVERRIDES ── */
+  /* All serif / display headings → Cormorant Garamond */
+  .font-serif,
+  h1, h2, h3 {
+    font-family: 'Cormorant Garamond', serif !important;
+  }
+  /* All label / uppercase / tracking text → Jost */
+  .label, .label-sm, .filter-btn, .sort-sel, .view-btn,
+  .proj-cta, .proj-card .svc-pill, .yr-badge,
+  button, select {
+    font-family: 'Jost', sans-serif !important;
+  }
+  /* All body / paragraph text → Jost light */
+  .body-text, .body-sm, p {
+    font-family: 'Jost', sans-serif !important;
   }
 
   .body-text { font-size: 1rem; line-height: 1.8; }
@@ -71,7 +90,24 @@
   }
   .proj-card:hover .proj-cta { transform:translateY(0); opacity:1; }
   .proj-card .svc-pill { position:absolute; top:20px; left:20px; padding:5px 14px; font-weight:700; }
-  .proj-card .yr-badge { position:absolute; top:20px; right:20px; font-family:'Cormorant Garamond',serif; font-weight:300; color:rgba(240,237,228,0.4); }
+  /* yr-badge uses Cormorant to keep the original character */
+  .proj-card .yr-badge {
+    position:absolute; top:20px; right:20px;
+    font-family:'Cormorant Garamond',serif !important;
+    font-weight:300; color:rgba(240,237,228,0.4);
+  }
+
+  /* Card title — never truncate */
+  .proj-card .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    line-height: 1.1;
+    color: #f0ede4;
+    margin-bottom: 2px;
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
 
   /* Pill colours */
   .pill-landscape { background:#253318; color:#92c45e; border:1px solid rgba(146,196,94,0.28); }
@@ -85,7 +121,7 @@
     padding:10px 22px; cursor:pointer; white-space:nowrap;
     border:1px solid rgba(184,169,106,0.18);
     color:rgba(104, 86, 31, 0.75); transition:all 0.3s; background:transparent;
-    font-family:'Barlow',sans-serif; font-weight:600;
+    font-family:'Jost',sans-serif; font-weight:600;
     font-size:0.65rem; letter-spacing:0.22em; text-transform:uppercase;
   }
   .filter-btn:hover { color:#b8a96a; border-color:rgba(184,169,106,0.45); }
@@ -94,7 +130,7 @@
   .sort-sel {
     background:transparent; border:1px solid rgba(184,169,106,0.18);
     color:rgba(240,237,228,0.75); padding:10px 16px; cursor:pointer; outline:none;
-    font-family:'Barlow',sans-serif; font-weight:500;
+    font-family:'Jost',sans-serif; font-weight:500;
     font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase;
   }
   .sort-sel option { background:#252520; color:rgba(240,237,228,0.9); }
@@ -118,6 +154,20 @@
   .featured-split { display:grid; grid-template-columns:1fr 1fr; min-height:580px; }
   @media(max-width:1024px){ .featured-split { grid-template-columns:1fr; } }
 
+  /* Featured panel title — never cut off */
+  .featured-title {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 300;
+    line-height: 1.0;
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  .featured-title em {
+    font-style: italic;
+    color: #b8a96a;
+  }
+
   .stat-item { text-align:center; padding:36px 20px; border-right:1px solid rgba(184,169,106,0.1); }
   .stat-item:last-child { border-right:none; }
 
@@ -132,6 +182,10 @@
 
   .testi { border-left:3px solid rgba(184,169,106,0.25); padding-left:28px; transition:border-color 0.3s; }
   .testi:hover { border-left-color:#b8a96a; }
+  /* Testimonial quotes use Cormorant for elegance */
+  .testi p {
+    font-family: 'Cormorant Garamond', serif !important;
+  }
 
   .card-hide { display:none !important; }
 
@@ -158,10 +212,12 @@
   </div>
 
   <div class="absolute top-44 right-8 lg:right-16 hidden lg:flex flex-col gap-7 text-right">
+    {% if total_projects %}
     <div>
       <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">{{ total_projects }}<span style="font-size:28px" class="text-gold-muted">+</span></div>
       <div class="label-sm text-cream/70">PROJECTS</div>
     </div>
+    {% endif %}
     <div>
       <div class="font-serif text-gold leading-none mb-1" style="font-size:52px;font-weight:300">12</div>
       <div class="label-sm text-cream/70">YEARS</div>
@@ -179,7 +235,7 @@
         Every<br><em class="text-gold italic">Project.</em><br>Exceptional.
       </h1>
       <p class="text-cream/55 body-text font-light max-w-xl mb-10">
-        {{ total_projects }}+ completed projects across {{ services|length }} disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.
+        {% if total_projects %}{{ total_projects }}+ completed projects across {{ services|length }} disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.{% else %}Explore our disciplines and get in touch when you're ready to start your project.{% endif %}
       </p>
       <a href="#portfolio" class="inline-flex items-center gap-4 text-gold label no-underline group">
         <span class="w-10 h-px bg-gold/40 group-hover:w-16 transition-all duration-300"></span>
@@ -197,7 +253,7 @@
 </section>
 
 
-<!-- ══════════ FEATURED PROJECT — dark image / light content ══════════ -->
+<!-- ══════════ FEATURED PROJECT ══════════ -->
 {% if featured_project %}
 <div class="featured-split" id="portfolio">
   <div class="relative overflow-hidden min-h-[500px]">
@@ -219,8 +275,9 @@
     <div class="label text-gold-muted mb-3 relative z-10">
       {% if featured_project.location %}{{ featured_project.location }}{% endif %}{% if featured_project.year %} — {{ featured_project.year }}{% endif %}
     </div>
-    <h2 class="font-serif text-dark font-light leading-tight gold-rule relative z-10" style="font-size:clamp(36px,4vw,58px)">
-      {{ featured_project.title|truncatewords:3 }}<br><em class="text-gold italic">{{ featured_project.title|truncatewords:10|slice:"-7:" }}</em>
+    <!-- Title: full text, no truncation -->
+    <h2 class="featured-title gold-rule relative z-10" style="font-size:clamp(36px,4vw,58px)">
+      {{ featured_project.title }}
     </h2>
     <p class="text-mid body-text font-light max-w-md mb-8 relative z-10 mt-7">
       {{ featured_project.summary|default:featured_project.description|truncatewords:30 }}
@@ -237,6 +294,7 @@
 
 
 <!-- ══════════ STATS — dark ══════════ -->
+{% if total_projects %}
 <div class="bg-dark grid grid-cols-2 lg:grid-cols-4 divide-x divide-gold/10">
   {% for service, count in service_counts|slice:":4" %}
   <div class="stat-item">
@@ -245,9 +303,11 @@
   </div>
   {% endfor %}
 </div>
+{% endif %}
 
 
 <!-- ══════════ FILTER BAR — sticky dark ══════════ -->
+{% if total_projects %}
 <div class="sticky top-[72px] z-40 bg-dark/97 backdrop-blur-md border-b border-gold/10 px-8 lg:px-16 py-4">
   <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
     <div class="filter-scroll flex gap-2 min-w-0">
@@ -269,19 +329,21 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 
-<!-- ══════════ PROJECT GRID — light off-white bg ══════════ -->
+<!-- ══════════ PROJECT GRID ══════════ -->
+{% if total_projects %}
 <section class="bg-off-white py-12 px-8 lg:px-16 pb-28">
   <div class="label-sm text-mid/45 mb-6 rev" id="result-count">Showing {{ total_projects }} project{{ total_projects|pluralize }}</div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="proj-grid">
 
     {% for project in projects %}
     {% with service_slug=project.service.slug %}
-    <a href="{% url 'project_detail' project.slug %}" 
-       class="proj-card {% if forloop.first and project.is_featured %}md:col-span-2{% endif %} rev" 
-       data-service="{{ service_slug }}" 
-       data-year="{{ project.year|default:project.created_at|date:'Y' }}" 
+    <a href="{% url 'project_detail' project.slug %}"
+       class="proj-card {% if forloop.first and project.is_featured %}md:col-span-2{% endif %} rev"
+       data-service="{{ service_slug }}"
+       data-year="{{ project.year|default:project.created_at|date:'Y' }}"
        data-name="{{ project.title }}"
        style="height:{% if forloop.first and project.is_featured %}540{% else %}440{% endif %}px; transition-delay:{% widthratio forloop.counter0 20 1 %}s">
       <img src="{{ project.card_image }}" alt="{{ project.title }}">
@@ -295,7 +357,10 @@
           {% if project.location %}
           <div class="label-sm text-gold mb-2">{{ project.location|upper }}</div>
           {% endif %}
-          <div class="font-serif text-cream font-light leading-tight mb-2" style="font-size:{% if forloop.first and project.is_featured %}34{% else %}28{% endif %}px">{{ project.title }}</div>
+          <!-- Full title — no truncation, no slice -->
+          <div class="card-title mb-2" style="font-size:{% if forloop.first and project.is_featured %}34{% else %}28{% endif %}px">
+            {{ project.title }}
+          </div>
           {% if project.summary %}
           <div class="proj-desc body-sm text-cream/55">{{ project.summary|truncatewords:20 }}</div>
           {% endif %}
@@ -319,9 +384,10 @@
     <div class="label-sm text-mid/40 mt-4">Showing {{ total_projects }} project{{ total_projects|pluralize }}</div>
   </div>
 </section>
+{% endif %}
 
 
-<!-- ══════════ WHY LUXSPACE — light sand bg ══════════ -->
+<!-- ══════════ WHY LUXSPACE ══════════ -->
 <section class="bg-light-sand py-28 px-8 lg:px-16">
   <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-28 items-center">
     <div class="rev-l">
