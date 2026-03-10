@@ -22,7 +22,16 @@ def home(request):
     Render the main LuxSpace landing page.
     """
     services_qs = Service.objects.filter(is_active=True).order_by("display_order", "name")
-    return render(request, "index.html", {"services": services_qs})
+    landing_projects = (
+        Project.objects.filter(status="published")
+        .select_related("service")
+        .order_by("-is_featured", "display_order", "-created_at")[:5]
+    )
+    return render(
+        request,
+        "index.html",
+        {"services": services_qs, "landing_projects": landing_projects},
+    )
 
 
 def services(request):

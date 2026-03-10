@@ -4,16 +4,26 @@
     <h2>What We<br/><em>Build</em></h2>
     <p>From raw structures to refined sanctuaries — every detail considered, every standard exceeded.</p>
   </div>
-  <div class="svc-grid">
-    {% for service in services %}
-    <div class="svc rev" data-n="{{ service.order_label }}" style="transition-delay:{% widthratio forloop.counter0 1 50 %}ms">
-      <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline stroke-linecap="round" stroke-linejoin="round" points="9,22 9,12 15,12 15,22"/></svg></div>
-      <div class="svc-title">{{ service.name }}</div>
-      <div class="svc-body">{{ service.hero_intro|truncatewords:25 }}</div>
-      <a href="{% url 'service_detail' service.slug %}" class="svc-more">Explore →</a>
-    </div>
+  <div class="svc-grid svc-grid-cards">
+    {% for service in services|slice:":8" %}
+    <a href="{% url 'service_detail' service.slug %}" class="svc-card rev" style="transition-delay:{% widthratio forloop.counter0 1 50 %}ms">
+      <div class="svc-card-img">
+        <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80' }}" alt="{{ service.name }}">
+      </div>
+      <div class="svc-card-body">
+        <div class="svc-card-num">{{ service.order_label }}</div>
+        <div class="svc-card-title">{{ service.name }}</div>
+        <div class="svc-card-desc">{{ service.hero_intro|truncatewords:18 }}</div>
+        <span class="svc-card-link">Explore →</span>
+      </div>
+    </a>
     {% empty %}
     <p class="text-mid" style="grid-column:1/-1; padding:24px;">No services yet. Run <code>python manage.py seed_demo_content</code>.</p>
     {% endfor %}
   </div>
+  {% if services %}
+  <div class="svc-view-all rev">
+    <a href="{% url 'services' %}" class="btn-primary">View all services</a>
+  </div>
+  {% endif %}
 </section>
