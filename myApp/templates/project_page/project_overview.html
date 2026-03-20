@@ -10,33 +10,33 @@
 {% endblock %}
 
 {% block extra_css %}
-  @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@200;300;400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; }
 
   html { font-size: 17px; }
   body {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Outfit', sans-serif;
     scroll-behavior: smooth;
     margin: 0;
     line-height: 1.75;
   }
 
   /* ── FONT OVERRIDES ── */
-  /* All serif / display headings → Cormorant Garamond */
+  /* Match index typography */
   .font-serif,
   h1, h2, h3 {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: 'Outfit', sans-serif !important;
   }
-  /* All label / uppercase / tracking text → Jost */
+  /* Labels / controls */
   .label, .label-sm, .filter-btn, .sort-sel, .view-btn,
   .proj-cta, .proj-card .svc-pill, .yr-badge,
   button, select {
-    font-family: 'Jost', sans-serif !important;
+    font-family: 'Outfit', sans-serif !important;
   }
-  /* All body / paragraph text → Jost light */
+  /* Body text */
   .body-text, .body-sm, p {
-    font-family: 'Jost', sans-serif !important;
+    font-family: 'Outfit', sans-serif !important;
   }
 
   .body-text { font-size: 1rem; line-height: 1.8; }
@@ -90,16 +90,16 @@
   }
   .proj-card:hover .proj-cta { transform:translateY(0); opacity:1; }
   .proj-card .svc-pill { position:absolute; top:20px; left:20px; padding:5px 14px; font-weight:700; }
-  /* yr-badge uses Cormorant to keep the original character */
+  /* Keep badge style aligned with page font */
   .proj-card .yr-badge {
     position:absolute; top:20px; right:20px;
-    font-family:'Cormorant Garamond',serif !important;
+    font-family:'Outfit',sans-serif !important;
     font-weight:300; color:rgba(240,237,228,0.4);
   }
 
   /* Card title — never truncate */
   .proj-card .card-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 300;
     line-height: 1.1;
     color: #f0ede4;
@@ -121,7 +121,7 @@
     padding:10px 22px; cursor:pointer; white-space:nowrap;
     border:1px solid rgba(184,169,106,0.18);
     color:rgba(104, 86, 31, 0.75); transition:all 0.3s; background:transparent;
-    font-family:'Jost',sans-serif; font-weight:600;
+    font-family:'Outfit',sans-serif; font-weight:600;
     font-size:0.65rem; letter-spacing:0.22em; text-transform:uppercase;
   }
   .filter-btn:hover { color:#b8a96a; border-color:rgba(184,169,106,0.45); }
@@ -130,7 +130,7 @@
   .sort-sel {
     background:transparent; border:1px solid rgba(184,169,106,0.18);
     color:rgba(240,237,228,0.75); padding:10px 16px; cursor:pointer; outline:none;
-    font-family:'Jost',sans-serif; font-weight:500;
+    font-family:'Outfit',sans-serif; font-weight:500;
     font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase;
   }
   .sort-sel option { background:#252520; color:rgba(240,237,228,0.9); }
@@ -146,7 +146,7 @@
   .filter-scroll::-webkit-scrollbar { display:none; }
 
   .wm {
-    font-family:'Cormorant Garamond',serif; font-size:200px; font-weight:300;
+    font-family:'Outfit',sans-serif; font-size:200px; font-weight:300;
     line-height:1; color:rgba(184,169,106,0.045); letter-spacing:-8px;
     pointer-events:none; user-select:none; position:absolute;
   }
@@ -156,7 +156,7 @@
 
   /* Featured panel title — never cut off */
   .featured-title {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: 'Outfit', sans-serif !important;
     font-weight: 300;
     line-height: 1.0;
     word-break: normal;
@@ -182,9 +182,9 @@
 
   .testi { border-left:3px solid rgba(184,169,106,0.25); padding-left:28px; transition:border-color 0.3s; }
   .testi:hover { border-left-color:#b8a96a; }
-  /* Testimonial quotes use Cormorant for elegance */
+  /* Testimonial quotes follow index font style */
   .testi p {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: 'Outfit', sans-serif !important;
   }
 
   .card-hide { display:none !important; }
@@ -198,7 +198,7 @@
 <!-- ══════════ HERO — dark full-bleed ══════════ -->
 <section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark">
   <div class="absolute inset-0" id="hero-bg">
-    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85" class="w-full h-full object-cover" alt="">
+    <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179964/luxspace/projects/villa_116_3.jpg" class="w-full h-full object-cover" alt="">
   </div>
   <div class="absolute inset-0" style="background:linear-gradient(to right,rgba(26,26,22,0.92) 0%,rgba(26,26,22,0.65) 30%,rgba(26,26,22,0.35) 60%,rgba(26,26,22,0.15) 85%,rgba(26,26,22,0.05) 100%)"></div>
   <div class="absolute top-28 left-8 lg:left-16 w-16 h-16 border-t border-l border-gold/20"></div>
@@ -237,7 +237,7 @@
       <p class="text-cream/55 body-text font-light max-w-xl mb-10">
         {% if total_projects %}{{ total_projects }}+ completed projects across {{ services|length }} disciplines. Browse our full body of work, filter by service, and find the project that speaks to your vision.{% else %}Explore our disciplines and get in touch when you're ready to start your project.{% endif %}
       </p>
-      <a href="#portfolio" class="inline-flex items-center gap-4 text-gold label no-underline group">
+      <a href="#portfolio" class="cta-btn cta-btn-secondary inline-flex items-center gap-4 text-gold label no-underline group border border-gold/40 px-8 py-3">
         <span class="w-10 h-px bg-gold/40 group-hover:w-16 transition-all duration-300"></span>
         EXPLORE THE PORTFOLIO
       </a>
@@ -283,10 +283,10 @@
       {{ featured_project.summary|default:featured_project.description|truncatewords:30 }}
     </p>
     <div class="flex items-center gap-5 relative z-10">
-      <a href="{% url 'project_detail' featured_project.slug %}" class="inline-flex items-center gap-4 bg-dark text-cream label px-10 py-4 hover:bg-charcoal transition-all no-underline">
+      <a href="{% url 'project_detail' featured_project.slug %}" class="cta-btn cta-btn-primary inline-flex items-center gap-4 bg-dark text-cream label px-10 py-4 hover:bg-charcoal transition-all no-underline">
         VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
       </a>
-      <a href="{% url 'project_detail' featured_project.slug %}" class="text-gold-muted label-sm hover:text-gold transition-colors no-underline">CASE STUDY →</a>
+      <a href="{% url 'project_detail' featured_project.slug %}" class="cta-btn cta-btn-secondary text-gold-muted label-sm hover:text-gold transition-colors no-underline border border-gold/35 px-6 py-3">CASE STUDY <i class="fa-solid fa-arrow-right text-xs"></i></a>
     </div>
   </div>
 </div>
@@ -378,7 +378,7 @@
   </div>
 
   <div class="text-center mt-16 rev">
-    <button class="inline-flex items-center gap-4 border border-mid/25 text-mid label px-14 py-5 hover:border-gold hover:text-gold transition-all duration-300">
+    <button class="cta-btn cta-btn-secondary inline-flex items-center gap-4 border border-mid/25 text-mid label px-14 py-5 hover:border-gold hover:text-gold transition-all duration-300">
       LOAD MORE PROJECTS <i class="fa-solid fa-plus text-xs"></i>
     </button>
     <div class="label-sm text-mid/40 mt-4">Showing {{ total_projects }} project{{ total_projects|pluralize }}</div>
@@ -418,13 +418,13 @@
     </div>
     <div class="rev-r grid grid-cols-2 gap-3 h-[480px]">
       <div class="mosaic row-span-2">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80" alt="">
+        <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg" alt="">
       </div>
       <div class="mosaic">
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&q=80" alt="">
+        <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg" alt="">
       </div>
       <div class="mosaic">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80" alt="">
+        <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180034/luxspace/projects/3d_renders_13.jpg" alt="">
       </div>
     </div>
   </div>
@@ -452,7 +452,7 @@
           </p>
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full overflow-hidden bg-charcoal flex-shrink-0">
-              <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover" alt="">
+              <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180022/luxspace/projects/3d_renders_3.jpg" class="w-full h-full object-cover" alt="">
             </div>
             <div>
               <div class="label-sm text-cream">SARAH M.</div>
@@ -467,7 +467,7 @@
           </p>
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full overflow-hidden bg-charcoal flex-shrink-0">
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover" alt="">
+              <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179975/luxspace/projects/villa_116_8.jpg" class="w-full h-full object-cover" alt="">
             </div>
             <div>
               <div class="label-sm text-cream">JAMES & HELEN P.</div>
@@ -503,22 +503,22 @@
 
 
 <!-- ══════════ CTA — dark photo ══════════ -->
-<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')] bg-cover bg-center"></div>
+<section class="relative min-h-[68vh] flex items-center justify-center overflow-hidden px-6 py-16">
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179964/luxspace/projects/villa_116_3.jpg')] bg-cover bg-center"></div>
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.93) 0%,rgba(26,26,22,0.78) 50%,rgba(26,26,22,0.90) 100%)"></div>
-  <div class="relative z-10 text-center px-8 max-w-2xl">
-    <div class="orn text-gold label mb-8 max-w-[250px] mx-auto">START YOUR PROJECT</div>
-    <h2 class="font-serif text-cream font-light leading-tight mb-6" style="font-size:clamp(44px,6vw,80px)">
+  <div class="relative z-10 text-center px-4 sm:px-8 max-w-3xl">
+    <div class="orn text-gold label mb-6 max-w-[250px] mx-auto">START YOUR PROJECT</div>
+    <h2 class="font-serif text-cream font-light leading-[0.95] mb-7" style="font-size:clamp(44px,6vw,80px)">
       Inspired by<br>What You've <em class="text-gold italic">Seen?</em>
     </h2>
-    <p class="text-cream/50 body-text font-light mb-12">
+    <p class="text-cream/50 body-text font-light max-w-xl mx-auto mb-10">
       Every project begins with a single conversation. Tell us your vision.
     </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="#" class="inline-flex items-center justify-center gap-3 bg-gold text-dark label px-12 py-5 hover:bg-gold-light transition-all no-underline">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+      <a href="#" class="cta-btn cta-btn-primary inline-flex items-center justify-center gap-3 bg-gold text-dark label px-12 py-5 min-w-[230px] hover:bg-gold-light transition-all no-underline">
         <i class="fa-regular fa-calendar"></i> BOOK A CONSULTATION
       </a>
-      <a href="{% url 'services' %}" class="inline-flex items-center justify-center gap-3 border border-cream/30 text-cream label px-12 py-5 hover:border-cream transition-all no-underline">
+      <a href="{% url 'services' %}" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 border border-cream/30 text-cream label px-12 py-5 min-w-[230px] hover:border-cream transition-all no-underline">
         EXPLORE SERVICES
       </a>
     </div>

@@ -3,6 +3,15 @@
 {% block title %}LuxSpace — {{ service.name }}{% endblock %}
 
 {% block extra_css %}
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
+
+  /* Match updated site typography */
+  .font-serif, h1, h2, h3,
+  .label, .label-sm, button, select, input, textarea,
+  p, body {
+    font-family: 'Outfit', sans-serif !important;
+  }
+
   /* Hero parallax */
   #hero-bg { transform: scale(1.1); transition: transform 0.1s linear; will-change: transform; }
 
@@ -35,7 +44,7 @@
 
   /* Process step */
   .process-step { position:relative; }
-  .process-step::before { content:attr(data-num); font-family:'Cormorant Garamond',serif; font-size:120px; font-weight:300; color:rgba(184,169,106,0.05); position:absolute; top:-20px; left:-10px; line-height:1; pointer-events:none; }
+  .process-step::before { content:attr(data-num); font-family:'Outfit',sans-serif; font-size:120px; font-weight:300; color:rgba(184,169,106,0.05); position:absolute; top:-20px; left:-10px; line-height:1; pointer-events:none; }
   .step-line { position:absolute; top:22px; left:50%; width:100%; height:1px; background:linear-gradient(to right, rgba(184,169,106,0.4), rgba(184,169,106,0.1)); }
 
   /* Testimonial card */
@@ -47,7 +56,7 @@
   .filter-btn.active, .filter-btn:hover { border-color: #b8a96a; color: #b8a96a; background: rgba(184,169,106,0.06); }
 
   /* Stat counter */
-  .stat-num { font-family:'Cormorant Garamond',serif; font-size:72px; font-weight:300; line-height:1; color:#b8a96a; }
+  .stat-num { font-family:'Outfit',sans-serif; font-size:72px; font-weight:300; line-height:1; color:#b8a96a; }
 
   /* Horizontal scroll / wrap for service tabs */
   .tabs-scroll {
@@ -77,7 +86,7 @@
 <section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark" id="hero">
   <!-- Parallax bg -->
   <div id="hero-bg" class="absolute inset-0">
-    <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=85' }}" class="w-full h-full object-cover" alt="">
+    <img src="{{ service.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg' }}" class="w-full h-full object-cover" alt="">
   </div>
   <!-- Gradient overlays -->
   <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,26,22,0.3) 0%, rgba(26,26,22,0.1) 40%, rgba(26,26,22,0.85) 80%, rgba(26,26,22,0.97) 100%)"></div>
@@ -103,7 +112,7 @@
       </h1>
       {% if service.hero_intro %}<p class="text-cream/45 text-[14px] tracking-[1px] leading-loose font-light max-w-xl mb-10">{{ service.hero_intro }}</p>{% endif %}
       <div class="flex items-center gap-8">
-        <a href="#overview" class="inline-flex items-center gap-4 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-10 py-4 hover:bg-gold-light transition-all duration-300 no-underline">
+        <a href="#overview" class="cta-btn cta-btn-primary inline-flex items-center gap-4 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-10 py-4 hover:bg-gold-light transition-all duration-300 no-underline">
           {{ service.cta_primary_label|default:"EXPLORE SERVICE" }} <i class="fa-solid fa-arrow-down text-xs"></i>
         </a>
         <a href="#projects" class="inline-flex items-center gap-3 text-cream/50 text-[10px] tracking-[2.5px] font-medium hover:text-gold transition-colors no-underline group">
@@ -139,7 +148,7 @@
       {% if service.overview_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 gold-after" style="font-size:clamp(42px,4.5vw,62px)">{{ service.overview_heading|linebreaksbr }}</h2>{% endif %}
       {% if service.overview_body_primary %}<p class="text-cream/45 text-[14px] leading-loose font-light mb-6">{{ service.overview_body_primary }}</p>{% endif %}
       {% if service.overview_body_secondary %}<p class="text-cream/35 text-[13px] leading-loose font-light mb-10">{{ service.overview_body_secondary }}</p>{% endif %}
-      <a href="#projects" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
+      <a href="#projects" class="cta-btn cta-btn-secondary inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
         SEE OUR WORK <i class="fa-solid fa-arrow-down text-xs"></i>
       </a>
     </div>
@@ -149,16 +158,16 @@
       <div class="grid grid-cols-12 grid-rows-2 gap-3 h-[520px]">
         <!-- Large left -->
         <div class="col-span-7 row-span-2 mosaic-item relative">
-          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" class="w-full h-full object-cover" alt="">
+          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg" class="w-full h-full object-cover" alt="">
           <div class="absolute inset-0 bg-gradient-to-t from-dark/40 to-transparent"></div>
         </div>
         <!-- Top right -->
         <div class="col-span-5 row-span-1 mosaic-item">
-          <img src="https://images.unsplash.com/photo-1588167056547-c183313da396?w=600&q=80" class="w-full h-full object-cover" alt="">
+          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180034/luxspace/projects/3d_renders_13.jpg" class="w-full h-full object-cover" alt="">
         </div>
         <!-- Bottom right -->
         <div class="col-span-5 row-span-1 mosaic-item relative">
-          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80" class="w-full h-full object-cover" alt="">
+          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180022/luxspace/projects/3d_renders_3.jpg" class="w-full h-full object-cover" alt="">
           <!-- Gold badge -->
           <div class="absolute bottom-4 left-4 bg-gold px-4 py-2">
             <div class="text-dark text-[8px] tracking-[2px] font-bold">CERTIFIED</div>
@@ -335,7 +344,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto" id="projects-grid">
       {% for project in projects %}
       <div class="proj-card h-[420px] rev group" style="transition-delay:{% widthratio forloop.counter0 10 1 %}s">
-        <img src="{{ project.card_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80' }}" class="w-full h-full object-cover" alt="{{ project.title }}">
+        <img src="{{ project.card_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179975/luxspace/projects/villa_116_8.jpg' }}" class="w-full h-full object-cover" alt="{{ project.title }}">
         <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.2) 50%,rgba(12,12,9,0) 100%)"></div>
         {% if project.is_featured %}
         <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">FEATURED</div>
@@ -345,7 +354,7 @@
           <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(26px,3vw,42px)">{{ project.title }}</h3>
           {% if project.summary %}<p class="text-cream/50 text-[12px] leading-relaxed max-w-md mb-5 hidden lg:block">{{ project.summary }}</p>{% endif %}
           <div class="proj-cta flex items-center gap-6">
-            <a href="{% url 'project_detail' project.slug %}" class="inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-6 py-3 hover:bg-gold hover:text-dark transition-all no-underline">
+            <a href="{% url 'project_detail' project.slug %}" class="cta-btn cta-btn-secondary inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-6 py-3 hover:bg-gold hover:text-dark transition-all no-underline">
               VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
             </a>
           </div>
@@ -391,7 +400,7 @@
 
     <div class="grid lg:grid-cols-3 gap-4 h-auto lg:h-[600px]">
       <div class="lg:col-span-2 mosaic-item relative h-80 lg:h-full">
-        <img src="{{ featured_project.card_image|default:'https://images.unsplash.com/photo-1558905585-72ab71d1f56c?w=1400&q=80' }}" class="w-full h-full object-cover" alt="{{ featured_project.title }}">
+        <img src="{{ featured_project.card_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179964/luxspace/projects/villa_116_3.jpg' }}" class="w-full h-full object-cover" alt="{{ featured_project.title }}">
         <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
         <div class="absolute bottom-8 left-8">
           <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-1">{{ featured_project.location|default:featured_project.service.short_label|upper }}</div>
@@ -416,7 +425,7 @@
           {% if featured_project.year %}<div><div class="font-serif text-gold text-3xl font-light">{{ featured_project.year }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">YEAR</div></div>{% endif %}
           {% if featured_project.outcome_stats %}{% for stat in featured_project.outcome_stats|slice:":2" %}<div><div class="font-serif text-gold text-3xl font-light">{{ stat.value }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">{{ stat.label }}</div></div>{% endfor %}{% endif %}
         </div>
-        <a href="{% url 'project_detail' featured_project.slug %}" class="bg-gold text-dark text-[10px] tracking-[3px] font-bold flex items-center justify-center gap-4 py-5 hover:bg-gold-light transition-all no-underline">
+        <a href="{% url 'project_detail' featured_project.slug %}" class="cta-btn cta-btn-primary bg-gold text-dark text-[10px] tracking-[3px] font-bold flex items-center justify-center gap-4 py-5 hover:bg-gold-light transition-all no-underline">
           READ FULL CASE STUDY <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
@@ -483,7 +492,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
       {% for svc in other_services %}
       <a href="{% url 'service_detail' svc.slug %}" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:{% widthratio forloop.counter0 20 1 %}s">
-        <img src="{{ svc.hero_background_image|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ svc.name }}">
+        <img src="{{ svc.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ svc.name }}">
         <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
           <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">{{ svc.order_label }}</div>
@@ -502,17 +511,17 @@
      CTA
 ════════════════════════════════════ -->
 <section class="relative min-h-[65vh] flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80')] bg-cover bg-center"></div>
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg')] bg-cover bg-center"></div>
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.94) 0%,rgba(26,26,22,0.80) 50%,rgba(26,26,22,0.90) 100%)"></div>
   <div class="relative z-10 text-center px-8 max-w-2xl">
     <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 max-w-[250px] mx-auto rev">BEGIN YOUR PROJECT</div>
     {% if service.cta_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">{{ service.cta_heading|linebreaksbr }}</h2>{% else %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">Ready to Transform<br>Your <em class="text-gold italic">Landscape?</em></h2>{% endif %}
     {% if service.cta_intro %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">{{ service.cta_intro }}</p>{% else %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">Every extraordinary garden begins with a conversation. Tell us about your land and your vision.</p>{% endif %}
     <div class="flex flex-col sm:flex-row gap-4 justify-center rev">
-      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all no-underline">
+      <a href="{% url 'contact' %}" class="cta-btn cta-btn-primary inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all no-underline">
         <i class="fa-regular fa-calendar"></i> BOOK A SITE VISIT
       </a>
-      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all no-underline">
+      <a href="{% url 'contact' %}" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all no-underline">
         <i class="fa-regular fa-envelope"></i> GET A QUOTE
       </a>
     </div>

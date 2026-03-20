@@ -3,6 +3,15 @@
 {% block title %}LuxSpace — Services{% endblock %}
 
 {% block extra_css %}
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
+
+  /* Match index typography */
+  .font-serif, h1, h2, h3,
+  .label, .label-sm, button, select,
+  p, body {
+    font-family: 'Outfit', sans-serif !important;
+  }
+
   /* Service card hover */
   .svc-card .card-desc { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.45s ease; }
   .svc-card:hover .card-desc { max-height: 100px; opacity: 1; }
@@ -21,7 +30,7 @@
      HERO
 ════════════════════════════════════ -->
 <section class="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
-  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1800&q=80')] bg-cover bg-center opacity-[0.18]"></div>
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg')] bg-cover bg-center opacity-[0.18]"></div>
   <div class="absolute inset-0 bg-gradient-to-br from-dark via-dark/92 to-dark/60"></div>
   <!-- Corner ornaments -->
   <div class="absolute top-28 left-16 w-14 h-14 border-t border-l border-gold/25"></div>
@@ -65,13 +74,13 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0.5">
     {% for service in services %}
     <div class="svc-card relative overflow-hidden cursor-pointer h-[450px] rev" onclick="document.getElementById('d-{{ service.slug }}').scrollIntoView({behavior:'smooth'})">
-      <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80' }}" class="w-full h-full object-cover" alt="{{ service.name }}">
+      <img src="{{ service.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg' }}" class="w-full h-full object-cover" alt="{{ service.name }}">
       <div class="shade absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.88) 0%,rgba(12,12,9,0.28) 55%,transparent 100%)"></div>
       <div class="absolute bottom-0 inset-x-0 p-8">
         <div class="text-gold text-[11px] tracking-[3px] font-semibold mb-2" style="font-family:'Cormorant Garamond',serif">{{ service.order_label }}</div>
         <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(24px,2.5vw,36px)">{{ service.name }}</h3>
         <p class="card-desc text-cream/50 text-[11px] tracking-[1px] leading-relaxed mb-3">{{ service.hero_intro|truncatewords:20 }}</p>
-        <a href="{% url 'service_detail' service.slug %}" class="card-cta inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2 no-underline">
+        <a href="{% url 'service_detail' service.slug %}" class="card-cta cta-btn cta-btn-secondary inline-flex items-center gap-3 border border-gold text-gold text-[10px] tracking-[2px] font-semibold px-4 py-2 no-underline">
           VIEW SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
@@ -108,7 +117,7 @@
      DIVIDER BANNER
 ════════════════════════════════════ -->
 <div class="bg-dark py-24 px-16 text-center relative overflow-hidden" id="details">
-  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=30')] bg-cover bg-center opacity-[0.04]"></div>
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180034/luxspace/projects/3d_renders_13.jpg')] bg-cover bg-center opacity-[0.04]"></div>
   <div class="relative z-10">
     <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-6 max-w-[240px] mx-auto rev">SERVICE DETAILS</div>
     <h2 class="font-serif text-cream font-light leading-tight rev" style="font-size:clamp(40px,5vw,62px)">
@@ -128,7 +137,7 @@
 {% for service in services %}
 <div id="d-{{ service.slug }}" class="grid lg:grid-cols-2 min-h-[90vh]">
   <div class="zoom-wrap relative {% if forloop.counter0|divisibleby:2 %}order-1{% else %}order-1 lg:order-2{% endif %}">
-    <img src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80' }}" class="w-full h-full object-cover min-h-96" alt="{{ service.name }}">
+    <img src="{{ service.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180022/luxspace/projects/3d_renders_3.jpg' }}" class="w-full h-full object-cover min-h-96" alt="{{ service.name }}">
     <div class="absolute inset-0 bg-gradient-to-r from-transparent to-dark/15"></div>
     <div class="absolute bottom-8 left-8 bg-dark/80 backdrop-blur border border-gold/30 px-5 py-3">
       <div class="text-gold text-[9px] tracking-[3px] font-bold">{{ service.hero_kicker|default:service.order_label }}</div>
@@ -141,7 +150,7 @@
     <h3 class="font-serif text-cream font-light leading-tight mb-2 rev-r" style="font-size:clamp(42px,4vw,64px)">{{ service.overview_heading|default:service.hero_title|linebreaksbr }}</h3>
     <div class="w-14 h-px bg-gold mt-6 mb-8 rev-r"></div>
     <p class="text-cream/50 text-[14px] leading-loose font-light max-w-md mb-8 rev-r">{{ service.overview_body_primary|default:service.hero_intro }}</p>
-    <a href="{% url 'service_detail' service.slug %}" class="inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
+    <a href="{% url 'service_detail' service.slug %}" class="cta-btn cta-btn-secondary inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 w-fit no-underline rev-r">
       EXPLORE SERVICE <i class="fa-solid fa-arrow-right text-xs"></i>
     </a>
   </div>
@@ -153,7 +162,7 @@
      CTA
 ════════════════════════════════════ -->
 <section class="relative min-h-[65vh] flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')] bg-cover bg-center"></div>
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179975/luxspace/projects/villa_116_8.jpg')] bg-cover bg-center"></div>
   <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(26,26,22,0.92) 0%, rgba(26,26,22,0.78) 50%, rgba(26,26,22,0.88) 100%);"></div>
   <div class="relative z-10 text-center px-8 max-w-2xl">
     <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 rev max-w-[250px] mx-auto">BEGIN YOUR PROJECT</div>
@@ -164,10 +173,10 @@
       Every exceptional space begins with a single conversation. Share your vision with our team.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center rev">
-      <a href="{% url 'contact' %}" class="inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all duration-300 no-underline">
+      <a href="{% url 'contact' %}" class="cta-btn cta-btn-primary inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all duration-300 no-underline">
         <i class="fa-regular fa-calendar"></i> BOOK A CONSULTATION
       </a>
-      <a href="{% url 'projects' %}" class="inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all duration-300 no-underline">
+      <a href="{% url 'projects' %}" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all duration-300 no-underline">
         <i class="fa-regular fa-images"></i> VIEW OUR PORTFOLIO
       </a>
     </div>
