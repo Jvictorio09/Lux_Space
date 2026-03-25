@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.db.models import Max
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import GalleryUploadForm, ProjectForm, ProjectImageURLForm, ServiceForm
-from .models import GalleryImage, Project, ProjectImage, Service
+from .forms import GalleryUploadForm, InsightForm, ProjectForm, ProjectImageURLForm, ServiceForm
+from .models import GalleryImage, Insight, Project, ProjectImage, Service
 from .utils import smart_compress_to_bytes, generate_public_id
 from django.conf import settings
 from io import BytesIO
@@ -48,6 +48,61 @@ def contact(request):
     Render the contact us page.
     """
     return render(request, "contact_us.html")
+
+
+def about(request):
+    """
+    Render the standalone About page.
+    """
+    return render(request, "about.html")
+
+
+def insights(request):
+    """
+    Render the insights listing page with live data.
+    """
+    category = request.GET.get("category", "all")
+    qs = Insight.objects.filter(status="published")
+    if category and category != "all":
+        qs = qs.filter(category=category)
+
+    featured = Insight.objects.filter(status="published", is_featured=True).first()
+    if not featured:
+        featured = Insight.objects.filter(status="published").first()
+
+    articles = qs.exclude(pk=featured.pk).order_by("-published_at") if featured else qs
+    return render(
+        request,
+        "insights/luxspace-insights.html",
+        {
+            "featured": featured,
+            "articles": articles,
+            "active_category": category,
+            "total_count": Insight.objects.filter(status="published").count(),
+        },
+    )
+
+
+def insight_detail(request, slug):
+    """
+    Render a single insight detail page by slug.
+    """
+    insight = get_object_or_404(Insight, slug=slug, status="published")
+    related = (
+        Insight.objects.filter(status="published", category=insight.category)
+        .exclude(pk=insight.pk)
+        .order_by("-published_at")[:3]
+    )
+    more = (
+        Insight.objects.filter(status="published")
+        .exclude(pk=insight.pk)
+        .order_by("-published_at")[:3]
+    )
+    return render(
+        request,
+        "insights/luxspace-insight-detail.html",
+        {"insight": insight, "related": related, "more": more},
+    )
 
 
 def service_detail(request, slug):
@@ -147,16 +202,18 @@ class DashboardLoginView(auth_views.LoginView):
 def dashboard_home(request):
     """
     Simple starting point for the custom client dashboard.
-
-    From here we'll later add links to manage services, projects, and content blocks.
     """
     service_count = Service.objects.count()
     project_count = Project.objects.count()
     featured_count = Project.objects.filter(is_featured=True).count()
+    insight_count = Insight.objects.count()
+    insight_published = Insight.objects.filter(status="published").count()
     context = {
         "service_count": service_count,
         "project_count": project_count,
         "featured_count": featured_count,
+        "insight_count": insight_count,
+        "insight_published": insight_published,
     }
     return render(request, "dashboard/home.html", context)
 
@@ -559,3 +616,202 @@ def dashboard_gallery(request):
         "dashboard/gallery.html",
         {"form": form, "images": images},
     )
+
+
+# ---------------------------------------------------------------------------
+# Gallery JSON API (used by Editor.js image picker)
+# ---------------------------------------------------------------------------
+
+import json as _json
+
+
+@login_required
+def gallery_api_images(request):
+    """Return gallery images as JSON for the Editor.js image picker."""
+    from django.http import JsonResponse
+    images = GalleryImage.objects.values("id", "title", "web_url", "thumb_url", "secure_url")
+    return JsonResponse({"images": list(images)})
+
+
+@login_required
+def gallery_api_upload(request):
+    """Upload an image to the gallery and return JSON."""
+    from django.http import JsonResponse
+    if request.method != "POST":
+        return JsonResponse({"success": False, "error": "POST only"}, status=405)
+
+    cloudinary.config(
+        cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+        api_key=settings.CLOUDINARY_API_KEY,
+        api_secret=settings.CLOUDINARY_API_SECRET,
+        secure=True,
+    )
+
+    f = request.FILES.get("image")
+    if not f:
+        return JsonResponse({"success": False, "error": "No file provided"}, status=400)
+
+    try:
+        file_size_mb = f.size / (1024 * 1024)
+        file_to_upload = smart_compress_to_bytes(f) if file_size_mb > 9.3 else BytesIO(f.read())
+        public_id = generate_public_id(f.name)
+        result = cloudinary.uploader.upload(
+            file_to_upload,
+            folder="luxspace/gallery",
+            public_id=public_id,
+            resource_type="image",
+            access_mode="public",
+        )
+        secure_url = result.get("secure_url") or result.get("url", "")
+        img = GalleryImage.objects.create(
+            title=f.name,
+            secure_url=secure_url,
+            web_url=secure_url,
+            thumb_url=secure_url,
+            public_id=result.get("public_id", public_id),
+            width=result.get("width"),
+            height=result.get("height"),
+            format=result.get("format", ""),
+            bytes=result.get("bytes"),
+        )
+        return JsonResponse({
+            "success": True,
+            "image": {
+                "id": img.pk,
+                "title": img.title,
+                "web_url": img.web_url,
+                "thumb_url": img.thumb_url,
+                "secure_url": img.secure_url,
+            },
+        })
+    except Exception as exc:
+        return JsonResponse({"success": False, "error": str(exc)}, status=500)
+
+
+@login_required
+def editor_image_upload(request):
+    """
+    Editor.js image tool upload endpoint.
+    Expects multipart with key 'image', returns Editor.js-compatible response.
+    """
+    from django.http import JsonResponse
+    if request.method != "POST":
+        return JsonResponse({"success": 0}, status=405)
+
+    cloudinary.config(
+        cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+        api_key=settings.CLOUDINARY_API_KEY,
+        api_secret=settings.CLOUDINARY_API_SECRET,
+        secure=True,
+    )
+
+    f = request.FILES.get("image")
+    if not f:
+        return JsonResponse({"success": 0, "message": "No file"})
+
+    try:
+        file_size_mb = f.size / (1024 * 1024)
+        file_to_upload = smart_compress_to_bytes(f) if file_size_mb > 9.3 else BytesIO(f.read())
+        public_id = generate_public_id(f.name)
+        result = cloudinary.uploader.upload(
+            file_to_upload,
+            folder="luxspace/insights",
+            public_id=public_id,
+            resource_type="image",
+            access_mode="public",
+        )
+        url = result.get("secure_url") or result.get("url", "")
+        return JsonResponse({"success": 1, "file": {"url": url}})
+    except Exception as exc:
+        return JsonResponse({"success": 0, "message": str(exc)})
+
+
+# ---------------------------------------------------------------------------
+# Dashboard — Insights
+# ---------------------------------------------------------------------------
+
+
+@login_required
+def dashboard_insights(request):
+    """List all insights with search/filter."""
+    insights_qs = Insight.objects.order_by("-created_at")
+    return render(request, "dashboard/insights_list.html", {"insights": insights_qs})
+
+
+@login_required
+def dashboard_insight_create(request):
+    """Create a new insight article."""
+    if request.method == "POST":
+        form = InsightForm(request.POST)
+        if form.is_valid():
+            insight = form.save()
+            messages.success(request, f"'{insight.title}' created.")
+            return redirect("dashboard_insight_edit", pk=insight.pk)
+        messages.error(request, "Please fix the errors below.")
+        blocks_json = request.POST.get("blocks", "{}")
+    else:
+        form = InsightForm()
+        blocks_json = "{}"
+
+    gallery_images = GalleryImage.objects.all().order_by("-created_at")
+    return render(
+        request,
+        "dashboard/insight_form.html",
+        {"form": form, "insight": None, "gallery_images": gallery_images, "blocks_json": blocks_json},
+    )
+
+
+@login_required
+def dashboard_insight_edit(request, pk):
+    """Edit an existing insight article."""
+    insight = get_object_or_404(Insight, pk=pk)
+
+    import json as _json_mod
+    if request.method == "POST":
+        form = InsightForm(request.POST, instance=insight)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Saved.")
+            return redirect("dashboard_insight_edit", pk=insight.pk)
+        messages.error(request, "Please fix the errors below.")
+        blocks_json = request.POST.get("blocks", "{}")
+    else:
+        blocks_json = _json_mod.dumps(insight.blocks) if insight.blocks else "{}"
+        form = InsightForm(
+            instance=insight,
+            initial={"blocks": blocks_json},
+        )
+
+    gallery_images = GalleryImage.objects.all().order_by("-created_at")
+    return render(
+        request,
+        "dashboard/insight_form.html",
+        {"form": form, "insight": insight, "gallery_images": gallery_images, "blocks_json": blocks_json},
+    )
+
+
+@login_required
+def dashboard_insight_delete(request, pk):
+    """Delete an insight (POST only)."""
+    if request.method == "POST":
+        insight = get_object_or_404(Insight, pk=pk)
+        title = insight.title
+        insight.delete()
+        messages.success(request, f"'{title}' deleted.")
+    return redirect("dashboard_insights")
+
+
+@login_required
+def dashboard_insight_toggle(request, pk):
+    """Toggle insight status between draft and published (POST only)."""
+    if request.method == "POST":
+        insight = get_object_or_404(Insight, pk=pk)
+        if insight.status == "published":
+            insight.status = "draft"
+            insight.save(update_fields=["status", "updated_at"])
+            messages.success(request, f"'{insight.title}' set to draft.")
+        else:
+            insight.status = "published"
+            insight.save()
+            messages.success(request, f"'{insight.title}' published.")
+    return redirect("dashboard_insights")

@@ -1,0 +1,210 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}LuxSpace — Insights{% endblock %}
+
+{% block content %}
+<style>
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+  .status-published { background: #e6f4ea; color: #1e7e34; }
+  .status-draft { background: #f5f5f5; color: #777; }
+  .featured-dot {
+    display: inline-block; width: 7px; height: 7px;
+    background: #c9a84c; border-radius: 50%; margin-right: 4px;
+  }
+  .action-btn {
+    border: none; background: none; cursor: pointer;
+    font-size: 12px; padding: 3px 8px; border-radius: 4px;
+    color: #555;
+  }
+  .action-btn:hover { background: #f0f0f0; }
+  .action-btn.danger:hover { background: #fdecea; color: #c62828; }
+  .action-btn.publish:hover { background: #e6f4ea; color: #1e7e34; }
+  .search-bar {
+    display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .search-bar input, .search-bar select {
+    padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px;
+    font-size: 13px; background: #fff;
+  }
+  .search-bar input { width: 240px; }
+  .cover-thumb {
+    width: 48px; height: 36px; object-fit: cover; border-radius: 3px;
+    background: #f0f0f0; display: block;
+  }
+  .no-results { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+</style>
+
+<div class="top-bar">
+  <div>
+    <h1>Insights</h1>
+    <small>{{ insights|length }} article{{ insights|length|pluralize }}</small>
+  </div>
+  <a href="{% url 'dashboard_insight_create' %}" class="btn-outline" style="background:#174ea6;color:#fff;border-color:#174ea6;">
+    + New Article
+  </a>
+</div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <div style="background:{% if msg.tags == 'error' %}#fdecea{% else %}#e6f4ea{% endif %};
+                color:{% if msg.tags == 'error' %}#c62828{% else %}#1e7e34{% endif %};
+                padding:8px 14px; border-radius:4px; margin-bottom:14px; font-size:13px;">
+      {{ msg }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Search + filter bar -->
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search title or excerpt…" oninput="applyFilters()">
+  <select id="statusFilter" onchange="applyFilters()">
+    <option value="all">All statuses</option>
+    <option value="published">Published</option>
+    <option value="draft">Draft</option>
+  </select>
+  <select id="catFilter" onchange="applyFilters()">
+    <option value="all">All categories</option>
+    <option value="interior">Interior Design</option>
+    <option value="landscape">Landscaping</option>
+    <option value="joinery">Joinery</option>
+    <option value="pools">Swimming Pools</option>
+    <option value="guides">Project Guides</option>
+    <option value="dubai">Dubai Living</option>
+  </select>
+</div>
+
+{% if insights %}
+<div class="card" style="padding:0; overflow:hidden;">
+  <table id="insightsTable">
+    <thead>
+      <tr>
+        <th style="width:54px;"></th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Featured</th>
+        <th>Date</th>
+        <th style="width:180px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for insight in insights %}
+      <tr data-title="{{ insight.title|lower }}"
+          data-excerpt="{{ insight.excerpt|lower }}"
+          data-status="{{ insight.status }}"
+          data-cat="{{ insight.category }}">
+        <td>
+          {% if insight.cover_image_url %}
+            <img src="{{ insight.cover_image_url }}" alt="" class="cover-thumb">
+          {% else %}
+            <div class="cover-thumb" style="background:#e8e8e8;"></div>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'dashboard_insight_edit' insight.pk %}"
+             style="font-weight:500; color:#174ea6; font-size:13px;">
+            {{ insight.title|truncatechars:60 }}
+          </a>
+          <div style="font-size:11px; color:#999; margin-top:2px;">
+            /insights/{{ insight.slug }}/
+          </div>
+        </td>
+        <td style="font-size:12px; color:#666;">{{ insight.category_label }}</td>
+        <td>
+          <span class="status-badge status-{{ insight.status }}">
+            {{ insight.get_status_display }}
+          </span>
+        </td>
+        <td style="text-align:center;">
+          {% if insight.is_featured %}
+            <span class="featured-dot"></span>
+          {% else %}
+            <span style="color:#ddd;">—</span>
+          {% endif %}
+        </td>
+        <td style="font-size:12px; color:#777;">
+          {% if insight.published_at %}
+            {{ insight.published_at|date:"M j, Y" }}
+          {% else %}
+            {{ insight.created_at|date:"M j, Y" }}
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'dashboard_insight_edit' insight.pk %}" class="action-btn">Edit</a>
+
+          <form method="post" action="{% url 'dashboard_insight_toggle' insight.pk %}"
+                style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="action-btn publish"
+                    title="{% if insight.status == 'published' %}Set to draft{% else %}Publish{% endif %}">
+              {% if insight.status == 'published' %}Unpublish{% else %}Publish{% endif %}
+            </button>
+          </form>
+
+          <a href="{% url 'insight_detail' insight.slug %}" target="_blank"
+             class="action-btn" title="View on site">↗</a>
+
+          <form method="post" action="{% url 'dashboard_insight_delete' insight.pk %}"
+                style="display:inline;"
+                onsubmit="return confirm('Delete \'{{ insight.title|truncatechars:40 }}\' permanently?')">
+            {% csrf_token %}
+            <button type="submit" class="action-btn danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="noResults" class="no-results" style="display:none;">
+    No articles match your search.
+  </div>
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:60px 20px;">
+  <p style="font-size:15px; color:#777; margin-bottom:16px;">No insights yet.</p>
+  <a href="{% url 'dashboard_insight_create' %}" class="btn-outline"
+     style="background:#174ea6;color:#fff;border-color:#174ea6;">
+    Write your first article
+  </a>
+</div>
+{% endif %}
+
+<script>
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const status = document.getElementById('statusFilter').value;
+  const cat = document.getElementById('catFilter').value;
+  const rows = document.querySelectorAll('#insightsTable tbody tr');
+  let visible = 0;
+
+  rows.forEach(row => {
+    const title = row.dataset.title || '';
+    const excerpt = row.dataset.excerpt || '';
+    const rowStatus = row.dataset.status || '';
+    const rowCat = row.dataset.cat || '';
+
+    const matchQ = !q || title.includes(q) || excerpt.includes(q);
+    const matchStatus = status === 'all' || rowStatus === status;
+    const matchCat = cat === 'all' || rowCat === cat;
+
+    const show = matchQ && matchStatus && matchCat;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+}
+
+// Keyboard shortcut: / focuses search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | LuxSpace Fit Out & Technical Services</title>
+  <meta name="description" content="LuxSpace Fit Out & Technical Services LLC — Dubai's premier interior fit-out, bespoke joinery, landscaping, and pool specialists since 2019.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --gold: #B8965A;
+      --gold-light: #D4AF7A;
+      --gold-pale: #F2E8D5;
+      --ink: #0D0D0D;
+      --ink2: #141414;
+      --charcoal: #1C1C1C;
+      --cream: #F0EDE6;
+      --stone: #4A4540;
+      --mist: #F7F5F2;
+      --white: #FFFFFF;
+      --rule: rgba(240,237,230,0.1);
+      --border: rgba(184,150,90,0.18);
+      --border-light: rgba(184,150,90,0.10);
+      --shadow: 0 32px 80px rgba(0,0,0,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ─── NAV ─────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 0 3rem; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+      background: rgba(10,10,8,0.6);
+      backdrop-filter: blur(12px);
+    }
+    nav.scrolled { background: rgba(10,10,8,0.92); backdrop-filter: blur(20px); border-color: var(--rule); }
+    .nav-links a, .nav-cta, .nav-hamburger { cursor: pointer; }
+    .nav-logo {
+      display: inline-flex; align-items: center; text-decoration: none;
+    }
+    .nav-logo img { height: 56px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--cream);
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
+      color: var(--ink);
+      background: var(--gold);
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #d4a35a; }
+    .nav-hamburger { display: none; background: none; border: none; color: var(--cream); font-size: 1.2rem; }
+    #mobile-nav { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 950; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 300; color: var(--cream); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    #mobile-nav a:hover { color: var(--gold); }
+    #mobile-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: var(--cream); font-size: 1.4rem; cursor: pointer; }
+
+    /* ─── HERO ───────────────────────── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format');
+      background-size: cover; background-position: center 30%;
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    .hero.loaded .hero-bg { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(160deg,
+        rgba(13,13,13,0.20) 0%,
+        rgba(13,13,13,0.45) 50%,
+        rgba(13,13,13,0.88) 100%
+      );
+    }
+    .hero-grain {
+      position: absolute; inset: 0; z-index: 2; opacity: 0.04; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .hero-inner {
+      position: relative; z-index: 3;
+      max-width: 72rem; margin: 0 auto;
+      padding: 0 2.5rem 5rem;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-eyebrow::before {
+      content: ""; display: block; width: 32px; height: 1px; background: var(--gold);
+    }
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300; line-height: 1.05;
+      letter-spacing: -0.01em;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-sub {
+      margin-top: 1.25rem;
+      max-width: 50ch;
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem; font-weight: 300;
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .hero-divider {
+      display: flex; gap: 1.5rem; align-items: center;
+      margin-top: 2.5rem;
+      opacity: 0; transform: translateY(12px);
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .hero-divider a {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .hero-divider a:hover { background: var(--gold-light); }
+    .hero-divider a.ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .hero-divider a.ghost:hover { border-color: var(--gold); color: var(--gold); background: transparent; }
+
+    /* ─── SECTION GENERIC ─────────────── */
+    .section { padding: 6rem 0; }
+    .container { max-width: 72rem; margin: 0 auto; padding: 0 2.5rem; }
+    .eyebrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .eyebrow::before { content: ""; display: block; width: 24px; height: 1px; background: var(--gold); }
+    h2.section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300; line-height: 1.15; letter-spacing: -0.01em;
+    }
+    h2.section-title em { font-style: italic; color: var(--gold-light); }
+
+    /* ─── STORY ──────────────────────── */
+    .story { background: var(--ink2); }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .story-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    .story-text p {
+      color: rgba(255,255,255,0.6);
+      line-height: 1.85; margin-top: 1.25rem; font-size: 1rem;
+    }
+    .story-text p + p { margin-top: 0.85rem; }
+    .story-text .highlight {
+      display: inline; color: var(--gold-light);
+      font-family: 'Outfit', sans-serif;
+      font-style: italic; font-size: 1.15em;
+    }
+    .story-visual {
+      position: relative;
+    }
+    .story-img-wrap {
+      position: relative; border-radius: 2px; overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+    .story-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.9) contrast(1.05);
+      transition: transform 0.5s ease;
+    }
+    .story-img-wrap:hover img { transform: scale(1.03); }
+    .story-badge {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      width: 120px; height: 120px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--ink);
+      box-shadow: 0 12px 40px rgba(184,150,90,0.4);
+    }
+    .story-badge .num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem; font-weight: 600; line-height: 1;
+    }
+    .story-badge .lbl {
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+    }
+    .story-frame {
+      position: absolute; top: -1rem; left: -1rem; right: 1rem; bottom: -1rem;
+      border: 1px solid var(--border); border-radius: 2px; pointer-events: none; z-index: -1;
+    }
+
+    /* ─── STATS ──────────────────────── */
+    .stats { background: var(--charcoal); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .stats-row { grid-template-columns: 1fr; } }
+    .stat-item {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-right: 1px solid var(--border-light);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+    @media (max-width: 768px) {
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(1),
+      .stat-item:nth-child(2) { border-bottom: 1px solid var(--border-light); }
+    }
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem; font-weight: 400; line-height: 1;
+      color: var(--gold);
+    }
+    .stat-num sup { font-size: 1.5rem; vertical-align: super; }
+    .stat-label {
+      margin-top: 0.4rem;
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ─── VALUES ─────────────────────── */
+    .values { background: var(--ink); }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      margin-top: 3rem;
+      background: var(--border-light);
+      border: 1px solid var(--border-light);
+    }
+    @media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
+    .value-card {
+      background: var(--ink2);
+      padding: 2.5rem 2rem;
+      transition: background 0.25s;
+      cursor: default;
+    }
+    .value-card:hover { background: #1A1A1A; }
+    .value-icon {
+      width: 44px; height: 44px; border-radius: 2px;
+      background: rgba(184,150,90,0.08);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      color: var(--gold); font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .value-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .value-body { color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.7; }
+
+    /* ─── SERVICES ───────────────────── */
+    .services { background: var(--mist); color: var(--ink); }
+    .services .eyebrow { color: var(--gold); }
+    .services .eyebrow::before { background: var(--gold); }
+    .services h2.section-title { color: var(--ink); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      margin-top: 3rem;
+      background: rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    @media (max-width: 640px) { .services-grid { grid-template-columns: 1fr; } }
+    .svc-card {
+      background: #FBF9F6;
+      padding: 2rem 1.75rem;
+      display: flex; gap: 1.25rem;
+      align-items: flex-start;
+      transition: background 0.2s;
+    }
+    .svc-card:hover { background: #fff; }
+    .svc-ico {
+      flex: 0 0 auto;
+      width: 44px; height: 44px;
+      background: rgba(184,150,90,0.1);
+      border: 1px solid rgba(184,150,90,0.2);
+      border-radius: 2px;
+      display: grid; place-items: center;
+      color: var(--gold); font-size: 1rem;
+      margin-top: 2px;
+    }
+    .svc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem; font-weight: 500;
+      color: var(--ink); margin-bottom: 0.3rem;
+    }
+    .svc-desc { color: var(--stone); font-size: 0.88rem; line-height: 1.65; }
+
+    /* ─── PROCESS ────────────────────── */
+    .process { background: var(--ink2); }
+    .process-track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 3rem;
+      position: relative;
+    }
+    @media (max-width: 900px) { .process-track { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .process-track { grid-template-columns: 1fr; } }
+    .process-track::before {
+      content: ""; position: absolute;
+      top: 2.6rem; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+    @media (max-width: 900px) { .process-track::before { display: none; } }
+    .proc-step { padding: 2rem 1.5rem; text-align: center; }
+    .proc-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid var(--border);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem; color: var(--gold);
+      margin-bottom: 1rem;
+      position: relative; z-index: 1;
+      background: var(--ink2);
+    }
+    .proc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem; font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .proc-desc { color: rgba(255,255,255,0.45); font-size: 0.85rem; line-height: 1.65; }
+
+    /* ─── TEAM ───────────────────────── */
+    .team { background: var(--ink); }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (max-width: 1024px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .team-grid { grid-template-columns: 1fr; } }
+    .team-card {
+      display: flex; flex-direction: column;
+    }
+    .team-photo {
+      aspect-ratio: 3/4; border-radius: 2px; overflow: hidden;
+      background: var(--charcoal);
+      position: relative;
+    }
+    .team-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.85) contrast(1.1) saturate(0.7);
+      transition: filter 0.3s, transform 0.4s;
+    }
+    .team-card:hover .team-photo img {
+      filter: brightness(0.95) contrast(1.05) saturate(0.9);
+      transform: scale(1.04);
+    }
+    .team-photo::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,13,13,0.6), transparent 50%);
+    }
+    .team-info { margin-top: 1rem; }
+    .team-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem; font-weight: 400;
+    }
+    .team-role {
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold); margin-top: 0.2rem;
+    }
+
+    /* ─── JOURNEY / TIMELINE ─────────── */
+    .journey { background: var(--charcoal); overflow: hidden; }
+    .timeline {
+      position: relative; margin-top: 4rem;
+    }
+    .timeline-line {
+      position: absolute; top: 1.6rem; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .timeline-scroll {
+      display: flex; gap: 0;
+      overflow-x: auto; scrollbar-width: none;
+      position: relative;
+    }
+    .timeline-scroll::-webkit-scrollbar { display: none; }
+    .tl-item {
+      flex: 0 0 calc(100% / 7);
+      min-width: 140px;
+      padding: 0 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--ink2);
+      border: 2px solid var(--gold);
+      margin: 0 auto 1.5rem;
+      position: relative; z-index: 1;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .tl-item:hover .tl-dot {
+      background: var(--gold);
+      transform: scale(1.3);
+    }
+    .tl-year {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem; font-weight: 400; color: var(--gold);
+    }
+    .tl-label {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-top: 0.2rem;
+    }
+    .tl-desc {
+      margin-top: 0.75rem;
+      font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55;
+    }
+
+    /* ─── PROJECTS ───────────────────── */
+    .projects { background: var(--ink2); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1.5px;
+      margin-top: 3rem;
+      background: rgba(255,255,255,0.05);
+      aspect-ratio: 16/9;
+    }
+    @media (max-width: 768px) {
+      .projects-grid { grid-template-columns: 1fr; grid-template-rows: auto; aspect-ratio: auto; }
+    }
+    .proj-item {
+      position: relative; overflow: hidden;
+      grid-row: 1 / span 2;
+    }
+    .proj-item:not(:first-child) { grid-row: auto; }
+    .proj-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: brightness(0.75);
+    }
+    .proj-item:hover img { transform: scale(1.05); }
+    .proj-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,13,13,0.85) 0%, transparent 60%);
+      padding: 1.5rem;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .proj-cat {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.35rem;
+    }
+    .proj-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400;
+    }
+
+    /* ─── WHY CHOOSE ─────────────────── */
+    .why { background: var(--mist); color: var(--ink); }
+    .why .eyebrow { color: var(--gold); }
+    .why .eyebrow::before { background: var(--gold); }
+    .why h2.section-title { color: var(--ink); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+    @media (max-width: 900px) { .why-grid { grid-template-columns: 1fr; gap: 2rem; } }
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+    .why-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1.25rem;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .why-item:hover {
+      border-color: rgba(184,150,90,0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .why-check {
+      width: 32px; height: 32px; flex: 0 0 auto;
+      background: rgba(184,150,90,0.1);
+      border: 1px solid rgba(184,150,90,0.2);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: var(--gold); font-size: 0.8rem;
+    }
+    .why-item-title { font-weight: 500; font-size: 0.95rem; color: var(--ink); }
+    .why-item-desc { font-size: 0.85rem; color: var(--stone); margin-top: 0.2rem; line-height: 1.6; }
+    .why-visual { position: relative; }
+    .why-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 2px; filter: brightness(0.9); }
+    .why-cert {
+      position: absolute; bottom: -1rem; left: -1rem;
+      background: var(--ink); color: var(--white);
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      min-width: 180px;
+    }
+    .why-cert-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem; font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .why-cert-label {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-top: 0.25rem;
+    }
+
+    /* ─── CTA ────────────────────────── */
+    .cta-section {
+      background: var(--ink);
+      padding: 6rem 0;
+      text-align: center;
+      border-top: 1px solid var(--border-light);
+    }
+    .cta-section h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+    }
+    .cta-section h2 em { font-style: italic; color: var(--gold-light); }
+    .cta-section p { color: rgba(255,255,255,0.5); margin-top: 1rem; max-width: 50ch; margin-inline: auto; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.75);
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 400;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── FOOTER ─────────────────────── */
+    footer {
+      background: #080808;
+      padding: 3rem 0 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400; letter-spacing: 0.15em;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      text-decoration: none; color: rgba(255,255,255,0.4);
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      text-align: center; margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.25); font-size: 0.78rem;
+    }
+
+    /* ─── ANIMATIONS ─────────────────── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.is-in { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      nav .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: block; }
+      .story-badge { width: 90px; height: 90px; bottom: -0.75rem; right: -0.75rem; }
+      .story-badge .num { font-size: 2rem; }
+      .projects-grid { height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div id="mobile-nav">
+    <button id="mobile-close"><i class="fa-solid fa-xmark"></i></button>
+    <a href="{% url 'about' %}" onclick="closeMobile()">About</a>
+    <a href="{% url 'services' %}" onclick="closeMobile()">Services</a>
+    <a href="{% url 'projects' %}" onclick="closeMobile()">Portfolio</a>
+    <a href="{% url 'insights' %}" onclick="closeMobile()">Insights</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()">Contact</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()" style="color:var(--gold)">Get a Quote →</a>
+  </div>
+
+  <nav id="main-nav">
+    <a href="{% url 'home' %}" class="nav-logo" aria-label="LuxSpace Home">
+      <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1774398574/LOGO_WHITE_hcnorn.png" alt="LuxSpace logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="{% url 'about' %}" class="active" style="color:var(--gold)">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'projects' %}">Portfolio</a></li>
+      <li><a href="{% url 'insights' %}">Insights</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+    </ul>
+    <a href="{% url 'contact' %}" class="nav-cta">Get a Quote</a>
+    <button class="nav-hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Dubai-Based Luxury Fit-Out</p>
+      <h1>Spaces That Reflect<br><em>Who You've Become</em></h1>
+      <p class="hero-sub">We design, build, and deliver premium interiors and outdoor environments for clients who expect precision, speed, and zero compromise.</p>
+      <div class="hero-divider">
+        <a href="#story">Start Your Project <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+        <a href="#projects" class="ghost">View Our Work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item reveal">
+          <div class="stat-num">6<sup>+</sup></div>
+          <div class="stat-label">Years of consistent delivery in Dubai's most demanding projects</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-1">
+          <div class="stat-num">500<sup>+</sup></div>
+          <div class="stat-label">Projects across residential, commercial, and outdoor environments</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-2">
+          <div class="stat-num">98<sup>%</sup></div>
+          <div class="stat-label">Client satisfaction — built on reliability, not promises</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-3">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Core divisions — fully integrated execution under one team</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="section story" id="story">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-text">
+          <p class="eyebrow">About LuxSpace</p>
+          <h2 class="section-title">Built on Control.<br><em>Driven by Standards.</em></h2>
+          <p>
+            Most projects fail in the gap between design and execution. <span class="highlight">LuxSpace was built to close that gap.</span>
+          </p>
+          <p>
+            We operate with a structured delivery model across five core divisions: fit-out, landscaping, joinery, swimming pools, and authority approvals. This allows us to control timelines, maintain quality, and eliminate coordination issues.
+          </p>
+          <p>
+            Every project is treated as a system. Every detail is owned. Every outcome is intentional.
+          </p>
+          <p style="margin-top: 1.5rem; color: rgba(255,255,255,0.45); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;">
+            Dubai-based. 500+ projects delivered. Trusted since 2019.
+          </p>
+        </div>
+        <div class="story-visual reveal">
+          <div class="story-img-wrap">
+            <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=1200&auto=format" alt="LuxSpace interior project">
+          </div>
+          <div class="story-badge">
+            <span class="num">2019</span>
+            <span class="lbl">Founded</span>
+          </div>
+          <div class="story-frame"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section values">
+    <div class="container">
+      <p class="eyebrow reveal">How We Operate</p>
+      <h2 class="section-title reveal reveal-delay-1">No shortcuts.<br><em>No surprises.</em></h2>
+      <div class="values-grid">
+        <div class="value-card reveal">
+          <div class="value-icon"><i class="fa-solid fa-gem"></i></div>
+          <h3 class="value-title">Precision Over Speed</h3>
+          <p class="value-body">We don't rush projects. We execute them correctly the first time — because rework costs more than patience.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-1">
+          <div class="value-icon"><i class="fa-solid fa-handshake"></i></div>
+          <h3 class="value-title">Client Alignment at Every Stage</h3>
+          <p class="value-body">You're never guessing what's happening. We keep you informed and in control throughout every phase.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <div class="value-icon"><i class="fa-solid fa-diagram-project"></i></div>
+          <h3 class="value-title">Structured, Transparent Delivery</h3>
+          <p class="value-body">Clear milestones. Clear timelines. No surprises. Every project follows a disciplined execution model.</p>
+        </div>
+        <div class="value-card reveal">
+          <div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3 class="value-title">Full Regulatory Ownership</h3>
+          <p class="value-body">Authority approvals, permit drawings, compliance submissions — handled entirely in-house, so nothing stalls.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-1">
+          <div class="value-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <h3 class="value-title">Integrated, Not Fragmented</h3>
+          <p class="value-body">Five divisions. One team. One point of accountability. No coordination gaps, no blame-passing between contractors.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <div class="value-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <h3 class="value-title">Outcomes, Not Deliverables</h3>
+          <p class="value-body">We don't just complete tasks. We take full responsibility for delivering the result exactly as promised.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section services">
+    <div class="container">
+      <p class="eyebrow reveal">What We Do</p>
+      <h2 class="section-title reveal reveal-delay-1">Five divisions.<br><em>Total accountability.</em></h2>
+      <div class="services-grid">
+        <div class="svc-card reveal">
+          <div class="svc-ico"><i class="fa-solid fa-couch"></i></div>
+          <div>
+            <div class="svc-title">Fit-Out Services</div>
+            <p class="svc-desc">Complete interior transformation delivered from concept to final handover — with full accountability at every stage.</p>
+          </div>
+        </div>
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-ico"><i class="fa-solid fa-tree"></i></div>
+          <div>
+            <div class="svc-title">Landscaping Services</div>
+            <p class="svc-desc">Outdoor environments engineered for durability, functionality, and long-term visual impact in the Gulf climate.</p>
+          </div>
+        </div>
+        <div class="svc-card reveal">
+          <div class="svc-ico"><i class="fa-solid fa-hammer"></i></div>
+          <div>
+            <div class="svc-title">Custom Joinery</div>
+            <p class="svc-desc">Bespoke cabinetry and carpentry built to match your exact space — not standard templates, not off-the-shelf compromises.</p>
+          </div>
+        </div>
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-ico"><i class="fa-solid fa-water"></i></div>
+          <div>
+            <div class="svc-title">Swimming Pool Contracting</div>
+            <p class="svc-desc">Designed and constructed for both performance and visual statement — pools that become the centrepiece of any property.</p>
+          </div>
+        </div>
+        <div class="svc-card reveal">
+          <div class="svc-ico"><i class="fa-solid fa-file-circle-check"></i></div>
+          <div>
+            <div class="svc-title">Authority Approvals</div>
+            <p class="svc-desc">We handle compliance, permit submissions, and authority coordination so your project moves without delays or dead ends.</p>
+          </div>
+        </div>
+        <div class="svc-card reveal reveal-delay-1">
+          <div class="svc-ico"><i class="fa-solid fa-bolt"></i></div>
+          <div>
+            <div class="svc-title">MEP & Smart Systems</div>
+            <p class="svc-desc">Electrical, plumbing, HVAC, fire alarm, and smart home automation — installed and certified to UAE standards, in-house.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section process">
+    <div class="container">
+      <p class="eyebrow reveal">How We Deliver</p>
+      <h2 class="section-title reveal reveal-delay-1">A process built to<br><em>eliminate delays</em></h2>
+      <div class="process-track">
+        <div class="proc-step reveal">
+          <div class="proc-num">01</div>
+          <div class="proc-title">Consultation</div>
+          <p class="proc-desc">We define scope, priorities, and expectations before anything begins. No ambiguity, no assumptions.</p>
+        </div>
+        <div class="proc-step reveal reveal-delay-1">
+          <div class="proc-num">02</div>
+          <div class="proc-title">Planning & Approvals</div>
+          <p class="proc-desc">Technical planning and authority coordination handled upfront — so execution never stalls waiting on paperwork.</p>
+        </div>
+        <div class="proc-step reveal reveal-delay-2">
+          <div class="proc-num">03</div>
+          <div class="proc-title">Execution</div>
+          <p class="proc-desc">Dedicated teams deliver with strict quality control and structured reporting. You're always in the loop.</p>
+        </div>
+        <div class="proc-step reveal reveal-delay-3">
+          <div class="proc-num">04</div>
+          <div class="proc-title">Handover</div>
+          <p class="proc-desc">Final inspection ensures everything meets the agreed standard. We don't sign off until it's right.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section projects">
+    <div class="container">
+      <p class="eyebrow reveal">Portfolio</p>
+      <h2 class="section-title reveal reveal-delay-1">The <em>LuxSpace</em> touch</h2>
+    </div>
+    <div class="container" style="padding-top: 2rem;">
+      <div class="projects-grid reveal">
+        <div class="proj-item">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format" alt="Residential Interior">
+          <div class="proj-overlay">
+            <div class="proj-cat">Interior Fit-Out</div>
+            <div class="proj-name">Jumeirah Park Residence</div>
+          </div>
+        </div>
+        <div class="proj-item">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=900&auto=format" alt="Office Design">
+          <div class="proj-overlay">
+            <div class="proj-cat">Office Renovation</div>
+            <div class="proj-name">Business Bay HQ</div>
+          </div>
+        </div>
+        <div class="proj-item">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=900&auto=format" alt="Landscape Design">
+          <div class="proj-overlay">
+            <div class="proj-cat">Landscape & Pool</div>
+            <div class="proj-name">Dubai Hills Villa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY / TIMELINE -->
+  <section class="section journey">
+    <div class="container">
+      <p class="eyebrow reveal">Our Journey</p>
+      <h2 class="section-title reveal reveal-delay-1">A legacy of <em>growth</em></h2>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-scroll">
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2019</div>
+            <div class="tl-label">Foundation</div>
+            <p class="tl-desc">LuxSpace established with a vision to redefine fit-out standards in the UAE.</p>
+          </div>
+          <div class="tl-item reveal reveal-delay-1">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2020</div>
+            <div class="tl-label">Landscape</div>
+            <p class="tl-desc">Launched comprehensive landscape and outdoor design services.</p>
+          </div>
+          <div class="tl-item reveal reveal-delay-2">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2021</div>
+            <div class="tl-label">Joinery</div>
+            <p class="tl-desc">Opened dedicated joinery workshop for bespoke millwork production.</p>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2022</div>
+            <div class="tl-label">Pools</div>
+            <p class="tl-desc">Added premium swimming pool design and construction to our portfolio.</p>
+          </div>
+          <div class="tl-item reveal reveal-delay-1">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2023</div>
+            <div class="tl-label">MEP & Smart</div>
+            <p class="tl-desc">Integrated MEP and smart home automation capabilities in-house.</p>
+          </div>
+          <div class="tl-item reveal reveal-delay-2">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2024</div>
+            <div class="tl-label">Growth</div>
+            <p class="tl-desc">Crossed 500 completed projects across Dubai and wider UAE.</p>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2025</div>
+            <div class="tl-label">Innovation</div>
+            <p class="tl-desc">Expanding with sustainable materials, smart solutions, and new verticals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY LUXSPACE -->
+  <section class="section why">
+    <div class="container">
+      <div class="why-grid">
+        <div>
+          <p class="eyebrow reveal">Why Choose Us</p>
+          <h2 class="section-title reveal reveal-delay-1">We remove risk.<br><em>We deliver outcomes.</em></h2>
+          <ul class="why-list" style="margin-top: 2rem;">
+            <li class="why-item reveal">
+              <div class="why-check"><i class="fa-solid fa-check fa-xs"></i></div>
+              <div>
+                <div class="why-item-title">Turnkey Execution</div>
+                <div class="why-item-desc">From concept to completion under one roof — no subcontractor chaos, no fragmented accountability.</div>
+              </div>
+            </li>
+            <li class="why-item reveal reveal-delay-1">
+              <div class="why-check"><i class="fa-solid fa-check fa-xs"></i></div>
+              <div>
+                <div class="why-item-title">Authority Approvals Handled</div>
+                <div class="why-item-desc">All permit drawings and regulatory submissions managed in-house. Your project doesn't wait on bureaucracy.</div>
+              </div>
+            </li>
+            <li class="why-item reveal reveal-delay-2">
+              <div class="why-check"><i class="fa-solid fa-check fa-xs"></i></div>
+              <div>
+                <div class="why-item-title">Reliable Timelines</div>
+                <div class="why-item-desc">Fixed milestones. Structured reporting. A track record of on-time delivery across 500+ projects.</div>
+              </div>
+            </li>
+            <li class="why-item reveal">
+              <div class="why-check"><i class="fa-solid fa-check fa-xs"></i></div>
+              <div>
+                <div class="why-item-title">Integrated Solutions</div>
+                <div class="why-item-desc">Fit-out, joinery, landscaping, pools — controlled end-to-end by one team with one quality standard.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="why-visual reveal">
+          <img class="why-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format" alt="LuxSpace project quality">
+          <div class="why-cert">
+            <div class="why-cert-num">500+</div>
+            <div class="why-cert-label">Projects Delivered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <p class="eyebrow reveal" style="justify-content: center;">Start Your Project</p>
+      <h2 class="reveal reveal-delay-1">Ready to build without<br><em>the usual headaches?</em></h2>
+      <p class="reveal reveal-delay-2">Tell us what you're planning. We'll give you a clear scope, timeline, and next step within 24–48 hours.</p>
+      <div class="cta-btns reveal reveal-delay-3">
+        <a href="tel:+971563079332" class="btn-gold">Start Your Project <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+        <a href="mailto:info@luxspacefitout.com" class="btn-outline">Request a Proposal</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">LUX<span>SPACE</span></div>
+        <ul class="footer-links">
+          <li><a href="{% url 'services' %}">Services</a></li>
+          <li><a href="{% url 'projects' %}">Portfolio</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'insights' %}">Insights</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <div style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">
+          Office 214, Bayan Business Center, DIP 1 — Dubai
+        </div>
+      </div>
+      <div class="footer-copy">© 2026 LuxSpace Fit Out & Technical Services L.L.C. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Hero entrance
+    window.addEventListener('load', () => {
+      document.getElementById('hero').classList.add('loaded');
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('is-in'));
+    }
+
+    // Nav scroll + mobile nav
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('main-nav');
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileClose = document.getElementById('mobile-close');
+    if (hamburger && mobileNav) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+    if (mobileClose && mobileNav) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+    function closeMobile() {
+      if (mobileNav) mobileNav.classList.remove('open');
+    }
+
+    // Stat counter animation
+    const statNums = document.querySelectorAll('.stat-num');
+    const countIO = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const sup = el.querySelector('sup');
+          const suffix = sup ? sup.textContent : '';
+          const raw = el.textContent.replace(suffix, '').trim();
+          const target = parseInt(raw);
+          if (isNaN(target)) return;
+          let cur = 0;
+          const step = target / 40;
+          const tick = setInterval(() => {
+            cur = Math.min(cur + step, target);
+            el.innerHTML = Math.round(cur) + (sup ? `<sup>${suffix}</sup>` : '');
+            if (cur >= target) clearInterval(tick);
+          }, 30);
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNums.forEach(el => countIO.observe(el));
+  </script>
+</body>
+</html>

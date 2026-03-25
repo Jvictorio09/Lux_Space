@@ -1,432 +1,912 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Us — LuxSpace</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | LuxSpace Fit Out & Technical Services</title>
+  <meta name="description" content="Get in touch with LuxSpace — Dubai's premium fit-out, landscaping, joinery, and pool specialists. Tell us about your project and we'll respond within 24 hours.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     :root {
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --dark: #1a1a1a;
-      --dark-2: #222222;
-      --dark-3: #2d2d2d;
-      --text-main: #f0ece4;
-      --text-muted: #a09880;
+      --gold: #B8965A;
+      --gold-light: #D4AF7A;
+      --gold-pale: #F2E8D5;
+      --ink: #0D0D0D;
+      --ink2: #141414;
+      --charcoal: #1C1C1C;
+      --stone: #4A4540;
+      --mist: #F7F5F2;
+      --white: #FFFFFF;
+      --border: rgba(184,150,90,0.18);
+      --border-light: rgba(184,150,90,0.10);
+      --border-hover: rgba(184,150,90,0.40);
+      --shadow: 0 32px 80px rgba(0,0,0,0.35);
+      --text-muted: rgba(255,255,255,0.45);
+      --text-dim: rgba(255,255,255,0.25);
+      --cream: #F0EDE6;
+      --rule: rgba(240,237,230,0.1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--dark);
-      color: var(--text-main);
-      font-family: 'Montserrat', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Noise texture overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    .serif { font-family: 'Cormorant Garamond', serif; }
-
-    /* Gold line decorator */
-    .gold-line {
-      display: inline-block;
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
-
-    /* Animated gold border card */
-    .contact-card {
-      position: relative;
-      background: linear-gradient(135deg, #242424 0%, #1e1e1e 100%);
-      border: 1px solid rgba(201,168,76,0.15);
-      transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
-    }
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(201,168,76,0.5), transparent 60%, rgba(201,168,76,0.2));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .contact-card:hover::before { opacity: 1; }
-    .contact-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(201,168,76,0.07);
-      border-color: rgba(201,168,76,0.35);
-    }
-
-    /* Glowing gold icon circle */
-    .icon-circle {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at 30% 30%, rgba(201,168,76,0.2), rgba(201,168,76,0.05));
-      border: 1px solid rgba(201,168,76,0.3);
-      box-shadow: 0 0 20px rgba(201,168,76,0.1);
-      flex-shrink: 0;
-    }
-
-    /* Background geometric decor */
-    .decor-circle {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.07);
-      pointer-events: none;
-    }
-
-    /* Form input */
-    .lux-input {
-      width: 100%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(201,168,76,0.2);
-      color: var(--text-main);
-      padding: 14px 18px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      background: var(--ink);
+      color: var(--white);
       font-weight: 300;
-      letter-spacing: 0.03em;
-      outline: none;
-      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
-    }
-    .lux-input::placeholder { color: rgba(160,152,128,0.6); }
-    .lux-input:focus {
-      border-color: var(--gold);
-      background: rgba(201,168,76,0.04);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.07);
+      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    textarea.lux-input { resize: none; min-height: 130px; }
+    /* Grain texture */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      opacity: 0.025;
+    }
 
-    .lux-btn {
-      background: linear-gradient(135deg, var(--gold) 0%, #a8852f 100%);
-      color: #111;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 16px 48px;
-      border: none;
-      cursor: pointer;
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 0 3rem; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+      background: rgba(10,10,8,0.6);
+      backdrop-filter: blur(12px);
+    }
+    nav.scrolled { background: rgba(10,10,8,0.92); backdrop-filter: blur(20px); border-color: var(--rule); }
+    .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 56px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.2s; font-weight: 500;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
+      color: var(--ink); background: var(--gold); padding: 10px 24px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #d4a35a; }
+    .nav-hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.2rem; cursor: pointer; }
+    #mobile-nav {
+      display: none; position: fixed; inset: 0; background: var(--ink); z-index: 950;
+      flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem; font-weight: 300; color: var(--white);
+      text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s;
+    }
+    #mobile-nav a:hover { color: var(--gold); }
+    #mobile-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none; color: var(--white); font-size: 1.4rem; cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: block; }
+    }
+
+    /* ── UTILS ── */
+    .container { max-width: 72rem; margin: 0 auto; padding: 0 2.5rem; }
+    .eyebrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 0.75rem;
+    }
+    .eyebrow::before { content: ""; display: block; width: 24px; height: 1px; background: var(--gold); }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      opacity: 0; transform: translateY(22px);
+      animation: fadeUp 0.85s cubic-bezier(.22,1,.36,1) both;
+    }
+    .d1 { animation-delay: 0.1s; }
+    .d2 { animation-delay: 0.25s; }
+    .d3 { animation-delay: 0.4s; }
+    .d4 { animation-delay: 0.55s; }
+    .d5 { animation-delay: 0.7s; }
+
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.is-in { opacity: 1; transform: none; }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.2s; }
+    .rd3 { transition-delay: 0.3s; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 10rem 0 5rem;
+      background: var(--ink2);
+      text-align: center;
       position: relative;
       overflow: hidden;
-      transition: box-shadow 0.3s, transform 0.3s;
+      border-bottom: 1px solid var(--border-light);
     }
-    .lux-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+    .page-hero::before {
+      content: "CONTACT";
+      position: absolute; right: -2rem; top: 50%; transform: translateY(-50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(7rem, 18vw, 18rem);
+      font-weight: 600; letter-spacing: -0.04em;
+      color: rgba(184,150,90,0.035);
+      pointer-events: none; white-space: nowrap; line-height: 1;
     }
-    .lux-btn:hover::after { opacity: 1; }
-    .lux-btn:hover {
-      box-shadow: 0 8px 32px rgba(201,168,76,0.35);
-      transform: translateY(-2px);
+    .page-hero-inner { position: relative; z-index: 1; }
+    .page-hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 300; line-height: 1; letter-spacing: 0.02em;
+      margin-top: 1rem;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .page-hero p {
+      max-width: 58ch; margin: 1.5rem auto 0;
+      color: rgba(255,255,255,0.5); font-size: 1rem; font-weight: 300; line-height: 1.8;
     }
 
-    /* Divider with diamond */
+    /* Diamond divider */
     .diamond-divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      display: flex; align-items: center; gap: 1rem;
+      max-width: 360px; margin: 2rem auto 0;
       color: var(--gold);
     }
-    .diamond-divider::before,
-    .diamond-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+    .diamond-divider::before, .diamond-divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,150,90,0.4), transparent);
     }
 
-    /* Page fade-in */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.9s ease both; }
-    .fade-up-1 { animation-delay: 0.1s; }
-    .fade-up-2 { animation-delay: 0.25s; }
-    .fade-up-3 { animation-delay: 0.4s; }
-    .fade-up-4 { animation-delay: 0.55s; }
-
-    /* Logo bar */
-    .logo-bar {
-      background: linear-gradient(180deg, #111 0%, transparent 100%);
-    }
-
-    /* Map embed */
-    .map-wrap {
-      border: 1px solid rgba(201,168,76,0.15);
+    /* ── INFO CARDS ── */
+    .info-section { padding: 4.5rem 0 0; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border-light);
+      border: 1px solid var(--border-light);
+      border-radius: 2px;
       overflow: hidden;
+    }
+    @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } }
+
+    .info-card {
+      background: var(--ink2);
+      padding: 2.5rem 2rem;
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+      transition: background 0.25s;
+    }
+    .info-card:hover { background: #181818; }
+    .info-card::after {
+      content: ""; position: absolute; bottom: 0; left: 2rem; right: 2rem; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,150,90,0.0), transparent);
+      transition: background 0.3s;
+    }
+    .info-card:hover::after {
+      background: linear-gradient(90deg, transparent, rgba(184,150,90,0.3), transparent);
+    }
+
+    .info-icon {
+      width: 52px; height: 52px; border-radius: 2px;
+      background: rgba(184,150,90,0.07);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      color: var(--gold); font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .info-card:hover .info-icon {
+      background: rgba(184,150,90,0.12);
+      border-color: var(--border-hover);
+    }
+    .info-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 0.6rem;
+    }
+    .info-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.65rem; font-weight: 400; line-height: 1.3;
+      color: var(--white); text-decoration: none;
+      transition: color 0.2s;
+    }
+    a.info-value:hover { color: var(--gold-light); }
+    .info-sub {
+      margin-top: 0.5rem;
+      font-size: 0.8rem; color: var(--text-muted); font-weight: 300;
+    }
+    .info-bar {
+      margin-top: 1.75rem;
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transition: width 0.3s;
+    }
+    .info-card:hover .info-bar { width: 64px; }
+
+    /* ── MAIN SECTION ── */
+    .main-section { padding: 4rem 0 6rem; }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 960px) { .main-grid { grid-template-columns: 1fr; gap: 3rem; } }
+
+    /* ── FORM ── */
+    .form-header { margin-bottom: 2.5rem; }
+    .form-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 300; line-height: 1.15; margin-top: 0.75rem;
+    }
+    .form-header h2 em { font-style: italic; color: var(--gold-light); }
+
+    .form-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
+
+    .lux-input {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(184,150,90,0.15);
+      color: var(--white);
+      padding: 0.95rem 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem; font-weight: 300; letter-spacing: 0.02em;
+      outline: none;
+      border-radius: 2px;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+      -webkit-appearance: none;
+    }
+    .lux-input::placeholder { color: rgba(255,255,255,0.22); }
+    .lux-input:focus {
+      border-color: var(--gold);
+      background: rgba(184,150,90,0.04);
+      box-shadow: 0 0 0 3px rgba(184,150,90,0.06);
+    }
+    select.lux-input { cursor: pointer; }
+    select.lux-input option { background: var(--ink2); }
+    textarea.lux-input { resize: none; min-height: 140px; }
+
+    /* Field label float style */
+    .field-wrap { position: relative; }
+    .field-label {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 0.45rem;
+    }
+
+    /* Service pills */
+    .service-pills {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .pill {
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(184,150,90,0.15);
+      border-radius: 2px;
+      font-size: 0.78rem; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .pill:hover { border-color: var(--border-hover); color: var(--gold-light); }
+    .pill.selected {
+      background: rgba(184,150,90,0.1);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Budget range */
+    .budget-options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .budget-btn {
+      padding: 0.45rem 0.85rem;
+      border: 1px solid rgba(184,150,90,0.12);
+      border-radius: 2px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.35);
+      background: transparent; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .budget-btn:hover { border-color: var(--border-hover); color: var(--gold-light); }
+    .budget-btn.selected { background: rgba(184,150,90,0.08); border-color: var(--gold); color: var(--gold); }
+
+    /* Submit */
+    .submit-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+      padding-top: 0.5rem;
+    }
+    .lux-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 1rem 2.25rem;
+      background: var(--gold); color: var(--ink);
+      border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+      border-radius: 2px;
+      position: relative; overflow: hidden;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+    .lux-btn::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .lux-btn:hover::before { opacity: 1; }
+    .lux-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(184,150,90,0.3);
+    }
+    .lux-btn .btn-arrow { transition: transform 0.2s; }
+    .lux-btn:hover .btn-arrow { transform: translateX(4px); }
+    .submit-note { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* Success message */
+    .success-msg {
+      display: none; margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(184,150,90,0.25);
+      background: rgba(184,150,90,0.06);
+      border-radius: 2px;
+      color: var(--gold-light);
+      font-size: 0.88rem; letter-spacing: 0.04em;
+      align-items: center; gap: 0.6rem;
+    }
+    .success-msg.show { display: flex; }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Map */
+    .map-wrap {
+      border: 1px solid var(--border-light);
+      border-radius: 2px; overflow: hidden;
       position: relative;
     }
-    .map-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 2px solid transparent;
-      pointer-events: none;
+    .map-wrap iframe {
+      display: block; width: 100%; height: 280px; border: 0;
+      filter: grayscale(90%) contrast(1.15) brightness(0.65) sepia(20%);
     }
+    .map-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to top, rgba(13,13,13,0.35), transparent 50%);
+    }
+    .map-label {
+      position: absolute; bottom: 1rem; left: 1rem;
+      background: rgba(13,13,13,0.88);
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.85rem;
+      border-radius: 2px;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .map-label i { color: var(--gold); font-size: 0.8rem; }
+    .map-label span {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* Info panels */
+    .panel {
+      background: var(--ink2);
+      border: 1px solid var(--border-light);
+      border-radius: 2px;
+      padding: 1.5rem;
+    }
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* Hours table */
+    .hours-list { display: flex; flex-direction: column; gap: 0.85rem; }
+    .hours-row {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .hours-day { font-size: 0.88rem; color: rgba(255,255,255,0.5); }
+    .hours-time {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem; font-weight: 400; color: var(--white);
+    }
+    .hours-time.closed { color: rgba(255,255,255,0.25); }
+    .hours-divider { height: 1px; background: rgba(255,255,255,0.05); }
+
+    /* Social links */
+    .social-row { display: flex; gap: 0.65rem; }
+    .social-link {
+      width: 40px; height: 40px; border-radius: 2px;
+      border: 1px solid rgba(184,150,90,0.15);
+      display: grid; place-items: center;
+      color: rgba(255,255,255,0.4); font-size: 0.9rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(184,150,90,0.06);
+    }
+
+    /* Quick contact strip */
+    .quick-strip {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border-light);
+      border: 1px solid var(--border-light);
+      border-radius: 2px; overflow: hidden;
+    }
+    .quick-item {
+      background: var(--ink2);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: background 0.2s;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    }
+    .quick-item:hover { background: #181818; }
+    .quick-icon { color: var(--gold); font-size: 1rem; }
+    .quick-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .quick-value { font-size: 0.88rem; color: rgba(255,255,255,0.7); }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--charcoal);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 2.5rem 0;
+    }
+    .trust-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0.75rem 2.5rem;
+      border-right: 1px solid var(--border-light);
+    }
+    .trust-item:last-child { border-right: none; }
+    @media (max-width: 640px) {
+      .trust-item { border-right: none; border-bottom: 1px solid var(--border-light); width: 50%; }
+      .trust-item:nth-child(even) { border-right: none; }
+    }
+    .trust-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem; font-weight: 400; color: var(--gold); line-height: 1;
+    }
+    .trust-num sup { font-size: 1rem; vertical-align: super; }
+    .trust-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted); margin-top: 0.3rem; text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808; padding: 3rem 0 2rem;
+      border-top: 1px solid var(--border-light);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem; font-weight: 400; letter-spacing: 0.15em;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-logo-sub {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.6; margin-top: 3px;
+    }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      text-decoration: none; color: rgba(255,255,255,0.3);
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-socials { display: flex; gap: 1rem; }
+    .footer-socials a {
+      color: rgba(255,255,255,0.25); font-size: 0.9rem;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-socials a:hover { color: var(--gold); }
+    .footer-copy {
+      text-align: center; margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.18); font-size: 0.72rem; letter-spacing: 0.08em;
+    }
+
+    /* Whatsapp floating button */
+    .wa-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 90;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #25D366;
+      display: grid; place-items: center;
+      color: white; font-size: 1.4rem;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(37,211,102,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(37,211,102,0.45); }
   </style>
 </head>
 <body>
 
-  <!-- Background decorative circles -->
-  <div class="decor-circle" style="width:500px;height:500px;top:-200px;right:-150px;"></div>
-  <div class="decor-circle" style="width:300px;height:300px;bottom:100px;left:-100px;"></div>
-  <div class="decor-circle" style="width:180px;height:180px;top:40%;right:10%;"></div>
-
-  <!-- Global NAV matching base.html -->
-  <nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-16 py-5 bg-dark/95 border-b border-gold/10 backdrop-blur-md">
-    <a href="{% url 'home' %}" class="flex items-center gap-3 no-underline">
-      <div class="w-10 h-10 border border-gold flex items-center justify-center relative">
-        <div class="absolute top-1.5 left-1.5 w-[18px] h-[18px] border-t border-l border-gold"></div>
-      </div>
-      <div>
-        <div class="font-bold tracking-[4px] text-[17px] text-cream">LUX<span class="text-gold">SPACE</span></div>
-        <div class="text-gold text-[7px] tracking-[3px] font-light mt-0.5">FIT OUT | LANDSCAPING | JOINERY</div>
-      </div>
-    </a>
-    <ul class="hidden lg:flex gap-10 list-none m-0 p-0">
-      <li><a href="{% url 'home' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">HOME</a></li>
-      <li><a href="{% url 'services' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">SERVICES</a></li>
-      <li><a href="{% url 'projects' %}" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">PORTFOLIO</a></li>
-      <li><a href="{% url 'home' %}#statement" class="nlink text-cream/60 text-[11px] tracking-[2.5px] font-medium hover:text-gold no-underline">ABOUT</a></li>
-      <li><a href="{% url 'contact' %}" class="nlink text-gold text-[11px] tracking-[2.5px] font-medium no-underline">CONTACT</a></li>
-    </ul>
-    <a href="{% url 'contact' %}" class="hidden lg:inline-flex items-center gap-2 px-7 py-3 border border-gold text-gold text-[10px] tracking-[2.5px] font-semibold hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
-      <i class="fa-regular fa-envelope text-xs"></i> GET A QUOTE
-    </a>
-    <button class="lg:hidden text-gold text-xl" id="mob-menu-btn">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-  </nav>
-
-  <!-- Mobile menu matching base.html -->
-  <div id="mob-menu" class="fixed inset-0 z-40 bg-dark/98 hidden flex-col items-center justify-center gap-8 text-center">
-    <button class="absolute top-6 right-8 text-gold text-2xl" onclick="document.getElementById('mob-menu').classList.add('hidden')">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-    <a href="{% url 'home' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">HOME</a>
-    <a href="{% url 'services' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">SERVICES</a>
-    <a href="{% url 'projects' %}" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">PORTFOLIO</a>
-    <a href="{% url 'home' %}#statement" class="text-cream text-2xl tracking-[4px] font-serif font-light no-underline hover:text-gold transition-colors" onclick="document.getElementById('mob-menu').classList.add('hidden')">ABOUT</a>
-    <a href="{% url 'contact' %}" class="text-gold text-2xl tracking-[4px] font-serif font-light no-underline" onclick="document.getElementById('mob-menu').classList.add('hidden')">CONTACT</a>
+  <!-- MOBILE NAV -->
+  <div id="mobile-nav">
+    <button id="mobile-close"><i class="fa-solid fa-xmark"></i></button>
+    <a href="{% url 'about' %}" onclick="closeMobile()">About</a>
+    <a href="{% url 'services' %}" onclick="closeMobile()">Services</a>
+    <a href="{% url 'projects' %}" onclick="closeMobile()">Portfolio</a>
+    <a href="{% url 'insights' %}" onclick="closeMobile()">Insights</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()">Contact</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()" style="color:var(--gold)">Get a Quote →</a>
   </div>
 
-  <!-- HERO SECTION -->
-  <section class="relative z-10 text-center px-6 pt-20 pb-16">
-    <div class="fade-up fade-up-1">
-      <p style="font-size:11px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:20px;">Reach Out To Us</p>
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="{% url 'home' %}" class="nav-logo" aria-label="LuxSpace Home">
+      <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1774398574/LOGO_WHITE_hcnorn.png" alt="LuxSpace logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'projects' %}">Portfolio</a></li>
+      <li><a href="{% url 'insights' %}">Insights</a></li>
+      <li><a href="{% url 'contact' %}" class="active" style="color:var(--white)">Contact</a></li>
+    </ul>
+    <a href="{% url 'contact' %}" class="nav-cta">Get a Quote</a>
+    <button class="nav-hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+
+  <!-- HERO -->
+  <header class="page-hero">
+    <div class="container page-hero-inner">
+      <p class="eyebrow fade-up d1" style="justify-content:center;">Reach Out</p>
+      <h1 class="fade-up d2">Get In <em>Touch</em></h1>
+      <p class="fade-up d3">Tell us what you're planning. We'll give you a clear scope, timeline,<br>and next step within 24–48 hours — no obligation.</p>
+      <div class="diamond-divider fade-up d4">
+        <i class="fa-solid fa-diamond" style="font-size:7px;"></i>
+      </div>
     </div>
-    <div class="fade-up fade-up-2">
-      <h1 class="serif" style="font-size:clamp(52px,9vw,96px);font-weight:300;line-height:1;letter-spacing:0.02em;color:#f0ece4;">
-        Get In <em style="color:var(--gold);font-style:italic;">Touch</em>
-      </h1>
-    </div>
-    <div class="fade-up fade-up-3" style="max-width:620px;margin:28px auto 0;">
-      <p style="font-size:16px;line-height:1.9;color:#b8b0a0;font-weight:300;letter-spacing:0.01em;">
-        Get in touch with Luxspace for expert consultation, premium design solutions, and seamless project execution. Our team provides personalized guidance, detailed planning, and professional support from concept to completion — ensuring exceptional quality, precision, and timely delivery for every project.
-      </p>
-    </div>
-    <div class="fade-up fade-up-4" style="margin-top:36px;">
-      <div class="diamond-divider" style="max-width:400px;margin:0 auto;">
-        <i class="fa-solid fa-diamond" style="font-size:8px;color:var(--gold);"></i>
+  </header>
+
+  <!-- INFO CARDS -->
+  <section class="info-section">
+    <div class="container">
+      <div class="info-grid">
+
+        <div class="info-card reveal">
+          <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="info-label">Phone Number</div>
+          <a class="info-value" href="tel:+971507267332">050 726 7332</a>
+          <p class="info-sub">Available Sun – Thu, 9AM – 6PM</p>
+          <div class="info-bar"></div>
+        </div>
+
+        <div class="info-card reveal rd1">
+          <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-label">Email Address</div>
+          <a class="info-value" href="mailto:info@luxspacefitout.com" style="font-size:1.25rem;word-break:break-all;">info@luxspacefitout.com</a>
+          <p class="info-sub">We respond within 24 hours</p>
+          <div class="info-bar"></div>
+        </div>
+
+        <div class="info-card reveal rd2">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-label">Office Address</div>
+          <div class="info-value" style="font-size:1.3rem;line-height:1.4;">Office 214, Bayan Business Center,<br>DIP 1 — Dubai, UAE</div>
+          <p class="info-sub">United Arab Emirates</p>
+          <div class="info-bar"></div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- CONTACT INFO CARDS -->
-  <section class="relative z-10 px-6 pb-16 max-w-5xl mx-auto">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+  <!-- MAIN: FORM + SIDEBAR -->
+  <section class="main-section" id="form">
+    <div class="container">
+      <div class="main-grid">
 
-      <!-- Phone -->
-      <div class="contact-card fade-up fade-up-2 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
-        <div class="icon-circle">
-          <i class="fa-solid fa-phone" style="color:var(--gold);font-size:20px;"></i>
-        </div>
-        <div>
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Phone Number</p>
-          <a href="tel:0507267332" style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:#f0ece4;letter-spacing:0.04em;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#f0ece4'">050 7267 332</a>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">Available Sun – Thu, 9AM – 6PM</p>
-        </div>
-        <div class="gold-line"></div>
-      </div>
-
-      <!-- Email -->
-      <div class="contact-card fade-up fade-up-3 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
-        <div class="icon-circle">
-          <i class="fa-solid fa-envelope" style="color:var(--gold);font-size:20px;"></i>
-        </div>
-        <div>
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Email Address</p>
-          <a href="mailto:info@luxspacefitout.com" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:#f0ece4;letter-spacing:0.02em;text-decoration:none;transition:color 0.3s;word-break:break-all;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#f0ece4'">info@luxspacefitout.com</a>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">We respond within 24 hours</p>
-        </div>
-        <div class="gold-line"></div>
-      </div>
-
-      <!-- Address -->
-      <div class="contact-card fade-up fade-up-4 p-8 flex flex-col items-start gap-5" style="border-radius:2px;">
-        <div class="icon-circle">
-          <i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:22px;"></i>
-        </div>
-        <div>
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Office Address</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:#f0ece4;line-height:1.4;letter-spacing:0.02em;">Office 214, Bayan Business Center,<br/>DIP 1 — Dubai</p>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:300;">United Arab Emirates</p>
-        </div>
-        <div class="gold-line"></div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT FORM + MAP -->
-  <section class="relative z-10 px-6 pb-24 max-w-5xl mx-auto">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;" class="contact-grid">
-
-      <!-- FORM -->
-      <div class="fade-up fade-up-2">
-        <div style="margin-bottom:32px;">
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Send A Message</p>
-          <h2 class="serif" style="font-size:38px;font-weight:300;color:#f0ece4;line-height:1.2;">Start Your<br/><em style="color:var(--gold);font-style:italic;">Project</em> With Us</h2>
-        </div>
-
-        <form onsubmit="handleSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <input class="lux-input" type="text" placeholder="Your Name" required/>
-            <input class="lux-input" type="tel" placeholder="Phone Number"/>
+        <!-- FORM -->
+        <div class="reveal">
+          <div class="form-header">
+            <p class="eyebrow">Send a Message</p>
+            <h2>Start Your <em>Project</em> With Us</h2>
           </div>
-          <input class="lux-input" type="email" placeholder="Email Address" required/>
-          <select class="lux-input" style="appearance:none;cursor:pointer;">
-            <option value="" style="background:#222;">Select Service</option>
-            <option style="background:#222;">Fit Out</option>
-            <option style="background:#222;">Landscaping</option>
-            <option style="background:#222;">Joinery</option>
-            <option style="background:#222;">Full Project</option>
-          </select>
-          <textarea class="lux-input" placeholder="Tell us about your project..."></textarea>
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-            <button type="submit" class="lux-btn">
-              Send Message &nbsp;<i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <p style="font-size:11px;color:var(--text-muted);font-weight:300;">We'll respond within 24 hours</p>
-          </div>
-        </form>
-        <div id="successMsg" style="display:none;margin-top:20px;padding:16px 20px;border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.06);color:var(--gold);font-size:13px;letter-spacing:0.05em;">
-          <i class="fa-solid fa-check-circle" style="margin-right:8px;"></i> Thank you! We'll be in touch shortly.
-        </div>
-      </div>
 
-      <!-- MAP / INFO PANEL -->
-      <div class="fade-up fade-up-3 flex flex-col gap-6">
-        <!-- Map embed -->
-        <div class="map-wrap" style="flex:1;min-height:300px;border-radius:2px;">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3613.7!2d55.18!3d25.02!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6e3a3a3a3a3a%3A0x0!2sBayan+Business+Center%2C+DIP+1%2C+Dubai!5e0!3m2!1sen!2sae!4v1700000000000"
-            width="100%" height="100%" style="border:0;display:block;min-height:300px;filter:grayscale(80%) contrast(1.1) brightness(0.8);" allowfullscreen="" loading="lazy">
-          </iframe>
-        </div>
+          <form class="form-grid" id="contactForm" onsubmit="handleSubmit(event)">
 
-        <!-- Working hours -->
-        <div class="contact-card p-6" style="border-radius:2px;">
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;"><i class="fa-regular fa-clock" style="margin-right:8px;"></i>Working Hours</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:14px;color:#b8b0a0;font-weight:300;">Sunday – Thursday</span>
-              <span style="font-size:14px;color:#f0ece4;font-family:'Cormorant Garamond',serif;font-size:17px;">9:00 AM – 6:00 PM</span>
+            <div class="form-row">
+              <div class="field-wrap">
+                <label class="field-label">Your Name *</label>
+                <input class="lux-input" type="text" placeholder="e.g. Ahmed Al Rashid" required>
+              </div>
+              <div class="field-wrap">
+                <label class="field-label">Phone Number</label>
+                <input class="lux-input" type="tel" placeholder="+971 50 000 0000">
+              </div>
             </div>
-            <div style="height:1px;background:rgba(201,168,76,0.1);"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:14px;color:#b8b0a0;font-weight:300;">Friday – Saturday</span>
-              <span style="font-size:14px;color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:17px;">Closed</span>
+
+            <div class="field-wrap">
+              <label class="field-label">Email Address *</label>
+              <input class="lux-input" type="email" placeholder="your@email.com" required>
             </div>
+
+            <div class="field-wrap">
+              <label class="field-label">Service Required</label>
+              <div class="service-pills">
+                <span class="pill" onclick="togglePill(this)">Fit-Out</span>
+                <span class="pill" onclick="togglePill(this)">Landscaping</span>
+                <span class="pill" onclick="togglePill(this)">Custom Joinery</span>
+                <span class="pill" onclick="togglePill(this)">Swimming Pool</span>
+                <span class="pill" onclick="togglePill(this)">MEP Works</span>
+                <span class="pill" onclick="togglePill(this)">Full Project</span>
+              </div>
+            </div>
+
+            <div class="field-wrap">
+              <label class="field-label">Approximate Budget (AED)</label>
+              <div class="budget-options">
+                <button type="button" class="budget-btn" onclick="toggleBudget(this)">Under 100K</button>
+                <button type="button" class="budget-btn" onclick="toggleBudget(this)">100K – 300K</button>
+                <button type="button" class="budget-btn" onclick="toggleBudget(this)">300K – 700K</button>
+                <button type="button" class="budget-btn" onclick="toggleBudget(this)">700K – 1.5M</button>
+                <button type="button" class="budget-btn" onclick="toggleBudget(this)">1.5M+</button>
+              </div>
+            </div>
+
+            <div class="field-wrap">
+              <label class="field-label">Project Details</label>
+              <textarea class="lux-input" placeholder="Tell us about your space, timeline, and any specific requirements..."></textarea>
+            </div>
+
+            <div class="submit-row">
+              <button type="submit" class="lux-btn">
+                Send Message <i class="fa-solid fa-arrow-right btn-arrow fa-xs"></i>
+              </button>
+              <span class="submit-note">We'll respond within 24 hours</span>
+            </div>
+
+          </form>
+
+          <div class="success-msg" id="successMsg">
+            <i class="fa-solid fa-circle-check"></i>
+            Thank you — we'll be in touch within 24 hours.
           </div>
         </div>
 
-        <!-- Socials -->
-        <div class="contact-card p-6" style="border-radius:2px;">
-          <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;"><i class="fa-solid fa-share-nodes" style="margin-right:8px;"></i>Follow Us</p>
-          <div style="display:flex;gap:16px;">
-            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="#" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://wa.me/971507267332" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);font-size:16px;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)'"><i class="fa-brands fa-whatsapp"></i></a>
+        <!-- RIGHT PANEL -->
+        <div class="right-panel reveal rd1">
+
+          <!-- Map -->
+          <div class="map-wrap">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3613.7!2d55.18!3d25.02!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6e3a3a3a3a3a%3A0x0!2sBayan+Business+Center%2C+DIP+1%2C+Dubai!5e0!3m2!1sen!2sae!4v1700000000000"
+              allowfullscreen="" loading="lazy">
+            </iframe>
+            <div class="map-overlay"></div>
+            <div class="map-label">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Bayan Business Center, DIP 1</span>
+            </div>
           </div>
+
+          <!-- Quick contact -->
+          <div class="quick-strip">
+            <a class="quick-item" href="tel:+971507267332">
+              <div class="quick-icon"><i class="fa-solid fa-phone"></i></div>
+              <div class="quick-label">Call Us</div>
+              <div class="quick-value">050 726 7332</div>
+            </a>
+            <a class="quick-item" href="https://wa.me/971507267332" target="_blank">
+              <div class="quick-icon"><i class="fa-brands fa-whatsapp"></i></div>
+              <div class="quick-label">WhatsApp</div>
+              <div class="quick-value">Chat Now</div>
+            </a>
+          </div>
+
+          <!-- Hours -->
+          <div class="panel">
+            <div class="panel-title">
+              <i class="fa-regular fa-clock"></i> Working Hours
+            </div>
+            <div class="hours-list">
+              <div class="hours-row">
+                <span class="hours-day">Sunday – Thursday</span>
+                <span class="hours-time">9:00 AM – 6:00 PM</span>
+              </div>
+              <div class="hours-divider"></div>
+              <div class="hours-row">
+                <span class="hours-day">Friday</span>
+                <span class="hours-time">9:00 AM – 1:00 PM</span>
+              </div>
+              <div class="hours-divider"></div>
+              <div class="hours-row">
+                <span class="hours-day">Saturday</span>
+                <span class="hours-time closed">Closed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Socials -->
+          <div class="panel">
+            <div class="panel-title">
+              <i class="fa-solid fa-share-nodes"></i> Follow Us
+            </div>
+            <div class="social-row">
+              <a class="social-link" href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a class="social-link" href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a class="social-link" href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a class="social-link" href="https://wa.me/971507267332" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+              <a class="social-link" href="#" title="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Global FOOTER matching base.html -->
-  <footer class="bg-dark border-t border-gold/10 px-8 lg:px-16 py-10 flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10 mt-8">
-    <div>
-      <div class="font-serif text-cream text-3xl font-light tracking-[3px]">LUX<span class="text-gold">SPACE</span></div>
-      <div class="text-gold text-[7px] tracking-[3px] mt-1 font-light">FIT OUT | LANDSCAPING | JOINERY</div>
+  <!-- TRUST BAR -->
+  <div class="trust-bar reveal">
+    <div class="container">
+      <div class="trust-row">
+        <div class="trust-item">
+          <div class="trust-num">6<sup>+</sup></div>
+          <div class="trust-label">Years in Dubai</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">500<sup>+</sup></div>
+          <div class="trust-label">Projects Completed</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">98<sup>%</sup></div>
+          <div class="trust-label">Client Satisfaction</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">24h</div>
+          <div class="trust-label">Response Guarantee</div>
+        </div>
+      </div>
     </div>
-    <div class="flex gap-6 text-cream/30">
-      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
-      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-      <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">LUX<span>SPACE</span></div>
+          <div class="footer-logo-sub">Fit Out · Landscaping · Joinery</div>
+        </div>
+        <ul class="footer-links">
+          <li><a href="{% url 'services' %}">Services</a></li>
+          <li><a href="{% url 'projects' %}">Portfolio</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'insights' %}">Insights</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <div class="footer-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-copy">© 2026 LuxSpace Fit Out & Technical Services L.L.C. · Office 214, Bayan Business Center, DIP 1, Dubai, UAE</div>
     </div>
-    <div class="text-cream/25 text-[10px] tracking-[2px]">© 2025 LUXSPACE. ALL RIGHTS RESERVED.</div>
   </footer>
 
-  <style>
-    @media (max-width: 768px) {
-      .contact-grid { grid-template-columns: 1fr !important; }
-    }
-  </style>
+  <!-- WhatsApp floating button -->
+  <a class="wa-float" href="https://wa.me/971507267332" target="_blank" title="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
   <script>
-    function handleSubmit(e) {
-      e.preventDefault();
-      document.getElementById('successMsg').style.display = 'block';
-      e.target.reset();
-      setTimeout(() => {
-        document.getElementById('successMsg').style.display = 'none';
-      }, 5000);
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+    // Mobile nav
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileClose = document.getElementById('mobile-close');
+    if (hamburger && mobileNav) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+    if (mobileClose && mobileNav) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+    function closeMobile() { if (mobileNav) mobileNav.classList.remove('open'); }
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Service pill toggle
+    function togglePill(el) {
+      el.classList.toggle('selected');
     }
 
-    // Mobile nav toggle (match base.js behaviour)
-    const mobMenuBtn = document.getElementById('mob-menu-btn');
-    const mobMenu = document.getElementById('mob-menu');
-    if (mobMenuBtn && mobMenu) {
-      mobMenuBtn.addEventListener('click', () => {
-        mobMenu.classList.remove('hidden');
-        mobMenu.classList.add('flex');
-      });
+    // Budget toggle (single select)
+    function toggleBudget(el) {
+      document.querySelectorAll('.budget-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
     }
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.lux-btn');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      setTimeout(() => {
+        const msg = document.getElementById('successMsg');
+        msg.classList.add('show');
+        e.target.reset();
+        document.querySelectorAll('.pill, .budget-btn').forEach(el => el.classList.remove('selected'));
+        btn.innerHTML = 'Send Message <i class="fa-solid fa-arrow-right btn-arrow fa-xs"></i>';
+        btn.disabled = false;
+        setTimeout(() => msg.classList.remove('show'), 6000);
+      }, 900);
+    }
+
+    // Stat counter
+    const statNums = document.querySelectorAll('.trust-num');
+    const countIO = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const sup = el.querySelector('sup');
+          const suffix = sup ? sup.textContent : '';
+          const raw = el.textContent.replace(suffix, '').trim();
+          const target = parseInt(raw);
+          if (isNaN(target)) return;
+          let cur = 0;
+          const step = Math.max(target / 40, 1);
+          const tick = setInterval(() => {
+            cur = Math.min(cur + step, target);
+            el.innerHTML = Math.round(cur) + (sup ? `<sup>${suffix}</sup>` : '');
+            if (cur >= target) clearInterval(tick);
+          }, 30);
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNums.forEach(el => countIO.observe(el));
   </script>
 </body>
 </html>

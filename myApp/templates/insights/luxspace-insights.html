@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insights | LuxSpace Fit Out & Technical Services</title>
+  <meta name="description" content="Expert insights on interior design, fit-out, landscaping, and luxury living in Dubai — from the LuxSpace team.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --gold: #B8965A;
+      --gold-light: #D4AF7A;
+      --gold-pale: #F2E8D5;
+      --ink: #0D0D0D;
+      --ink2: #141414;
+      --charcoal: #1C1C1C;
+      --stone: #4A4540;
+      --mist: #F7F5F2;
+      --white: #FFFFFF;
+      --border: rgba(184,150,90,0.18);
+      --border-light: rgba(184,150,90,0.10);
+      --shadow: 0 32px 80px rgba(0,0,0,0.25);
+      --cream: #F0EDE6;
+      --rule: rgba(240,237,230,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 0 3rem; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+      background: rgba(10,10,8,0.6);
+      backdrop-filter: blur(12px);
+    }
+    nav.scrolled { background: rgba(10,10,8,0.92); backdrop-filter: blur(20px); border-color: var(--rule); }
+    .nav-logo { display:flex; align-items:center; text-decoration:none; }
+    .nav-logo img { height:36px; width:auto; display:block; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a {
+      text-decoration:none; color:rgba(240,237,230,0.55);
+      font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:400;
+      transition:color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color:var(--cream); }
+    .nav-cta {
+      padding:0.55rem 1.4rem; border:1px solid var(--gold); border-radius:1px;
+      color:var(--gold); text-decoration:none;
+      font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; font-weight:400;
+      transition:background 0.25s,color 0.25s;
+      white-space:nowrap;
+    }
+    .nav-cta:hover { background:var(--gold); color:var(--ink); }
+    .nav-hamburger {
+      display:none; background:none; border:none; color:var(--cream);
+      font-size:1.25rem; cursor:pointer; padding:0.25rem;
+    }
+    #mobile-nav {
+      display:none; position:fixed; inset:0; z-index:950;
+      background:rgba(10,10,8,0.97); backdrop-filter:blur(20px);
+      flex-direction:column; align-items:center; justify-content:center; gap:2rem;
+    }
+    #mobile-nav.open { display:flex; }
+    #mobile-nav a {
+      text-decoration:none; color:rgba(240,237,230,0.7);
+      font-size:1.5rem; font-weight:300; letter-spacing:0.12em; text-transform:uppercase;
+      transition:color 0.2s;
+    }
+    #mobile-nav a:hover { color:var(--cream); }
+    #mobile-close {
+      position:absolute; top:1.5rem; right:2rem;
+      background:none; border:none; color:var(--gold); font-size:1.5rem; cursor:pointer;
+    }
+    @media (max-width:768px) {
+      nav { padding:0 1.25rem; }
+      .nav-links, .nav-cta { display:none; }
+      .nav-hamburger { display:block; }
+    }
+
+    /* ── UTILS ── */
+    .container { max-width: 72rem; margin: 0 auto; padding: 0 2.5rem; }
+    .eyebrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 0.75rem;
+    }
+    .eyebrow::before { content: ""; display: block; width: 24px; height: 1px; background: var(--gold); }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.is-in { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 10rem 0 5rem;
+      background: var(--ink2);
+      border-bottom: 1px solid var(--border-light);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: "INSIGHTS";
+      position: absolute; right: -1rem; top: 50%; transform: translateY(-50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(6rem, 14vw, 14rem);
+      font-weight: 600; letter-spacing: -0.04em;
+      color: rgba(184,150,90,0.04);
+      pointer-events: none; white-space: nowrap; line-height: 1;
+    }
+    .page-header-inner { position: relative; z-index: 1; }
+    .page-header .eyebrow {
+      opacity: 0; transform: translateY(14px);
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+    .page-header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 300; line-height: 1.1; letter-spacing: -0.01em;
+      margin-top: 0.75rem;
+      opacity: 0; transform: translateY(18px);
+      animation: fadeUp 0.8s 0.25s forwards;
+    }
+    .page-header h1 em { font-style: italic; color: var(--gold-light); }
+    .page-header p {
+      max-width: 56ch; color: rgba(255,255,255,0.5);
+      margin-top: 1rem; font-size: 1rem;
+      opacity: 0; transform: translateY(14px);
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: var(--ink2);
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border-light);
+      position: sticky; top: 70px; z-index: 50;
+    }
+    .filter-inner {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 2px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn.active {
+      background: var(--gold); border-color: var(--gold);
+      color: var(--ink);
+    }
+
+    /* ── FEATURED POST ── */
+    .featured { padding: 4rem 0 0; }
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border-light);
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--ink2);
+      transition: border-color 0.25s;
+      text-decoration: none; color: inherit;
+      cursor: pointer;
+    }
+    .featured-card:hover { border-color: var(--border); }
+    @media (max-width: 900px) {
+      .featured-card { grid-template-columns: 1fr; }
+    }
+    .featured-img {
+      position: relative; overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    .featured-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.85) contrast(1.05) saturate(0.8);
+      transition: transform 0.6s ease;
+    }
+    .featured-card:hover .featured-img img { transform: scale(1.04); }
+    .featured-img-badge {
+      position: absolute; top: 1.25rem; left: 1.25rem;
+      background: var(--gold); color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.3rem 0.65rem; border-radius: 2px;
+    }
+    .featured-body {
+      padding: 3rem;
+      display: flex; flex-direction: column; justify-content: center;
+      border-left: 1px solid var(--border-light);
+    }
+    @media (max-width: 900px) {
+      .featured-body { border-left: none; border-top: 1px solid var(--border-light); padding: 2rem; }
+    }
+    .featured-meta {
+      display: flex; align-items: center; gap: 1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1.25rem;
+    }
+    .featured-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); opacity: 0.6; }
+    .featured-cat {
+      color: var(--gold);
+    }
+    .featured-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 300; line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .featured-title em { font-style: italic; color: var(--gold-light); }
+    .featured-excerpt {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.95rem; line-height: 1.75;
+      margin-bottom: 1.75rem;
+    }
+    .read-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { gap: 0.9rem; }
+    .read-link .arrow { transition: transform 0.2s; }
+    .read-link:hover .arrow { transform: translateX(3px); }
+
+    /* ── GRID SECTION ── */
+    .posts-section { padding: 3rem 0 6rem; }
+    .posts-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .posts-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400; letter-spacing: 0.02em;
+    }
+    .posts-count {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1024px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px)  { .posts-grid { grid-template-columns: 1fr; } }
+
+    .post-card {
+      background: var(--ink2);
+      border: 1px solid var(--border-light);
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: pointer;
+    }
+    .post-card:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+    }
+    .post-thumb {
+      position: relative; overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    .post-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.82) contrast(1.08) saturate(0.75);
+      transition: transform 0.5s ease;
+    }
+    .post-card:hover .post-thumb img { transform: scale(1.05); }
+    .post-cat-tag {
+      position: absolute; bottom: 0.85rem; left: 0.85rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(13,13,13,0.82); color: var(--gold);
+      padding: 0.28rem 0.55rem; border-radius: 2px;
+      backdrop-filter: blur(4px);
+    }
+    .post-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .post-meta {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.65rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .post-meta .dot { width: 2px; height: 2px; border-radius: 50%; background: currentColor; }
+    .post-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400; line-height: 1.3;
+      margin-bottom: 0.65rem;
+      transition: color 0.2s;
+    }
+    .post-card:hover .post-title { color: var(--gold-light); }
+    .post-excerpt {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.85rem; line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .post-author {
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .author-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: var(--gold);
+      font-family: 'Outfit', sans-serif;
+    }
+    .author-name {
+      font-size: 0.78rem; color: rgba(255,255,255,0.45);
+    }
+    .post-read-time {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SIDEBAR TOPICS ── */
+    .insights-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .insights-layout { grid-template-columns: 1fr; } }
+
+    .sidebar { position: sticky; top: 130px; }
+    .sidebar-block {
+      background: var(--ink2);
+      border: 1px solid var(--border-light);
+      border-radius: 2px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .topic-list { list-style: none; display: flex; flex-direction: column; gap: 0.1rem; }
+    .topic-item a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0.5rem;
+      text-decoration: none; color: rgba(255,255,255,0.5);
+      font-size: 0.88rem;
+      border-radius: 2px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .topic-item a:hover { background: rgba(184,150,90,0.07); color: var(--gold-light); }
+    .topic-count {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.65rem; color: rgba(255,255,255,0.2);
+    }
+
+    .featured-posts-list { display: flex; flex-direction: column; gap: 1rem; }
+    .sidebar-post {
+      display: flex; gap: 0.85rem; text-decoration: none; color: inherit;
+      transition: opacity 0.2s;
+    }
+    .sidebar-post:hover { opacity: 0.8; }
+    .sidebar-post-thumb {
+      flex: 0 0 60px; height: 60px; border-radius: 2px; overflow: hidden;
+    }
+    .sidebar-post-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.8) saturate(0.7);
+    }
+    .sidebar-post-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; font-weight: 400; line-height: 1.35;
+      color: rgba(255,255,255,0.75);
+    }
+    .sidebar-post-date {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem; color: rgba(255,255,255,0.3);
+      margin-top: 0.25rem; letter-spacing: 0.06em;
+    }
+
+    /* ── NEWSLETTER ── */
+    .newsletter-bar {
+      background: var(--charcoal);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 3.5rem 0;
+    }
+    .newsletter-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .newsletter-copy h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem; font-weight: 300;
+    }
+    .newsletter-copy h3 em { font-style: italic; color: var(--gold-light); }
+    .newsletter-copy p { color: rgba(255,255,255,0.45); margin-top: 0.35rem; font-size: 0.9rem; }
+    .newsletter-form {
+      display: flex; gap: 0; flex: 0 0 auto;
+    }
+    .newsletter-form input {
+      padding: 0.85rem 1.25rem;
+      background: var(--ink2);
+      border: 1px solid var(--border);
+      border-right: none;
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem; font-weight: 300;
+      outline: none; border-radius: 2px 0 0 2px;
+      width: 260px;
+      transition: border-color 0.2s;
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.25); }
+    .newsletter-form input:focus { border-color: var(--gold); }
+    .newsletter-form button {
+      padding: 0.85rem 1.5rem;
+      background: var(--gold); color: var(--ink);
+      border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+      border-radius: 0 2px 2px 0;
+      transition: background 0.2s;
+    }
+    .newsletter-form button:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808; padding: 3rem 0 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem; font-weight: 400; letter-spacing: 0.15em;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      text-decoration: none; color: rgba(255,255,255,0.35);
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      text-align: center; margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.2); font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE NAV -->
+  <div id="mobile-nav">
+    <button id="mobile-close"><i class="fa-solid fa-xmark"></i></button>
+    <a href="{% url 'about' %}" onclick="closeMobile()">About</a>
+    <a href="{% url 'services' %}" onclick="closeMobile()">Services</a>
+    <a href="{% url 'projects' %}" onclick="closeMobile()">Portfolio</a>
+    <a href="{% url 'insights' %}" onclick="closeMobile()">Insights</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()">Contact</a>
+    <a href="{% url 'contact' %}" onclick="closeMobile()" style="color:var(--gold)">Get a Quote →</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="{% url 'home' %}" class="nav-logo" aria-label="LuxSpace Home">
+      <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1774398574/LOGO_WHITE_hcnorn.png" alt="LuxSpace logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'services' %}">Services</a></li>
+      <li><a href="{% url 'projects' %}">Portfolio</a></li>
+      <li><a href="{% url 'insights' %}" class="active" style="color:var(--gold)">Insights</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+    </ul>
+    <a href="{% url 'contact' %}" class="nav-cta">Get a Quote</a>
+    <button class="nav-hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="container page-header-inner">
+      <p class="eyebrow">Editorial</p>
+      <h1>Insights & <em>Perspectives</em></h1>
+      <p>Design thinking, project guides, and expert knowledge from Dubai's leading fit-out and technical services team.</p>
+    </div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="container">
+      <div class="filter-inner">
+        <button class="filter-btn {% if active_category == 'all' %}active{% endif %}" data-filter="all">All</button>
+        <button class="filter-btn {% if active_category == 'interior' %}active{% endif %}" data-filter="interior">Interior Design</button>
+        <button class="filter-btn {% if active_category == 'landscape' %}active{% endif %}" data-filter="landscape">Landscaping</button>
+        <button class="filter-btn {% if active_category == 'joinery' %}active{% endif %}" data-filter="joinery">Joinery</button>
+        <button class="filter-btn {% if active_category == 'pools' %}active{% endif %}" data-filter="pools">Swimming Pools</button>
+        <button class="filter-btn {% if active_category == 'guides' %}active{% endif %}" data-filter="guides">Project Guides</button>
+        <button class="filter-btn {% if active_category == 'dubai' %}active{% endif %}" data-filter="dubai">Dubai Living</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED POST -->
+  {% if featured %}
+  <section class="featured">
+    <div class="container">
+      <a class="featured-card reveal" href="{% url 'insight_detail' featured.slug %}">
+        <div class="featured-img">
+          {% if featured.cover_image_url %}
+            <img src="{{ featured.cover_image_url }}" alt="{{ featured.title }}">
+          {% else %}
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1800&auto=format" alt="{{ featured.title }}">
+          {% endif %}
+          <span class="featured-img-badge">Featured</span>
+        </div>
+        <div class="featured-body">
+          <div class="featured-meta">
+            <span class="featured-cat">{{ featured.category_label }}</span>
+            <span class="dot"></span>
+            <span>{{ featured.published_date_display }}</span>
+            <span class="dot"></span>
+            <span>{{ featured.read_time }} min read</span>
+          </div>
+          <h2 class="featured-title">{{ featured.title }}</h2>
+          <p class="featured-excerpt">{{ featured.excerpt }}</p>
+          <span class="read-link">Read Article <i class="fa-solid fa-arrow-right arrow fa-xs"></i></span>
+        </div>
+      </a>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- POSTS GRID + SIDEBAR -->
+  <section class="posts-section">
+    <div class="container">
+      <div class="insights-layout">
+
+        <!-- MAIN GRID -->
+        <div>
+          <div class="posts-header">
+            <h2>Latest Articles</h2>
+            <span class="posts-count">{{ total_count }} article{{ total_count|pluralize }}</span>
+          </div>
+
+          <div class="posts-grid" id="postsGrid">
+
+            {% for article in articles %}
+            <a class="post-card reveal {% cycle '' 'reveal-d1' 'reveal-d2' %}"
+               href="{% url 'insight_detail' article.slug %}"
+               data-cat="{{ article.category }}">
+              <div class="post-thumb">
+                {% if article.cover_image_url %}
+                  <img src="{{ article.cover_image_url }}" alt="{{ article.title }}">
+                {% else %}
+                  <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=900&auto=format" alt="">
+                {% endif %}
+                <span class="post-cat-tag">{{ article.category_label }}</span>
+              </div>
+              <div class="post-body">
+                <div class="post-meta">
+                  <span>{{ article.published_date_display }}</span>
+                  <span class="dot"></span>
+                  <span>{{ article.read_time }} min</span>
+                </div>
+                <h3 class="post-title">{{ article.title }}</h3>
+                <p class="post-excerpt">{{ article.excerpt|truncatechars:130 }}</p>
+                <div class="post-footer">
+                  <div class="post-author">
+                    <div class="author-avatar">LS</div>
+                    <span class="author-name">LuxSpace Team</span>
+                  </div>
+                  <span class="post-read-time">{{ article.read_time }} min read</span>
+                </div>
+              </div>
+            </a>
+            {% empty %}
+            <div style="color:rgba(255,255,255,0.4); font-size:14px; padding:40px 0; grid-column:1/-1;">
+              No articles available yet.
+            </div>
+            {% endfor %}
+
+          </div><!-- end posts-grid -->
+
+          
+          <!-- Load More -->
+          <div style="text-align:center; margin-top: 3rem;">
+            <button id="loadMoreBtn" style="
+              padding: 0.9rem 2.5rem;
+              border: 1px solid var(--border);
+              background: transparent;
+              color: rgba(255,255,255,0.6);
+              font-family: 'Outfit', sans-serif;
+              font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+              cursor: pointer; border-radius: 2px;
+              transition: border-color 0.2s, color 0.2s;
+            ">Load More Articles</button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <div class="sidebar-block">
+            <div class="sidebar-title">Browse by Topic</div>
+            <ul class="topic-list">
+              <li class="topic-item"><a href="#"><span>Interior Design</span><span class="topic-count">4</span></a></li>
+              <li class="topic-item"><a href="#"><span>Landscaping</span><span class="topic-count">3</span></a></li>
+              <li class="topic-item"><a href="#"><span>Project Guides</span><span class="topic-count">2</span></a></li>
+              <li class="topic-item"><a href="#"><span>Custom Joinery</span><span class="topic-count">1</span></a></li>
+              <li class="topic-item"><a href="#"><span>Swimming Pools</span><span class="topic-count">1</span></a></li>
+              <li class="topic-item"><a href="#"><span>Dubai Living</span><span class="topic-count">1</span></a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-block">
+            <div class="sidebar-title">Popular Articles</div>
+            <div class="featured-posts-list">
+              {% for pop in articles|slice:":3" %}
+              <a class="sidebar-post" href="{% url 'insight_detail' pop.slug %}">
+                <div class="sidebar-post-thumb">
+                  {% if pop.cover_image_url %}
+                    <img src="{{ pop.cover_image_url }}" alt="{{ pop.title }}">
+                  {% else %}
+                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=200&auto=format" alt="">
+                  {% endif %}
+                </div>
+                <div>
+                  <div class="sidebar-post-title">{{ pop.title|truncatechars:50 }}</div>
+                  <div class="sidebar-post-date">{{ pop.published_date_display }}</div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="sidebar-block" style="background: linear-gradient(135deg, #1a1508, #141414); border-color: var(--border);">
+            <div class="sidebar-title" style="color: var(--gold);">Get Expert Advice</div>
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.65; margin-bottom: 1.25rem;">Planning a fit-out or renovation? Talk to our team before you commit to a contractor.</p>
+            <a href="{% url 'contact' %}" style="
+              display: block; text-align: center;
+              padding: 0.8rem; background: var(--gold); color: var(--ink);
+              text-decoration: none; border-radius: 2px;
+              font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+            ">Book a Consultation</a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-bar">
+    <div class="container">
+      <div class="newsletter-inner">
+        <div class="newsletter-copy">
+          <h3>Stay ahead of the <em>curve</em></h3>
+          <p>Design guides, project insights, and Dubai market perspectives — straight to your inbox.</p>
+        </div>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email address">
+          <button>Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">LUX<span>SPACE</span></div>
+        <ul class="footer-links">
+          <li><a href="{% url 'services' %}">Services</a></li>
+          <li><a href="{% url 'projects' %}">Portfolio</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'insights' %}">Insights</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <div style="color: rgba(255,255,255,0.35); font-size: 0.8rem;">
+          Office 214, Bayan Business Center, DIP 1 — Dubai
+        </div>
+      </div>
+      <div class="footer-copy">© 2026 LuxSpace Fit Out & Technical Services L.L.C. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+    // Mobile nav
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileClose = document.getElementById('mobile-close');
+    if (hamburger && mobileNav) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+    if (mobileClose && mobileNav) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+    function closeMobile() { if (mobileNav) mobileNav.classList.remove('open'); }
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Filter buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const postCards = document.querySelectorAll('.post-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        postCards.forEach(card => {
+          if (filter === 'all' || card.dataset.cat === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Load more (cosmetic)
+    document.getElementById('loadMoreBtn').addEventListener('click', function() {
+      this.textContent = 'No more articles';
+      this.style.opacity = '0.4';
+      this.style.cursor = 'default';
+    });
+  </script>
+</body>
+</html>

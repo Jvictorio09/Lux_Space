@@ -1,13 +1,15 @@
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 
-from myApp.models import Project, ProjectImage, Service
+from myApp.models import Insight, Project, ProjectImage, Service
 
+from .seed_data.insights import INSIGHTS_DATA
 from .seed_data.projects import GALLERY_IMAGES, PROJECTS_DATA
 from .seed_data.services import SERVICES_DATA
 
 
 class Command(BaseCommand):
-    help = "Seed initial services and projects so the LuxSpace site looks rich on first run."
+    help = "Seed initial services, projects, and insights so the LuxSpace site looks rich on first run."
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.MIGRATE_HEADING("Seeding LuxSpace demo content"))
@@ -61,5 +63,18 @@ class Command(BaseCommand):
                         display_order=idx,
                     )
                 self.stdout.write(f"  Added {len(images)} images to {project.title}")
+
+        # --- Insights ---
+        for idata in INSIGHTS_DATA:
+            idata = dict(idata)
+            obj, created = Insight.objects.update_or_create(
+                slug=idata["slug"],
+                defaults={
+                    **idata,
+                    "published_at": timezone.now() if idata.get("status") == "published" else None,
+                },
+            )
+            msg = "Created" if created else "Updated"
+            self.stdout.write(f"  {msg} insight: {obj.title}")
 
         self.stdout.write(self.style.SUCCESS("Seeding complete."))

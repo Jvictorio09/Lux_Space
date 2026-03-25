@@ -2,432 +2,1059 @@
 
 {% block title %}LuxSpace — {{ service.name }}{% endblock %}
 
-{% block extra_css %}
-  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
-
-  /* Match updated site typography */
-  .font-serif, h1, h2, h3,
-  .label, .label-sm, button, select, input, textarea,
-  p, body {
-    font-family: 'Outfit', sans-serif !important;
-  }
-
-  /* Hero parallax */
-  #hero-bg { transform: scale(1.1); transition: transform 0.1s linear; will-change: transform; }
-
-  /* Service tab nav */
-  .svc-tab { position:relative; cursor:pointer; transition: all 0.3s; border-bottom: 2px solid transparent; padding-bottom: 6px; white-space: nowrap; }
-  .svc-tab.active { color: #b8a96a; border-bottom-color: #b8a96a; }
-  .svc-tab:hover { color: #b8a96a; }
-
-  /* Feature list */
-  .feat-item { display:flex; align-items:flex-start; gap:16px; padding:20px 0; border-bottom:1px solid rgba(184,169,106,0.12); transition: all 0.3s; }
-  .feat-item:hover .feat-icon { background: #b8a96a; color: #1a1a16; transform: rotate(5deg) scale(1.1); }
-  .feat-icon { width:42px; height:42px; border:1px solid rgba(184,169,106,0.3); display:flex; align-items:center; justify-content:center; color:#b8a96a; font-size:14px; flex-shrink:0; transition:all 0.3s; }
-
-  /* Project card */
-  .proj-card { position:relative; overflow:hidden; cursor:pointer; }
-  .proj-card img { transition:transform 1.1s cubic-bezier(0.25,0.46,0.45,0.94); }
-  .proj-card:hover img { transform:scale(1.08); }
-  .proj-card .overlay { transition: background 0.4s ease; }
-  .proj-card:hover .overlay { background: linear-gradient(to top, rgba(12,12,9,0.97) 0%, rgba(12,12,9,0.5) 50%, rgba(12,12,9,0.05) 100%) !important; }
-  .proj-card .proj-info { transform:translateY(12px); opacity:0.7; transition: all 0.4s ease; }
-  .proj-card:hover .proj-info { transform:translateY(0); opacity:1; }
-  .proj-card .proj-cta { transform:translateY(16px); opacity:0; transition: all 0.4s ease 0.05s; }
-  .proj-card:hover .proj-cta { transform:translateY(0); opacity:1; }
-  .proj-card .proj-tag { transform:translateY(-8px); opacity:0; transition: all 0.35s ease; }
-  .proj-card:hover .proj-tag { transform:translateY(0); opacity:1; }
-
-  /* Slider dots */
-  .dot { width:6px; height:6px; border-radius:50%; background:rgba(184,169,106,0.3); cursor:pointer; transition:all 0.3s; }
-  .dot.active { background:#b8a96a; width:24px; border-radius:3px; }
-
-  /* Process step */
-  .process-step { position:relative; }
-  .process-step::before { content:attr(data-num); font-family:'Outfit',sans-serif; font-size:120px; font-weight:300; color:rgba(184,169,106,0.05); position:absolute; top:-20px; left:-10px; line-height:1; pointer-events:none; }
-  .step-line { position:absolute; top:22px; left:50%; width:100%; height:1px; background:linear-gradient(to right, rgba(184,169,106,0.4), rgba(184,169,106,0.1)); }
-
-  /* Testimonial card */
-  .testi-card { border-left: 2px solid rgba(184,169,106,0.3); transition: border-color 0.3s; }
-  .testi-card:hover { border-left-color: #b8a96a; }
-
-  /* Project filter btn */
-  .filter-btn { transition: all 0.3s; border: 1px solid rgba(184,169,106,0.2); color: rgba(90,90,80,0.7); font-size: 10px; letter-spacing: 2px; padding: 8px 20px; cursor: pointer; }
-  .filter-btn.active, .filter-btn:hover { border-color: #b8a96a; color: #b8a96a; background: rgba(184,169,106,0.06); }
-
-  /* Stat counter */
-  .stat-num { font-family:'Outfit',sans-serif; font-size:72px; font-weight:300; line-height:1; color:#b8a96a; }
-
-  /* Horizontal scroll / wrap for service tabs */
-  .tabs-scroll {
-    overflow-x: auto;
-    padding-bottom: 6px;
-  }
-
-  /* Image mosaic hover */
-  .mosaic-item { overflow: hidden; }
-  .mosaic-item img { transition: transform 1.2s ease; }
-  .mosaic-item:hover img { transform: scale(1.06); }
-
-  /* Gradient text */
-  .text-gradient { background: linear-gradient(135deg, #b8a96a 0%, #d4c484 50%, #b8a96a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
-  @media (max-width: 768px) {
-    .stat-num { font-size: 52px; }
-  }
+{% block extra_head %}
+<meta name="description" content="{{ service.hero_intro|default:'Premium design and build services from LuxSpace — Dubai trusted fit-out, landscaping, joinery, and pool specialists.' }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 {% endblock %}
 
+{% block extra_css %}
+/* ═══════════════════════════════════════════════════════
+   FULL TOKEN + STYLE OVERRIDE
+   Scoped to #svc-page to beat base.html entirely
+   Fonts: Barlow Condensed (display) + Barlow (body) + Space Mono (label)
+═══════════════════════════════════════════════════════ */
+
+/* Force-load fonts before anything else renders */
+#svc-page { font-family: 'Barlow', sans-serif !important; }
+
+/* All tokens on #svc-page to override base :root */
+#svc-page {
+  --g:       #C4973E;   /* gold */
+  --ga:      #E0B96A;   /* gold amber hover */
+  --i:       #080808;   /* ink black */
+  --i2:      #0F0F0F;   /* ink panel */
+  --i3:      #181818;   /* ink light */
+  --st:      #1C2028;   /* steel blue-grey */
+  --ash:     #EEECE8;   /* light background */
+  --wh:      #F8F7F5;   /* off-white text */
+  --mu:      rgba(248,247,245,0.42);  /* muted text */
+  --dm:      rgba(248,247,245,0.2);   /* dim text */
+  --b:       rgba(196,151,62,0.16);   /* border gold */
+  --bl:      rgba(196,151,62,0.08);   /* border light */
+  --gap:     3px;
+  --pad:     2.5rem;
+  --max:     86rem;
+
+  background: var(--i) !important;
+  color: var(--wh) !important;
+  font-weight: 300;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Nuclear font override — prevents base.html from applying its fonts */
+#svc-page *:not(i):not(.fa):not([class*="fa-"]) {
+  font-family: 'Barlow', sans-serif !important;
+}
+#svc-page h1, #svc-page h2, #svc-page h3, #svc-page h4,
+#svc-page .disp {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+#svc-page .mono, #svc-page .s-label, #svc-page .s-mono {
+  font-family: 'Space Mono', monospace !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.22em;
+  font-size: 0.6rem;
+}
+
+/* ─── Layout ──────────────────────────────────────── */
+.s-wrap {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+@media (max-width:640px){ .s-wrap{ padding-inline:1.25rem; } }
+.s-sec  { padding-block: 7rem; }
+.s-secx { padding-block: 9rem; }
+
+/* ─── Reveal Animations ───────────────────────────── */
+@keyframes sfadeup {
+  to { opacity:1; transform:none; }
+}
+.rv  { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
+.rvl { opacity:0; transform:translateX(-26px); transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
+.rvr { opacity:0; transform:translateX(26px); transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
+.rv.in,.rvl.in,.rvr.in { opacity:1; transform:none; }
+.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
+
+/* ─── Label ───────────────────────────────────────── */
+.s-label {
+  display:flex; align-items:center; gap:.75rem;
+  color: var(--g);
+}
+.s-label::before {
+  content:""; display:block; width:18px; height:1px;
+  background:var(--g); flex-shrink:0;
+}
+
+/* ─── Buttons ─────────────────────────────────────── */
+.sbtn {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.9rem 1.9rem;
+  font-family:'Space Mono',monospace !important;
+  font-size:.6rem !important; letter-spacing:.2em; text-transform:uppercase !important;
+  text-decoration:none; cursor:pointer; border:none;
+  transition:all .2s; position:relative; overflow:hidden;
+}
+.sbtn::before {
+  content:""; position:absolute; inset:0;
+  background:rgba(255,255,255,.1); opacity:0; transition:opacity .2s;
+}
+.sbtn:hover::before{ opacity:1; }
+.sbtn-g  { background:var(--g); color:var(--i); }
+.sbtn-g:hover { background:var(--ga); transform:translateY(-2px); box-shadow:0 12px 30px rgba(196,151,62,.28); }
+.sbtn-o  { background:transparent; color:var(--wh); border:1px solid rgba(248,247,245,.18); }
+.sbtn-o:hover { border-color:var(--g); color:var(--g); }
+.sbtn-dk { background:transparent; color:var(--i); border:1px solid rgba(8,8,8,.16); }
+.sbtn-dk:hover { background:var(--i); color:var(--wh); }
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+#sh {
+  position:relative; height:100svh; min-height:680px;
+  display:flex; align-items:flex-end; overflow:hidden;
+  background:var(--i);
+}
+
+#sh-bg {
+  position:absolute; inset:0;
+  transform:scale(1.07);
+  transition:transform .12s linear;
+  will-change:transform;
+}
+#sh-bg img { width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Multi-layer overlays */
+#sh-bg::after {
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(to right,  rgba(8,8,8,.88) 0%,rgba(8,8,8,.3) 55%,rgba(8,8,8,.05) 100%),
+    linear-gradient(to top,    rgba(8,8,8,1)   0%,rgba(8,8,8,0)  42%);
+}
+
+/* Noise */
+#sh::after {
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px;
+}
+
+/* Left gold rule */
+#sh::before {
+  content:""; position:absolute; left:0; top:0; bottom:0; z-index:3;
+  width:3px;
+  background:linear-gradient(to bottom,transparent 0%,var(--g) 25%,var(--g) 75%,transparent 100%);
+  opacity:.55;
+}
+
+/* Breadcrumb */
+.sh-bc {
+  position:absolute; top:7rem; left:var(--pad); z-index:5;
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(248,247,245,.25);
+  display:flex; align-items:center; gap:.5rem;
+}
+.sh-bc a { color:inherit; text-decoration:none; transition:color .2s; }
+.sh-bc a:hover { color:var(--g); }
+.sh-bc .sep { color:rgba(248,247,245,.12); }
+
+/* Vertical ID tag */
+.sh-tag {
+  position:absolute; right:var(--pad); top:50%; z-index:5;
+  transform:translateY(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:.85rem;
+}
+.sh-tag-txt {
+  font-family:'Space Mono',monospace !important;
+  font-size:.5rem; letter-spacing:.35em; text-transform:uppercase;
+  color:rgba(248,247,245,.18); writing-mode:vertical-rl;
+}
+.sh-tag-ln { width:1px; height:44px; background:linear-gradient(to bottom,var(--g),transparent); opacity:.45; }
+
+/* Hero content */
+.sh-content {
+  position:relative; z-index:4; width:100%;
+  padding:0 var(--pad) 5rem;
+  max-width:var(--max); margin-inline:auto;
+}
+
+.sh-kicker {
+  display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;
+  opacity:0; transform:translateY(14px);
+  animation:sfadeup .7s .1s cubic-bezier(.16,1,.3,1) forwards;
+}
+.sh-kicker-lbl {
+  font-family:'Space Mono',monospace !important;
+  font-size:.58rem; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--g);
+}
+.sh-kicker-dash { width:28px; height:1px; background:rgba(196,151,62,.5); }
+
+.sh-h1 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(5rem,13vw,12rem);
+  font-weight:800 !important; line-height:.88;
+  letter-spacing:-.03em; text-transform:uppercase;
+  color:var(--wh); max-width:12ch;
+  opacity:0; transform:translateY(30px);
+  animation:sfadeup .9s .25s cubic-bezier(.16,1,.3,1) forwards;
+}
+.sh-h1 em {
+  font-style:normal !important;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:2px var(--g);
+  color:var(--g);
+}
+
+.sh-sub {
+  margin-top:2rem; max-width:48ch;
+  color:var(--mu); font-size:.94rem; line-height:1.82;
+  border-left:2px solid var(--b); padding-left:1.25rem;
+  opacity:0; transform:translateY(16px);
+  animation:sfadeup .85s .45s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.sh-actions {
+  display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; margin-top:2.75rem;
+  opacity:0; transform:translateY(12px);
+  animation:sfadeup .8s .65s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* Scroll bar bottom-left */
+.sh-scroll {
+  position:absolute; bottom:2rem; left:var(--pad); z-index:5;
+  display:flex; align-items:center; gap:1rem;
+}
+.sh-scroll-lbl {
+  font-family:'Space Mono',monospace !important;
+  font-size:.48rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--dm);
+}
+.sh-scroll-track {
+  width:32px; height:1px; background:rgba(196,151,62,.2); position:relative;
+}
+.sh-scroll-head {
+  position:absolute; top:-1px; left:0;
+  width:9px; height:3px; background:var(--g);
+  animation:sh-move 2s ease-in-out infinite;
+}
+@keyframes sh-move { 0%{left:0} 50%{left:calc(100% - 9px)} 100%{left:0} }
+
+/* Stat strip bottom-right */
+.sh-stats {
+  position:absolute; bottom:3rem; right:var(--pad); z-index:5;
+  display:flex; gap:0;
+}
+.sh-stat {
+  padding:.9rem 1.35rem;
+  border:1px solid var(--b); border-right:none;
+  background:rgba(8,8,8,.72); backdrop-filter:blur(8px);
+  text-align:center;
+}
+.sh-stat:last-child { border-right:1px solid var(--b); }
+.sh-stat-n {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:1.65rem; font-weight:700 !important;
+  line-height:1; color:var(--g);
+}
+.sh-stat-l {
+  font-family:'Space Mono',monospace !important;
+  font-size:.48rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--dm); margin-top:.25rem;
+}
+
+@media(max-width:768px){
+  .sh-h1{ font-size:clamp(3.5rem,16vw,6rem); }
+  .sh-tag,.sh-bc,.sh-stats,.sh-scroll{ display:none; }
+  .sh-content{ padding-bottom:3rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════
+   OVERVIEW
+═══════════════════════════════════════════════════ */
+#sov { background:var(--i2); }
+
+.sov-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;
+}
+@media(max-width:960px){ .sov-grid{ grid-template-columns:1fr; gap:3rem; } }
+
+.sov-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:800 !important; text-transform:uppercase; letter-spacing:-.025em; line-height:.9;
+  color:var(--wh); margin-block:.75rem 1.5rem;
+}
+.sov-body { color:var(--mu); font-size:.93rem; line-height:1.85; }
+.sov-rule { width:100%; height:1px; background:var(--bl); margin-block:1.25rem; border:none; }
+
+/* Bordered body text */
+.sov-body-accent {
+  color:var(--mu); font-size:.93rem; line-height:1.85;
+  border-left:2px solid var(--bl); padding-left:1.25rem; margin-bottom:.85rem;
+}
+
+/* Mosaic — precision 3px joints */
+.sov-mos {
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:var(--gap); height:540px;
+}
+@media(max-width:960px){ .sov-mos{ height:360px; } }
+
+.sov-m { grid-column:1; grid-row:1/3; overflow:hidden; }
+.sov-a { grid-column:2; grid-row:1;   overflow:hidden; }
+.sov-b { grid-column:2; grid-row:2;   overflow:hidden; position:relative; }
+
+.sov-m img, .sov-a img, .sov-b img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(.72) contrast(1.12) saturate(.6);
+  transition:transform .8s cubic-bezier(.16,1,.3,1), filter .4s;
+}
+.sov-m:hover img, .sov-a:hover img, .sov-b:hover img {
+  transform:scale(1.05);
+  filter:brightness(.88) contrast(1.06) saturate(.78);
+}
+
+.sov-badge {
+  position:absolute; bottom:0; left:0; right:0;
+  background:var(--g); color:var(--i);
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.22em; text-transform:uppercase;
+  padding:.55rem .85rem;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   CAPABILITIES
+═══════════════════════════════════════════════════ */
+#sfeat { background:var(--ash); color:var(--i); }
+
+.sfeat-grid {
+  display:grid; grid-template-columns:360px 1fr; gap:6rem; align-items:start;
+}
+@media(max-width:960px){ .sfeat-grid{ grid-template-columns:1fr; gap:3.5rem; } }
+
+/* Large ghost number behind heading */
+.sfeat-ghost {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(6rem,14vw,10rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.05em;
+  color:rgba(8,8,8,.05); line-height:.85; margin-bottom:-.5rem;
+  user-select:none;
+}
+.sfeat-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:800 !important; text-transform:uppercase; letter-spacing:-.025em; line-height:.9;
+  color:var(--i); margin-bottom:1.25rem;
+}
+.sfeat-h2 em { font-style:normal !important; color:var(--g); }
+
+.sfeat-body { color:#5A5550; font-size:.88rem; line-height:1.8; max-width:34ch; }
+
+/* Stats row */
+.sfeat-stats {
+  display:flex; gap:0; margin-top:2.5rem;
+  border:1px solid rgba(8,8,8,.08);
+}
+.sfeat-stat {
+  flex:1; padding:1.4rem 1rem; text-align:center;
+  border-right:1px solid rgba(8,8,8,.08);
+}
+.sfeat-stat:last-child { border-right:none; }
+.sfeat-stat-v {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:2.5rem; font-weight:700 !important; line-height:1; color:var(--g);
+}
+.sfeat-stat-l {
+  font-family:'Space Mono',monospace !important;
+  font-size:.52rem; letter-spacing:.14em; text-transform:uppercase;
+  color:#8A8580; margin-top:.3rem;
+}
+
+/* Feature list */
+.sfeat-list { display:flex; flex-direction:column; }
+.sfeat-item {
+  display:flex; gap:1.25rem; align-items:flex-start;
+  padding:1.5rem 0; border-bottom:1px solid rgba(8,8,8,.08);
+  transition:padding-left .25s;
+}
+.sfeat-item:last-child { border-bottom:none; }
+.sfeat-item:hover { padding-left:.6rem; }
+.sfeat-ico {
+  width:42px; height:42px; flex-shrink:0;
+  border:1px solid rgba(8,8,8,.1);
+  display:grid; place-items:center;
+  color:var(--g); font-size:.95rem;
+  background:rgba(196,151,62,.06);
+  transition:background .25s,border-color .25s,color .25s;
+}
+.sfeat-item:hover .sfeat-ico { background:var(--g); color:var(--i); border-color:var(--g); }
+.sfeat-title { font-size:.88rem; font-weight:600 !important; color:var(--i); margin-bottom:.22rem; }
+.sfeat-desc  { font-size:.8rem; color:#6E6860; line-height:1.72; }
+
+
+/* ═══════════════════════════════════════════════════
+   PROCESS
+═══════════════════════════════════════════════════ */
+#sproc { background:var(--st); }
+
+.sproc-hdr {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-bottom:4rem; gap:2rem; flex-wrap:wrap;
+}
+.sproc-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.25rem,5vw,4rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.025em; line-height:.9;
+  color:var(--wh);
+}
+.sproc-h2 em { font-style:normal !important; color:var(--g); }
+
+.sproc-track {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:0; position:relative;
+}
+@media(max-width:900px){ .sproc-track{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:480px){ .sproc-track{ grid-template-columns:1fr; } }
+
+/* Hairline connecting bar across top */
+.sproc-track::before {
+  content:""; position:absolute;
+  top:0; left:12%; right:12%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--b),transparent);
+}
+@media(max-width:900px){ .sproc-track::before{ display:none; } }
+
+.sproc-step {
+  padding:2rem 2rem 2.5rem;
+  border-right:1px solid rgba(248,247,245,.04);
+  position:relative; transition:background .25s;
+}
+.sproc-step:last-child { border-right:none; }
+.sproc-step:hover { background:rgba(248,247,245,.02); }
+
+.sproc-n {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:5.5rem; font-weight:800 !important; line-height:1;
+  letter-spacing:-.04em; color:rgba(196,151,62,.1);
+  margin-bottom:1.5rem; transition:color .25s;
+}
+.sproc-step:hover .sproc-n { color:rgba(196,151,62,.18); }
+
+.sproc-ph {
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--g); margin-bottom:.55rem;
+}
+.sproc-title {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:1.6rem; font-weight:700 !important;
+  text-transform:uppercase; letter-spacing:-.01em;
+  color:var(--wh); margin-bottom:.7rem;
+}
+.sproc-desc { font-size:.82rem; color:var(--mu); line-height:1.75; }
+
+/* Gold base bar on final step */
+.sproc-step-final::after {
+  content:""; position:absolute; bottom:0; left:0; right:0;
+  height:2px; background:var(--g);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   PROJECTS GRID
+═══════════════════════════════════════════════════ */
+#sprojs { background:var(--i2); }
+
+.sprojs-hdr {
+  display:grid; grid-template-columns:1fr auto;
+  gap:2rem; align-items:end; margin-bottom:var(--gap);
+  padding-bottom:2rem; border-bottom:1px solid var(--bl);
+}
+@media(max-width:640px){ .sprojs-hdr{ grid-template-columns:1fr; } }
+
+.sprojs-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.5rem,7vw,6rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.03em; line-height:.88;
+  color:var(--wh);
+}
+.sprojs-h2 em { font-style:normal !important; color:var(--g); }
+
+/* Asymmetric editorial grid */
+.sprojs-grid {
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr;
+  grid-auto-rows:300px;
+  gap:var(--gap);
+}
+@media(max-width:1024px){ .sprojs-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:600px){  .sprojs-grid{ grid-template-columns:1fr; grid-auto-rows:260px; } }
+
+.sprojs-grid .sp-card:first-child { grid-row:span 2; }
+@media(max-width:1024px){ .sprojs-grid .sp-card:first-child{ grid-row:span 1; } }
+
+.sp-card {
+  position:relative; overflow:hidden;
+  display:block; text-decoration:none;
+  background:var(--i3); cursor:pointer;
+}
+.sp-card img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(.62) contrast(1.12) saturate(.55);
+  transition:transform 1s cubic-bezier(.16,1,.3,1), filter .5s;
+}
+.sp-card:hover img { transform:scale(1.06); filter:brightness(.82) contrast(1.06) saturate(.75); }
+
+.sp-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,.96)0%,rgba(8,8,8,.35)50%,rgba(8,8,8,.02)100%);
+  transition:background .4s;
+}
+.sp-card:hover .sp-ov {
+  background:linear-gradient(to top,rgba(8,8,8,1)0%,rgba(8,8,8,.55)60%,rgba(8,8,8,.08)100%);
+}
+
+/* Featured badge slides from top */
+.sp-badge {
+  position:absolute; top:0; left:0;
+  background:var(--g); color:var(--i);
+  font-family:'Space Mono',monospace !important;
+  font-size:.5rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:.32rem .7rem;
+  transform:translateY(-100%); transition:transform .3s;
+}
+.sp-card:hover .sp-badge { transform:translateY(0); }
+
+.sp-body {
+  position:absolute; bottom:0; inset-x:0; padding:1.6rem;
+  transform:translateY(6px); transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.sp-card:hover .sp-body { transform:translateY(0); }
+
+.sp-meta {
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--g); margin-bottom:.42rem;
+}
+.sp-title {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(1.4rem,3vw,2rem); font-weight:700 !important;
+  text-transform:uppercase; letter-spacing:-.015em;
+  color:var(--wh); line-height:1; margin-bottom:.8rem;
+}
+.sp-summary {
+  font-size:.8rem; color:var(--mu); line-height:1.65; max-width:42ch;
+  margin-bottom:.9rem;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .35s .05s, transform .35s .05s;
+}
+.sp-card:hover .sp-summary { opacity:1; transform:translateY(0); }
+.sp-cta {
+  display:inline-flex; align-items:center; gap:.45rem;
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--g); border:1px solid var(--b); padding:.48rem .8rem;
+  opacity:0; transform:translateY(6px);
+  transition:opacity .3s .1s, transform .3s .1s, border-color .2s;
+}
+.sp-card:hover .sp-cta { opacity:1; transform:translateY(0); }
+.sp-cta:hover { border-color:var(--g); }
+
+
+/* ═══════════════════════════════════════════════════
+   SPOTLIGHT
+═══════════════════════════════════════════════════ */
+#sspot { background:var(--i); }
+
+.sspot-hdr {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-bottom:2.5rem; gap:2rem; flex-wrap:wrap;
+}
+.sspot-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2rem,5vw,4rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.025em; line-height:.9;
+  color:var(--wh);
+}
+.sspot-h2 em { font-style:normal !important; color:var(--g); }
+
+.sspot-panels {
+  display:grid; grid-template-columns:1.5fr 1fr;
+  gap:var(--gap); height:560px;
+}
+@media(max-width:900px){ .sspot-panels{ grid-template-columns:1fr; height:auto; } }
+
+.sspot-main { position:relative; overflow:hidden; }
+.sspot-main img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(.7) contrast(1.1) saturate(.6);
+  transition:transform .8s;
+}
+.sspot-main:hover img { transform:scale(1.04); }
+.sspot-main-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,.9)0%,transparent 55%);
+}
+.sspot-info { position:absolute; bottom:0; inset-x:0; padding:1.75rem; }
+.sspot-cat {
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--g); margin-bottom:.38rem;
+}
+.sspot-title {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700 !important;
+  text-transform:uppercase; letter-spacing:-.015em; color:var(--wh);
+}
+.sspot-view {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:58px; height:58px;
+  border:1px solid rgba(248,247,245,.22);
+  display:grid; place-items:center;
+  color:rgba(248,247,245,.5); text-decoration:none;
+  transition:border-color .2s, background .2s, color .2s;
+}
+.sspot-view:hover { border-color:var(--g); background:rgba(196,151,62,.15); color:var(--g); }
+
+.sspot-right { display:flex; flex-direction:column; gap:var(--gap); }
+.sspot-img2 { flex:1; overflow:hidden; }
+.sspot-img2 img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.68) saturate(.55); }
+.sspot-data {
+  background:var(--st); padding:1.5rem;
+  display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;
+}
+.sspot-dv {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:2rem; font-weight:700 !important; color:var(--g); line-height:1;
+}
+.sspot-dl {
+  font-family:'Space Mono',monospace !important;
+  font-size:.5rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dm); margin-top:.22rem;
+}
+.sspot-link {
+  display:flex; align-items:center; justify-content:center; gap:.65rem;
+  background:var(--g); color:var(--i);
+  font-family:'Space Mono',monospace !important;
+  font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:1.2rem; text-decoration:none;
+  transition:background .2s;
+}
+.sspot-link:hover { background:var(--ga); }
+
+
+/* ═══════════════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════════════ */
+#stesti { background:var(--ash); }
+
+.stesti-grid { display:grid; grid-template-columns:300px 1fr; gap:6rem; align-items:start; }
+@media(max-width:900px){ .stesti-grid{ grid-template-columns:1fr; gap:3rem; } }
+
+.stesti-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.25rem,5vw,3.75rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.025em; line-height:.9;
+  color:var(--i); margin-top:1rem;
+}
+.stesti-h2 em { font-style:normal !important; color:var(--g); }
+
+.stesti-list { display:flex; flex-direction:column; gap:1px; background:rgba(8,8,8,.07); }
+.stesti-card {
+  background:var(--ash); padding:2rem;
+  border-left:2px solid transparent;
+  transition:border-color .25s, background .25s, transform .25s;
+}
+.stesti-card:hover { border-left-color:var(--g); background:#fff; transform:translateX(4px); }
+.stesti-q  { font-size:.95rem; line-height:1.8; color:var(--i); font-style:italic; margin-bottom:1.25rem; }
+.stesti-row { display:flex; align-items:center; justify-content:space-between; }
+.stesti-nm { font-size:.82rem; font-weight:600 !important; color:var(--i); }
+.stesti-lc {
+  font-family:'Space Mono',monospace !important;
+  font-size:.55rem; letter-spacing:.12em; color:#8A8580; margin-top:.15rem;
+}
+.stesti-stars { color:var(--g); font-size:.62rem; letter-spacing:.08em; }
+
+
+/* ═══════════════════════════════════════════════════
+   OTHER SERVICES
+═══════════════════════════════════════════════════ */
+#sother { background:var(--i); }
+
+.sother-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2rem,5vw,4rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.025em; line-height:.9; color:var(--wh);
+}
+.sother-h2 em { font-style:normal !important; color:var(--g); }
+
+.sother-row {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:var(--gap); margin-top:3rem;
+}
+@media(max-width:1024px){ .sother-row{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:640px){ .sother-row{ grid-template-columns:repeat(2,1fr); } }
+
+.sother-tile {
+  position:relative; overflow:hidden;
+  aspect-ratio:2/3; display:block; text-decoration:none; background:var(--i3);
+}
+.sother-tile img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(.5) saturate(.45) contrast(1.12);
+  transition:transform .8s, filter .4s;
+}
+.sother-tile:hover img { transform:scale(1.08); filter:brightness(.72) saturate(.65); }
+.sother-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(8,8,8,.92)0%,transparent 55%);
+}
+.sother-body { position:absolute; bottom:0; inset-x:0; padding:1.25rem; }
+.sother-ord {
+  font-family:'Space Mono',monospace !important;
+  font-size:.5rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--g); margin-bottom:.28rem;
+}
+.sother-name {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:1.15rem; font-weight:700 !important;
+  text-transform:uppercase; letter-spacing:-.01em; color:var(--wh);
+}
+.sother-bar { width:0; height:2px; background:var(--g); margin-top:.55rem; transition:width .35s; }
+.sother-tile:hover .sother-bar { width:26px; }
+
+
+/* ═══════════════════════════════════════════════════
+   CTA
+═══════════════════════════════════════════════════ */
+#scta {
+  position:relative; min-height:72vh;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.scta-bg { position:absolute; inset:0; }
+.scta-bg img { width:100%; height:100%; object-fit:cover; display:block; }
+.scta-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,rgba(8,8,8,.9) 0%,rgba(8,8,8,.75) 50%,rgba(8,8,8,.92) 100%);
+}
+.scta-inner {
+  position:relative; z-index:2;
+  max-width:680px; margin-inline:auto; padding:6rem var(--pad);
+  width:100%; text-align:center;
+}
+.scta-h2 {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:clamp(2.2rem,6vw,5.5rem); font-weight:800 !important;
+  text-transform:uppercase; letter-spacing:-.035em; line-height:.88;
+  color:var(--wh); margin-top:1.25rem;
+}
+.scta-h2 em {
+  font-style:normal !important;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:2px var(--g);
+}
+.scta-p {
+  color:var(--mu); font-size:.92rem; line-height:1.82;
+  margin-top:1.75rem; max-width:52ch; margin-inline:auto;
+}
+.scta-btns { display:flex; gap:1rem; margin-top:2.5rem; flex-wrap:wrap; justify-content:center; }
+{% endblock %}
+
+
 {% block content %}
+<div id="svc-page">
 
-
-<!-- ════════════════════════════════════
-     HERO — Full bleed with parallax
-════════════════════════════════════ -->
-<section class="relative h-screen min-h-[700px] flex items-end overflow-hidden bg-dark" id="hero">
-  <!-- Parallax bg -->
-  <div id="hero-bg" class="absolute inset-0">
-    <img src="{{ service.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg' }}" class="w-full h-full object-cover" alt="">
+<!-- ══ HERO ═══════════════════════════════════════════ -->
+<section id="sh">
+  <div id="sh-bg">
+    <img
+      src="{{ service.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2400&auto=format' }}"
+      alt="{{ service.name }}" loading="eager" fetchpriority="high">
   </div>
-  <!-- Gradient overlays -->
-  <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,26,22,0.3) 0%, rgba(26,26,22,0.1) 40%, rgba(26,26,22,0.85) 80%, rgba(26,26,22,0.97) 100%)"></div>
-  <!-- Corner ornaments -->
-  <div class="absolute top-28 left-8 lg:left-16 w-14 h-14 border-t border-l border-gold/25"></div>
-  <div class="absolute top-28 right-8 lg:right-16 w-14 h-14 border-t border-r border-gold/25"></div>
 
-  <!-- Breadcrumb -->
-  
+  <nav class="sh-bc" aria-label="Breadcrumb">
+    <a href="{% url 'home' %}">Home</a><span class="sep">/</span>
+    <a href="{% url 'services' %}">Services</a><span class="sep">/</span>
+    <span>{{ service.name }}</span>
+  </nav>
 
-  <!-- Hero content -->
-  <div class="relative z-10 px-8 lg:px-16 pb-20 w-full">
-    <div class="max-w-5xl">
-      <div class="flex items-center gap-5 mb-6">
-        {% if service.hero_kicker %}<div class="text-white font-serif text-[11px] tracking-[4px] font-semibold opacity-90">{{ service.hero_kicker }}</div>{% endif %}
-        {% if service.hero_kicker and service.hero_eyebrow %}<div class="w-12 h-px bg-white/50"></div>{% endif %}
-        {% if service.hero_eyebrow %}<div class="text-white text-[10px] tracking-[3px] opacity-80">{{ service.hero_eyebrow }}</div>{% endif %}
-      </div>
-      <h1 class="font-serif text-cream leading-[0.88] mb-6" style="font-size:clamp(70px,11vw,140px);font-weight:300">
-        {% with parts=service.get_hero_name_parts %}
-        {% if parts.1 %}{{ parts.0 }}<em class="text-gold italic">{{ parts.1 }}</em>{% else %}{{ service.name }}{% endif %}
-        {% endwith %}
-      </h1>
-      {% if service.hero_intro %}<p class="text-cream/45 text-[14px] tracking-[1px] leading-loose font-light max-w-xl mb-10">{{ service.hero_intro }}</p>{% endif %}
-      <div class="flex items-center gap-8">
-        <a href="#overview" class="cta-btn cta-btn-primary inline-flex items-center gap-4 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-10 py-4 hover:bg-gold-light transition-all duration-300 no-underline">
-          {{ service.cta_primary_label|default:"EXPLORE SERVICE" }} <i class="fa-solid fa-arrow-down text-xs"></i>
-        </a>
-        <a href="#projects" class="inline-flex items-center gap-3 text-cream/50 text-[10px] tracking-[2.5px] font-medium hover:text-gold transition-colors no-underline group">
-          <span class="w-8 h-px bg-cream/30 group-hover:bg-gold group-hover:w-12 transition-all duration-300"></span>{{ service.cta_secondary_label|default:"VIEW PROJECTS" }}
-        </a>
-      </div>
-    </div>
-    <!-- Scroll indicator -->
-    <div class="absolute right-12 bottom-20 hidden lg:flex flex-col items-center gap-3">
-      <div class="text-cream/25 text-[8px] tracking-[3px] font-medium" style="writing-mode:vertical-rl">SCROLL</div>
-      <div class="w-px h-12 bg-gold/20 relative overflow-hidden">
-        <div class="w-full bg-gold/60 absolute top-0" style="height:50%;animation:scrollLine 2s ease-in-out infinite"></div>
-      </div>
-    </div>
+  <div class="sh-tag">
+    <div class="sh-tag-txt">{{ service.name }}</div>
+    <div class="sh-tag-ln"></div>
   </div>
-</section>
 
-<style>
-  @keyframes scrollLine { 0%{top:-50%} 100%{top:120%} }
-</style>
+  <div class="sh-content">
+    {% if service.hero_kicker or service.hero_eyebrow %}
+    <div class="sh-kicker">
+      {% if service.hero_kicker %}<span class="sh-kicker-lbl">{{ service.hero_kicker }}</span>{% endif %}
+      {% if service.hero_kicker and service.hero_eyebrow %}<span class="sh-kicker-dash"></span>{% endif %}
+      {% if service.hero_eyebrow %}<span class="sh-kicker-lbl" style="color:rgba(248,247,245,.35);">{{ service.hero_eyebrow }}</span>{% endif %}
+    </div>
+    {% endif %}
 
+    <h1 class="sh-h1">
+      {% with parts=service.get_hero_name_parts %}
+        {% if parts.1 %}{{ parts.0 }}<em>{{ parts.1 }}</em>{% else %}{{ service.name }}{% endif %}
+      {% endwith %}
+    </h1>
 
-<!-- ════════════════════════════════════
-     OVERVIEW — What we do
-════════════════════════════════════ -->
-<section id="overview" class="bg-dark py-32 px-8 lg:px-16 relative overflow-hidden">
-  <div class="wm" style="top:-40px;right:-30px">L</div>
+    {% if service.hero_intro %}
+    <p class="sh-sub">{{ service.hero_intro }}</p>
+    {% endif %}
 
-  <div class="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center max-w-7xl mx-auto">
-    <!-- Left: text -->
-    <div class="lg:col-span-5 rev-l">
-      <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-8 max-w-[180px]">OUR APPROACH</div>
-      {% if service.overview_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 gold-after" style="font-size:clamp(42px,4.5vw,62px)">{{ service.overview_heading|linebreaksbr }}</h2>{% endif %}
-      {% if service.overview_body_primary %}<p class="text-cream/45 text-[14px] leading-loose font-light mb-6">{{ service.overview_body_primary }}</p>{% endif %}
-      {% if service.overview_body_secondary %}<p class="text-cream/35 text-[13px] leading-loose font-light mb-10">{{ service.overview_body_secondary }}</p>{% endif %}
-      <a href="#projects" class="cta-btn cta-btn-secondary inline-flex items-center gap-4 border border-gold text-gold text-[10px] tracking-[3px] font-bold px-8 py-4 hover:bg-gold hover:text-dark transition-all duration-300 no-underline">
-        SEE OUR WORK <i class="fa-solid fa-arrow-down text-xs"></i>
+    <div class="sh-actions">
+      <a href="#sov" class="sbtn sbtn-g">
+        {{ service.cta_primary_label|default:"Explore Service" }}
+        <i class="fa-solid fa-arrow-down fa-xs"></i>
+      </a>
+      <a href="#sprojs" class="sbtn sbtn-o">
+        {{ service.cta_secondary_label|default:"View Projects" }}
+        <i class="fa-solid fa-arrow-right fa-xs"></i>
       </a>
     </div>
+  </div>
 
-    <!-- Right: image mosaic -->
-    <div class="lg:col-span-7 rev-r">
-      <div class="grid grid-cols-12 grid-rows-2 gap-3 h-[520px]">
-        <!-- Large left -->
-        <div class="col-span-7 row-span-2 mosaic-item relative">
-          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg" class="w-full h-full object-cover" alt="">
-          <div class="absolute inset-0 bg-gradient-to-t from-dark/40 to-transparent"></div>
-        </div>
-        <!-- Top right -->
-        <div class="col-span-5 row-span-1 mosaic-item">
-          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180034/luxspace/projects/3d_renders_13.jpg" class="w-full h-full object-cover" alt="">
-        </div>
-        <!-- Bottom right -->
-        <div class="col-span-5 row-span-1 mosaic-item relative">
-          <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180022/luxspace/projects/3d_renders_3.jpg" class="w-full h-full object-cover" alt="">
-          <!-- Gold badge -->
-          <div class="absolute bottom-4 left-4 bg-gold px-4 py-2">
-            <div class="text-dark text-[8px] tracking-[2px] font-bold">CERTIFIED</div>
-            <div class="text-dark text-[8px] tracking-[2px] font-bold">LANDSCAPERS</div>
-          </div>
-        </div>
-      </div>
+  <div class="sh-scroll">
+    <span class="sh-scroll-lbl">Scroll</span>
+    <div class="sh-scroll-track"><div class="sh-scroll-head"></div></div>
+  </div>
+
+  <div class="sh-stats">
+    <div class="sh-stat">
+      <div class="sh-stat-n">500+</div>
+      <div class="sh-stat-l">Projects</div>
+    </div>
+    <div class="sh-stat">
+      <div class="sh-stat-n">6+</div>
+      <div class="sh-stat-l">Years</div>
+    </div>
+    <div class="sh-stat">
+      <div class="sh-stat-n">98%</div>
+      <div class="sh-stat-l">Satisfaction</div>
     </div>
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     FEATURES — What's included
-════════════════════════════════════ -->
-<section class="bg-cream py-28 px-8 lg:px-16">
-  <div class="max-w-7xl mx-auto">
-    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-      <!-- Left heading -->
-      <div class="rev-l">
-        <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-4">CAPABILITIES</p>
-        <h2 class="font-serif text-dark font-light leading-tight mb-8 gold-after" style="font-size:clamp(40px,4vw,58px)">
-          Every Detail.<br><em class="text-gold italic">Considered.</em>
-        </h2>
-        <p class="text-mid text-[14px] leading-loose font-light max-w-sm mb-10">
-          Our {{ service.name|lower }} service encompasses the full spectrum — from initial site analysis and concept design through to installation, planting, and ongoing maintenance programmes.
-        </p>
-        <!-- Stats strip -->
-        <div class="grid grid-cols-3 gap-px bg-light-sand overflow-hidden">
-          <div class="bg-cream py-8 text-center">
-            <div class="stat-num">87</div>
-            <div class="text-mid text-[8px] tracking-[2.5px] font-medium mt-1">GARDENS<br>CREATED</div>
-          </div>
-          <div class="bg-cream py-8 text-center">
-            <div class="stat-num">15+</div>
-            <div class="text-mid text-[8px] tracking-[2.5px] font-medium mt-1">PLANT<br>SPECIES</div>
-          </div>
-          <div class="bg-cream py-8 text-center">
-            <div class="stat-num">4</div>
-            <div class="text-mid text-[8px] tracking-[2.5px] font-medium mt-1">AWARDS<br>WON</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: feature list -->
-      <div class="rev-r">
-        <div class="feat-item" onclick="">
-          <div class="feat-icon"><i class="fa-solid fa-seedling"></i></div>
-          <div>
-            <div class="text-dark text-[13px] tracking-[1.5px] font-semibold mb-1">Garden Design & Master Planning</div>
-            <div class="text-mid text-[12px] leading-relaxed font-light">Comprehensive site analysis, conceptual masterplans, and detailed planting schemes tailored to your land's unique character.</div>
-          </div>
-        </div>
-        <div class="feat-item">
-          <div class="feat-icon"><i class="fa-solid fa-leaf"></i></div>
-          <div>
-            <div class="text-dark text-[13px] tracking-[1.5px] font-semibold mb-1">Planting & Turf Installation</div>
-            <div class="text-mid text-[12px] leading-relaxed font-light">Premium specimen trees, curated planting palettes, and flawless lawn installation for year-round beauty.</div>
-          </div>
-        </div>
-        <div class="feat-item">
-          <div class="feat-icon"><i class="fa-solid fa-droplet"></i></div>
-          <div>
-            <div class="text-dark text-[13px] tracking-[1.5px] font-semibold mb-1">Irrigation & Drainage Systems</div>
-            <div class="text-mid text-[12px] leading-relaxed font-light">Smart irrigation technology and precision drainage engineering that protects your investment and conserves water.</div>
-          </div>
-        </div>
-        <div class="feat-item">
-          <div class="feat-icon"><i class="fa-solid fa-lightbulb"></i></div>
-          <div>
-            <div class="text-dark text-[13px] tracking-[1.5px] font-semibold mb-1">Landscape Lighting Design</div>
-            <div class="text-mid text-[12px] leading-relaxed font-light">Atmospheric low-voltage lighting that transforms your garden after dark into a breathtaking nocturnal experience.</div>
-          </div>
-        </div>
-        <div class="feat-item" style="border-bottom:none">
-          <div class="feat-icon"><i class="fa-solid fa-recycle"></i></div>
-          <div>
-            <div class="text-dark text-[13px] tracking-[1.5px] font-semibold mb-1">Sustainable Landscape Solutions</div>
-            <div class="text-mid text-[12px] leading-relaxed font-light">Eco-conscious design principles, native species selection, and rainwater harvesting for landscapes that give back.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ════════════════════════════════════
-     PROCESS
-════════════════════════════════════ -->
-<section class="bg-charcoal py-28 px-8 lg:px-16">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-20 rev">
-      <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-6 max-w-[200px] mx-auto">HOW IT WORKS</div>
-      <h2 class="font-serif text-cream font-light leading-tight" style="font-size:clamp(38px,4vw,58px)">
-        Our <em class="text-gold italic">Process</em>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 relative">
-      <!-- Connecting line on desktop -->
-      <div class="absolute top-10 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent hidden lg:block"></div>
-
-      <!-- Step 1 -->
-      <div class="process-step text-center pt-4 rev" data-num="1">
-        <div class="w-11 h-11 border border-gold/40 flex items-center justify-center mx-auto mb-6 relative bg-charcoal">
-          <div class="w-2.5 h-2.5 bg-gold rounded-full"></div>
-          <div class="absolute -top-px -left-px -right-px -bottom-px border border-gold/15"></div>
-        </div>
-        <div class="text-gold text-[9px] tracking-[3px] font-bold mb-3">PHASE 01</div>
-        <div class="font-serif text-cream text-2xl font-light mb-3">Discovery</div>
-        <div class="text-cream/35 text-[12px] leading-relaxed font-light">Site analysis, brief development & vision alignment with our design director.</div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="process-step text-center pt-4 rev" data-num="2" style="transition-delay:0.1s">
-        <div class="w-11 h-11 border border-gold/40 flex items-center justify-center mx-auto mb-6 relative bg-charcoal">
-          <div class="w-2.5 h-2.5 bg-gold rounded-full"></div>
-        </div>
-        <div class="text-gold text-[9px] tracking-[3px] font-bold mb-3">PHASE 02</div>
-        <div class="font-serif text-cream text-2xl font-light mb-3">Concept</div>
-        <div class="text-cream/35 text-[12px] leading-relaxed font-light">Masterplan development, mood boards, material palettes & 3D visualisations.</div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="process-step text-center pt-4 rev" data-num="3" style="transition-delay:0.2s">
-        <div class="w-11 h-11 border border-gold/40 flex items-center justify-center mx-auto mb-6 relative bg-charcoal">
-          <div class="w-2.5 h-2.5 bg-gold rounded-full"></div>
-        </div>
-        <div class="text-gold text-[9px] tracking-[3px] font-bold mb-3">PHASE 03</div>
-        <div class="font-serif text-cream text-2xl font-light mb-3">Creation</div>
-        <div class="text-cream/35 text-[12px] leading-relaxed font-light">Expert installation by our specialist teams, managed with precision.</div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="process-step text-center pt-4 rev" data-num="4" style="transition-delay:0.3s">
-        <div class="w-11 h-11 border border-gold flex items-center justify-center mx-auto mb-6 relative bg-gold">
-          <i class="fa-solid fa-check text-dark text-xs"></i>
-        </div>
-        <div class="text-gold text-[9px] tracking-[3px] font-bold mb-3">PHASE 04</div>
-        <div class="font-serif text-cream text-2xl font-light mb-3">Handover</div>
-        <div class="text-cream/35 text-[12px] leading-relaxed font-light">Final reveal, care guides, and optional ongoing maintenance programme.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ════════════════════════════════════
-     PROJECTS — The main showcase
-════════════════════════════════════ -->
-<section id="projects" class="bg-off-white py-32 px-8 lg:px-16">
-  <div class="max-w-7xl mx-auto">
-
-    <!-- Section header -->
-    <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-14 gap-8">
-      <div class="rev-l">
-        <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-6 max-w-[200px]">OUR WORK</div>
-        <h2 class="font-serif text-dark font-light leading-tight gold-after" style="font-size:clamp(44px,5vw,72px)">
-          {{ service.name }}<br><em class="text-gold italic">Projects</em>
-        </h2>
-      </div>
-      <div class="rev-r text-right">
-        <p class="text-mid text-[13px] leading-loose font-light max-w-xs mb-6">
-          Each project is a unique dialogue between our vision and the land — resulting in environments of lasting beauty.
-        </p>
-        <a href="{% url 'projects' %}" class="inline-flex items-center gap-3 text-gold text-[10px] tracking-[2.5px] font-semibold no-underline hover:gap-5 transition-all group">
-          VIEW ALL PROJECTS <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
-      </div>
-    </div>
-
-    <!-- Projects grid — Dynamic from DB -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto" id="projects-grid">
-      {% for project in projects %}
-      <div class="proj-card h-[420px] rev group" style="transition-delay:{% widthratio forloop.counter0 10 1 %}s">
-        <img src="{{ project.card_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179975/luxspace/projects/villa_116_8.jpg' }}" class="w-full h-full object-cover" alt="{{ project.title }}">
-        <div class="overlay absolute inset-0" style="background:linear-gradient(to top,rgba(12,12,9,0.9) 0%,rgba(12,12,9,0.2) 50%,rgba(12,12,9,0) 100%)"></div>
-        {% if project.is_featured %}
-        <div class="proj-tag absolute top-6 left-6 bg-gold text-dark text-[8px] tracking-[2px] font-bold px-3 py-1.5">FEATURED</div>
+<!-- ══ OVERVIEW ═══════════════════════════════════════ -->
+<section id="sov" class="s-sec">
+  <div class="s-wrap">
+    <div class="sov-grid">
+      <div class="rvl">
+        <p class="s-label mono" style="margin-bottom:1.5rem;">Our Approach</p>
+        {% if service.overview_heading %}
+        <h2 class="sov-h2">{{ service.overview_heading|linebreaksbr }}</h2>
         {% endif %}
-        <div class="absolute bottom-0 inset-x-0 p-8 proj-info">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-2">{% if project.location %}{{ project.location|upper }}{% endif %}{% if project.year %} — {{ project.year }}{% endif %}</div>
-          <h3 class="font-serif text-cream font-light leading-tight mb-3" style="font-size:clamp(26px,3vw,42px)">{{ project.title }}</h3>
-          {% if project.summary %}<p class="text-cream/50 text-[12px] leading-relaxed max-w-md mb-5 hidden lg:block">{{ project.summary }}</p>{% endif %}
-          <div class="proj-cta flex items-center gap-6">
-            <a href="{% url 'project_detail' project.slug %}" class="cta-btn cta-btn-secondary inline-flex items-center gap-3 border border-gold text-gold text-[9px] tracking-[2.5px] font-bold px-6 py-3 hover:bg-gold hover:text-dark transition-all no-underline">
-              VIEW PROJECT <i class="fa-solid fa-arrow-right text-xs"></i>
-            </a>
+        <hr class="sov-rule">
+        {% if service.overview_body_primary %}
+        <p class="sov-body-accent">{{ service.overview_body_primary }}</p>
+        {% endif %}
+        {% if service.overview_body_secondary %}
+        <p style="color:rgba(248,247,245,.22);font-size:.85rem;line-height:1.82;margin-bottom:2.5rem;">{{ service.overview_body_secondary }}</p>
+        {% endif %}
+        <a href="#sprojs" class="sbtn sbtn-o">See Our Work <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+      </div>
+
+      <div class="rvr">
+        <div class="sov-mos">
+          <div class="sov-m">
+            <img src="{{ service.overview_image_1|default:'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=1200&auto=format' }}" alt="{{ service.name }}" loading="lazy">
+          </div>
+          <div class="sov-a">
+            <img src="{{ service.overview_image_2|default:'https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=900&auto=format' }}" alt="" loading="lazy">
+          </div>
+          <div class="sov-b">
+            <img src="{{ service.overview_image_3|default:'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=900&auto=format' }}" alt="" loading="lazy">
+            <div class="sov-badge">{% if service.overview_badge %}{{ service.overview_badge }}{% else %}Certified Specialists{% endif %}</div>
           </div>
         </div>
       </div>
-      {% empty %}
-      <div class="col-span-12 text-center py-20 rev">
-        <p class="text-mid body-text">No projects yet for this service.</p>
-        <a href="{% url 'projects' %}" class="inline-flex items-center gap-3 text-gold text-[10px] tracking-[2.5px] font-semibold mt-6 no-underline">
-          BROWSE ALL PROJECTS <i class="fa-solid fa-arrow-right text-xs"></i>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CAPABILITIES ═══════════════════════════════════ -->
+<section id="sfeat" class="s-secx">
+  <div class="s-wrap">
+    <div class="sfeat-grid">
+      <div class="rvl">
+        <p class="s-label" style="color:var(--g);margin-bottom:1rem;">Capabilities</p>
+        <div class="sfeat-ghost">{{ service.name|slice:":2"|upper }}</div>
+        <h2 class="sfeat-h2">Every<br>Detail.<br><em>Owned.</em></h2>
+        <p class="sfeat-body">Our {{ service.name|lower }} service covers the full spectrum — from initial brief and technical planning through to delivery and long-term support.</p>
+        <div class="sfeat-stats">
+          <div class="sfeat-stat">
+            <div class="sfeat-stat-v">{{ service.stat_1_value|default:"500+" }}</div>
+            <div class="sfeat-stat-l">{{ service.stat_1_label|default:"Projects" }}</div>
+          </div>
+          <div class="sfeat-stat">
+            <div class="sfeat-stat-v">{{ service.stat_2_value|default:"6+" }}</div>
+            <div class="sfeat-stat-l">{{ service.stat_2_label|default:"Years" }}</div>
+          </div>
+          <div class="sfeat-stat">
+            <div class="sfeat-stat-v">{{ service.stat_3_value|default:"98%" }}</div>
+            <div class="sfeat-stat-l">{{ service.stat_3_label|default:"Satisfaction" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rvr">
+        <div class="sfeat-list">
+          {% for feat in service.features.all %}
+          <div class="sfeat-item">
+            <div class="sfeat-ico"><i class="{{ feat.icon|default:'fa-solid fa-circle-check' }}"></i></div>
+            <div>
+              <div class="sfeat-title">{{ feat.title }}</div>
+              <div class="sfeat-desc">{{ feat.description }}</div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="sfeat-item"><div class="sfeat-ico"><i class="fa-solid fa-drafting-compass"></i></div><div><div class="sfeat-title">Design & Technical Planning</div><div class="sfeat-desc">Full site assessment, technical drawings, and material specifications resolved before a contract is signed. No guesswork on pricing.</div></div></div>
+          <div class="sfeat-item"><div class="sfeat-ico"><i class="fa-solid fa-file-circle-check"></i></div><div><div class="sfeat-title">Authority Approvals</div><div class="sfeat-desc">All permit submissions, NOC applications, and DM/DDA coordination managed in-house. Your project doesn't wait on bureaucracy.</div></div></div>
+          <div class="sfeat-item"><div class="sfeat-ico"><i class="fa-solid fa-bolt"></i></div><div><div class="sfeat-title">Structured Execution</div><div class="sfeat-desc">Specialist teams on every trade. Fixed milestones, weekly reporting. The quote you sign is the invoice you receive.</div></div></div>
+          <div class="sfeat-item"><div class="sfeat-ico"><i class="fa-solid fa-shield-halved"></i></div><div><div class="sfeat-title">Fixed-Price Contracts</div><div class="sfeat-desc">Design resolved before pricing. Zero mid-project variations. Complete financial transparency from day one through handover.</div></div></div>
+          <div class="sfeat-item" style="border-bottom:none;"><div class="sfeat-ico"><i class="fa-solid fa-handshake"></i></div><div><div class="sfeat-title">Post-Handover Commitment</div><div class="sfeat-desc">Final inspection, snagging resolution, and optional maintenance. We don't disappear after the keys are handed over.</div></div></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PROCESS ════════════════════════════════════════ -->
+<section id="sproc" class="s-secx">
+  <div class="s-wrap">
+    <div class="sproc-hdr">
+      <div class="rvl">
+        <p class="s-label" style="margin-bottom:1rem;">How It Works</p>
+        <h2 class="sproc-h2">A Process Built to<br><em>Eliminate Delays</em></h2>
+      </div>
+      <p class="rvr" style="color:var(--mu);font-size:.88rem;line-height:1.8;max-width:34ch;">Four defined phases. No surprises at any stage.</p>
+    </div>
+
+    <div class="sproc-track">
+      <div class="sproc-step rv">
+        <div class="sproc-n">01</div>
+        <div class="sproc-ph">Phase 01</div>
+        <div class="sproc-title">Consultation</div>
+        <div class="sproc-desc">We define scope, priorities, and budget before anything begins. No ambiguity. No assumed costs baked in later.</div>
+      </div>
+      <div class="sproc-step rv d1">
+        <div class="sproc-n">02</div>
+        <div class="sproc-ph">Phase 02</div>
+        <div class="sproc-title">Planning</div>
+        <div class="sproc-desc">Technical drawings, 3D renders, specs, and authority approvals — all resolved and costed before we touch the site.</div>
+      </div>
+      <div class="sproc-step rv d2">
+        <div class="sproc-n">03</div>
+        <div class="sproc-ph">Phase 03</div>
+        <div class="sproc-title">Execution</div>
+        <div class="sproc-desc">Specialist teams on site. Strict QC. Weekly reporting. You always know the current status — no chasing required.</div>
+      </div>
+      <div class="sproc-step sproc-step-final rv d3">
+        <div class="sproc-n" style="color:rgba(196,151,62,.22);">04</div>
+        <div class="sproc-ph">Phase 04</div>
+        <div class="sproc-title">Handover</div>
+        <div class="sproc-desc">Final inspection. Every snag resolved. We sign off only when the standard is met — then we hand over the keys.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PROJECTS ═══════════════════════════════════════ -->
+<section id="sprojs" class="s-secx">
+  <div class="s-wrap">
+    <div class="sprojs-hdr">
+      <div class="rvl">
+        <p class="s-label" style="margin-bottom:.85rem;">Our Work</p>
+        <h2 class="sprojs-h2">{{ service.name }}<br><em>Projects</em></h2>
+      </div>
+      <div class="rvr" style="text-align:right;">
+        <a href="{% url 'projects' %}" style="font-family:'Space Mono',monospace!important;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(248,247,245,.35);text-decoration:none;display:inline-flex;align-items:center;gap:.7rem;transition:color .2s;" onmouseover="this.style.color='var(--g)'" onmouseout="this.style.color='rgba(248,247,245,.35)'">
+          View All <i class="fa-solid fa-arrow-right fa-xs"></i>
         </a>
+      </div>
+    </div>
+
+    <div class="sprojs-grid">
+      {% for project in projects %}
+      <a class="sp-card rv" href="{% url 'project_detail' project.slug %}" style="transition-delay:{{ forloop.counter0|floatformat:1 }}00ms;">
+        <img src="{{ project.card_image|default:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format' }}" alt="{{ project.title }}" loading="lazy">
+        <div class="sp-ov"></div>
+        {% if project.is_featured %}<div class="sp-badge">Featured</div>{% endif %}
+        <div class="sp-body">
+          <div class="sp-meta">{% if project.location %}{{ project.location }}{% endif %}{% if project.location and project.year %} — {% endif %}{% if project.year %}{{ project.year }}{% endif %}</div>
+          <h3 class="sp-title">{{ project.title }}</h3>
+          {% if project.summary %}<p class="sp-summary">{{ project.summary }}</p>{% endif %}
+          <span class="sp-cta">View Project <i class="fa-solid fa-arrow-right fa-xs"></i></span>
+        </div>
+      </a>
+      {% empty %}
+      <div class="rv" style="grid-column:1/-1;padding:5rem;text-align:center;color:var(--mu);">
+        <p style="margin-bottom:1.5rem;">No projects yet for this service.</p>
+        <a href="{% url 'projects' %}" class="sbtn sbtn-g">Browse All Projects <i class="fa-solid fa-arrow-right fa-xs"></i></a>
       </div>
       {% endfor %}
     </div>
 
     {% if projects %}
-    <div class="text-center mt-16 rev">
-      <div class="text-mid/40 text-[10px] tracking-[2px]">Showing {{ projects|length }} {{ service.name|lower }} project{{ projects|length|pluralize }}</div>
+    <div class="rv" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--bl);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:'Space Mono',monospace!important;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dm);">{{ projects|length }} project{{ projects|length|pluralize }} shown</span>
+      <a href="{% url 'projects' %}" class="sbtn sbtn-g" style="padding:.7rem 1.5rem;">All Work <i class="fa-solid fa-arrow-right fa-xs"></i></a>
     </div>
     {% endif %}
   </div>
 </section>
 
 
-<!-- ════════════════════════════════════
-     FEATURED PROJECT SPOTLIGHT
-════════════════════════════════════ -->
+<!-- ══ SPOTLIGHT ══════════════════════════════════════ -->
 {% if featured_project %}
-<section class="bg-dark py-28 px-8 lg:px-16 relative overflow-hidden">
-  <div class="wm" style="bottom:-60px;left:-30px">B</div>
-  <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-16 gap-6">
-      <div class="rev-l">
-        <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-6 max-w-[200px]">PROJECT SPOTLIGHT</div>
-        <h2 class="font-serif text-cream font-light leading-tight" style="font-size:clamp(38px,4vw,58px)">
-          Behind the<br><em class="text-gold italic">Design</em>
-        </h2>
+<section id="sspot" class="s-secx">
+  <div class="s-wrap">
+    <div class="sspot-hdr">
+      <div class="rvl">
+        <p class="s-label" style="margin-bottom:1rem;">Project Spotlight</p>
+        <h2 class="sspot-h2">Behind the <em>Build</em></h2>
       </div>
-      <p class="text-cream/35 text-[13px] leading-loose font-light max-w-sm rev-r">
-        A deeper look into {{ featured_project.title }} — from concept to completion.
-      </p>
+      <p class="rvr" style="color:var(--mu);font-size:.88rem;max-width:34ch;line-height:1.8;">A closer look at {{ featured_project.title }} — brief to final handover.</p>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-4 h-auto lg:h-[600px]">
-      <div class="lg:col-span-2 mosaic-item relative h-80 lg:h-full">
-        <img src="{{ featured_project.card_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773179964/luxspace/projects/villa_116_3.jpg' }}" class="w-full h-full object-cover" alt="{{ featured_project.title }}">
-        <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
-        <div class="absolute bottom-8 left-8">
-          <div class="text-gold text-[9px] tracking-[3px] font-semibold mb-1">{{ featured_project.location|default:featured_project.service.short_label|upper }}</div>
-          <div class="font-serif text-cream text-3xl font-light">{{ featured_project.title }}</div>
+    <div class="sspot-panels rv">
+      <div class="sspot-main">
+        <img src="{{ featured_project.card_image|default:'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=1600&auto=format' }}" alt="{{ featured_project.title }}" loading="lazy">
+        <div class="sspot-main-ov"></div>
+        <div class="sspot-info">
+          <div class="sspot-cat">{{ featured_project.location|default:featured_project.service.short_label|upper }}{% if featured_project.year %} — {{ featured_project.year }}{% endif %}</div>
+          <div class="sspot-title">{{ featured_project.title }}</div>
         </div>
-        <a href="{% url 'project_detail' featured_project.slug %}" class="absolute inset-0 flex items-center justify-center">
-          <span class="w-16 h-16 border-2 border-white/30 rounded-full flex items-center justify-center backdrop-blur hover:border-gold hover:bg-gold/20 transition-all group">
-            <i class="fa-solid fa-arrow-right text-white/60 text-sm ml-1 group-hover:text-gold"></i>
-          </span>
-        </a>
+        <a href="{% url 'project_detail' featured_project.slug %}" class="sspot-view"><i class="fa-solid fa-arrow-right"></i></a>
       </div>
-
-      <div class="flex flex-col gap-4">
+      <div class="sspot-right">
         {% if featured_project.images.first %}
-        <div class="mosaic-item relative flex-1 min-h-48">
-          <img src="{{ featured_project.images.first.image_url }}" class="w-full h-full object-cover" alt="">
-          <div class="absolute inset-0 bg-dark/30"></div>
-        </div>
+        <div class="sspot-img2"><img src="{{ featured_project.images.first.image_url }}" alt="" loading="lazy"></div>
         {% endif %}
-        <div class="bg-charcoal p-7 grid grid-cols-2 gap-4">
-          {% if featured_project.location %}<div><div class="font-serif text-gold text-3xl font-light">{{ featured_project.location }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">LOCATION</div></div>{% endif %}
-          {% if featured_project.year %}<div><div class="font-serif text-gold text-3xl font-light">{{ featured_project.year }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">YEAR</div></div>{% endif %}
-          {% if featured_project.outcome_stats %}{% for stat in featured_project.outcome_stats|slice:":2" %}<div><div class="font-serif text-gold text-3xl font-light">{{ stat.value }}</div><div class="text-cream/30 text-[9px] tracking-[2px] mt-1">{{ stat.label }}</div></div>{% endfor %}{% endif %}
+        <div class="sspot-data">
+          {% if featured_project.location %}<div><div class="sspot-dv">{{ featured_project.location }}</div><div class="sspot-dl">Location</div></div>{% endif %}
+          {% if featured_project.year %}<div><div class="sspot-dv">{{ featured_project.year }}</div><div class="sspot-dl">Year</div></div>{% endif %}
+          {% for stat in featured_project.outcome_stats|slice:":2" %}<div><div class="sspot-dv">{{ stat.value }}</div><div class="sspot-dl">{{ stat.label }}</div></div>{% endfor %}
         </div>
-        <a href="{% url 'project_detail' featured_project.slug %}" class="cta-btn cta-btn-primary bg-gold text-dark text-[10px] tracking-[3px] font-bold flex items-center justify-center gap-4 py-5 hover:bg-gold-light transition-all no-underline">
-          READ FULL CASE STUDY <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
+        <a href="{% url 'project_detail' featured_project.slug %}" class="sspot-link">Read Full Case Study <i class="fa-solid fa-arrow-right fa-xs"></i></a>
       </div>
     </div>
   </div>
@@ -435,43 +1062,29 @@
 {% endif %}
 
 
-<!-- ════════════════════════════════════
-     TESTIMONIALS — from projects with testimonial_quote
-════════════════════════════════════ -->
+<!-- ══ TESTIMONIALS ═══════════════════════════════════ -->
 {% if has_testimonials %}
-<section class="bg-cream py-28 px-8 lg:px-16">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
-      <div class="lg:w-1/3 rev-l">
-        <div class="orn text-gold text-[10px] tracking-[4px] font-medium mb-8 max-w-[200px]">CLIENT VOICES</div>
-        <h2 class="font-serif text-dark font-light leading-tight mb-6 gold-after" style="font-size:clamp(38px,4vw,54px)">
-          What Our<br><em class="text-gold italic">Clients Say</em>
-        </h2>
-        <p class="text-mid text-[13px] leading-loose font-light">
-          Our work speaks for itself — but sometimes our clients say it better.
-        </p>
+<section id="stesti" class="s-secx">
+  <div class="s-wrap">
+    <div class="stesti-grid">
+      <div class="rvl">
+        <p class="s-label" style="color:var(--g);margin-bottom:1.25rem;">Client Voices</p>
+        <h2 class="stesti-h2">What<br>They<br><em>Say</em></h2>
+        <p style="color:#6E6860;font-size:.85rem;line-height:1.8;margin-top:1.25rem;max-width:26ch;">Delivered on time. On budget. Exactly as agreed.</p>
       </div>
-
-      <div class="lg:w-2/3 space-y-8 rev-r">
-        {% for project in projects %}
-        {% if project.testimonial_quote %}
-        <div class="testi-card pl-8 py-2">
-          <div class="font-serif text-dark text-xl font-light italic leading-relaxed mb-5">{{ project.testimonial_quote }}</div>
-          <div class="flex items-center gap-4">
-            {% if project.testimonial_avatar_url %}
-            <div class="w-11 h-11 rounded-full bg-light-sand overflow-hidden">
-              <img src="{{ project.testimonial_avatar_url }}" class="w-full h-full object-cover" alt="{{ project.testimonial_author }}">
-            </div>
-            {% endif %}
+      <div class="stesti-list rvr">
+        {% for project in projects %}{% if project.testimonial_quote %}
+        <div class="stesti-card">
+          <p class="stesti-q">"{{ project.testimonial_quote }}"</p>
+          <div class="stesti-row">
             <div>
-              {% if project.testimonial_author %}<div class="text-dark text-[12px] tracking-[1.5px] font-semibold">{{ project.testimonial_author }}</div>{% endif %}
-              {% if project.testimonial_location %}<div class="text-mid text-[10px] tracking-[1.5px]">{{ project.testimonial_location }}</div>{% endif %}
+              {% if project.testimonial_author %}<div class="stesti-nm">{{ project.testimonial_author }}</div>{% endif %}
+              {% if project.testimonial_location %}<div class="stesti-lc">{{ project.testimonial_location }}</div>{% endif %}
             </div>
-            <div class="ml-auto text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <div class="stesti-stars">★★★★★</div>
           </div>
         </div>
-        {% endif %}
-        {% endfor %}
+        {% endif %}{% endfor %}
       </div>
     </div>
   </div>
@@ -479,25 +1092,26 @@
 {% endif %}
 
 
-<!-- ════════════════════════════════════
-     OTHER SERVICES — Cross-sell
-════════════════════════════════════ -->
+<!-- ══ OTHER SERVICES ═════════════════════════════════ -->
 {% if other_services %}
-<section class="bg-charcoal py-24 px-8 lg:px-16">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-14 rev">
-      <p class="text-gold-muted text-[10px] tracking-[4px] font-medium mb-4">EXPLORE MORE</p>
-      <h2 class="font-serif text-cream font-light" style="font-size:clamp(36px,4vw,52px)">Our Other <em class="text-gold italic">Services</em></h2>
+<section id="sother" class="s-secx">
+  <div class="s-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;" class="rv">
+      <div>
+        <p class="s-label" style="margin-bottom:1rem;">Explore More</p>
+        <h2 class="sother-h2">Our Other <em>Services</em></h2>
+      </div>
+      <a href="{% url 'services' %}" class="sbtn sbtn-o">All Services <i class="fa-solid fa-arrow-right fa-xs"></i></a>
     </div>
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+    <div class="sother-row">
       {% for svc in other_services %}
-      <a href="{% url 'service_detail' svc.slug %}" class="group relative overflow-hidden h-64 no-underline rev" style="transition-delay:{% widthratio forloop.counter0 20 1 %}s">
-        <img src="{{ svc.hero_background_image|default:'https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ svc.name }}">
-        <div class="absolute inset-0 bg-dark/50 group-hover:bg-dark/70 transition-all duration-300"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-end pb-7">
-          <div class="text-gold text-[9px] tracking-[2px] font-semibold mb-2">{{ svc.order_label }}</div>
-          <div class="font-serif text-cream text-lg font-light">{{ svc.name }}</div>
-          <div class="w-0 h-px bg-gold mt-3 group-hover:w-8 transition-all duration-300"></div>
+      <a href="{% url 'service_detail' svc.slug %}" class="sother-tile rv" style="transition-delay:{{ forloop.counter0|floatformat:1 }}00ms;">
+        <img src="{{ svc.hero_background_image|default:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format' }}" alt="{{ svc.name }}" loading="lazy">
+        <div class="sother-ov"></div>
+        <div class="sother-body">
+          {% if svc.order_label %}<div class="sother-ord">{{ svc.order_label }}</div>{% endif %}
+          <div class="sother-name">{{ svc.name }}</div>
+          <div class="sother-bar"></div>
         </div>
       </a>
       {% endfor %}
@@ -507,29 +1121,63 @@
 {% endif %}
 
 
-<!-- ════════════════════════════════════
-     CTA
-════════════════════════════════════ -->
-<section class="relative min-h-[65vh] flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180028/luxspace/projects/3d_renders_9.jpg')] bg-cover bg-center"></div>
-  <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(26,26,22,0.94) 0%,rgba(26,26,22,0.80) 50%,rgba(26,26,22,0.90) 100%)"></div>
-  <div class="relative z-10 text-center px-8 max-w-2xl">
-    <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 max-w-[250px] mx-auto rev">BEGIN YOUR PROJECT</div>
-    {% if service.cta_heading %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">{{ service.cta_heading|linebreaksbr }}</h2>{% else %}<h2 class="font-serif text-cream font-light leading-tight mb-6 rev" style="font-size:clamp(44px,6vw,80px)">Ready to Transform<br>Your <em class="text-gold italic">Landscape?</em></h2>{% endif %}
-    {% if service.cta_intro %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">{{ service.cta_intro }}</p>{% else %}<p class="text-cream/45 text-[13px] tracking-wide leading-loose font-light mb-12 rev">Every extraordinary garden begins with a conversation. Tell us about your land and your vision.</p>{% endif %}
-    <div class="flex flex-col sm:flex-row gap-4 justify-center rev">
-      <a href="{% url 'contact' %}" class="cta-btn cta-btn-primary inline-flex items-center justify-center gap-3 bg-gold text-dark text-[10px] tracking-[3px] font-bold px-12 py-5 hover:bg-gold-light transition-all no-underline">
-        <i class="fa-regular fa-calendar"></i> BOOK A SITE VISIT
+<!-- ══ CTA ════════════════════════════════════════════ -->
+<section id="scta">
+  <div class="scta-bg">
+    <img src="{{ service.cta_background_image|default:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2400&auto=format' }}" alt="" loading="lazy">
+  </div>
+  <div class="scta-ov"></div>
+  <div class="scta-inner">
+    <p class="s-label rv" style="margin-bottom:0;">Begin Your Project</p>
+    <h2 class="scta-h2 rv">
+      {% if service.cta_heading %}{{ service.cta_heading }}{% else %}Build<br>Without<br><em>Headaches.</em>{% endif %}
+    </h2>
+    <p class="scta-p rv">{% if service.cta_intro %}{{ service.cta_intro }}{% else %}Tell us what you're planning. Clear scope, fixed price, and a response within 24–48 hours.{% endif %}</p>
+    <div class="scta-btns rv">
+      <a href="{% url 'contact' %}" class="sbtn sbtn-g" style="padding:1.1rem 2.5rem;">
+        Start Your Project <i class="fa-solid fa-arrow-right fa-xs"></i>
       </a>
-      <a href="{% url 'contact' %}" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 border border-cream/35 text-cream text-[10px] tracking-[3px] font-medium px-12 py-5 hover:border-cream transition-all no-underline">
-        <i class="fa-regular fa-envelope"></i> GET A QUOTE
+      <a href="{% url 'contact' %}" class="sbtn sbtn-o" style="padding:1.1rem 2.5rem;">
+        Request a Quote
       </a>
     </div>
   </div>
 </section>
 
-
+</div><!-- #svc-page -->
 {% endblock %}
 
+
 {% block extra_js %}
+<script>
+(function(){
+  /* Scroll reveal */
+  const els = document.querySelectorAll('#svc-page .rv, #svc-page .rvl, #svc-page .rvr');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+    },{ threshold:0.1 });
+    els.forEach(el=>io.observe(el));
+  } else {
+    els.forEach(el=>el.classList.add('in'));
+  }
+
+  /* Hero parallax */
+  const bg = document.getElementById('sh-bg');
+  if(bg && matchMedia('(prefers-reduced-motion:no-preference)').matches){
+    window.addEventListener('scroll',()=>{
+      const sy = window.scrollY, vh = window.innerHeight;
+      if(sy < vh*1.5) bg.style.transform = `scale(1.07) translateY(${(sy/vh)*7}%)`;
+    },{ passive:true });
+  }
+
+  /* Smooth anchor scroll */
+  document.querySelectorAll('#svc-page a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+})();
+</script>
 {% endblock %}

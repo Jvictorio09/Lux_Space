@@ -1,0 +1,679 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if insight %}Edit — {{ insight.title|truncatechars:40 }}{% else %}New Insight{% endif %} — LuxSpace
+{% endblock %}
+
+{% block content %}
+<style>
+  /* ── Layout ── */
+  .editor-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .editor-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── Command bar ── */
+  .cmd-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .cmd-bar-left { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #999; }
+  .cmd-bar-right { display: flex; align-items: center; gap: 8px; }
+  #currentTitle { font-size: 13px; font-weight: 600; color: #333; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #saveStatus {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    background: #f5f5f5; color: #888; transition: all 0.2s;
+  }
+  #saveStatus.saving { background: #fff3cd; color: #856404; }
+  #saveStatus.saved  { background: #e6f4ea; color: #1e7e34; }
+  #saveStatus.unsaved{ background: #fff3cd; color: #856404; }
+  #saveStatus.error  { background: #fdecea; color: #c62828; }
+
+  /* ── Title field ── */
+  #titleField {
+    font-size: 26px; font-weight: 600; border: none; outline: none;
+    width: 100%; padding: 8px 0; margin-bottom: 4px;
+    border-bottom: 2px solid #e0e0e0; background: transparent;
+    font-family: Arial, Helvetica, sans-serif; color: #111;
+    transition: border-color 0.2s;
+  }
+  #titleField:focus { border-color: #174ea6; }
+  #titleField::placeholder { color: #bbb; font-weight: 400; }
+
+  /* ── Editor container ── */
+  .editor-wrap {
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 6px;
+    min-height: 520px; padding: 16px 24px;
+  }
+  #editorHost { min-height: 420px; }
+
+  /* ── Sidebar panels ── */
+  .panel {
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 6px;
+    padding: 16px; margin-bottom: 14px;
+  }
+  .panel-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #888; font-weight: 600; margin-bottom: 12px;
+  }
+  .field-row { margin-bottom: 12px; }
+  .field-row label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px;
+    font-size: 13px; font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+  }
+  .field-row textarea { resize: vertical; }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus {
+    outline: none; border-color: #174ea6;
+  }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .checkbox-row input[type="checkbox"] { width: auto; cursor: pointer; }
+  .checkbox-row label { font-size: 13px; color: #444; margin: 0; cursor: pointer; }
+
+  /* ── Cover preview ── */
+  #coverPreview {
+    width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    border-radius: 4px; display: none; margin-top: 8px;
+    background: #f5f5f5;
+  }
+  .cover-placeholder {
+    width: 100%; aspect-ratio: 16/9; background: #f5f5f5; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: #bbb; font-size: 11px; margin-top: 8px;
+  }
+
+  /* ── Gallery modal ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: 8px; width: 740px; max-width: 95vw;
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid #eee;
+  }
+  .modal-header h3 { margin: 0; font-size: 16px; }
+  .modal-close {
+    border: none; background: none; font-size: 20px; cursor: pointer; color: #777;
+    line-height: 1;
+  }
+  .modal-tabs { display: flex; border-bottom: 1px solid #eee; padding: 0 20px; }
+  .modal-tab {
+    padding: 10px 16px; font-size: 13px; border: none; background: none;
+    cursor: pointer; border-bottom: 2px solid transparent; color: #777;
+    transition: all 0.15s;
+  }
+  .modal-tab.active { border-bottom-color: #174ea6; color: #174ea6; font-weight: 600; }
+  .modal-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Gallery grid */
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px;
+  }
+  .gallery-item {
+    cursor: pointer; border-radius: 4px; overflow: hidden;
+    border: 2px solid transparent; transition: border-color 0.15s;
+    aspect-ratio: 4/3; background: #f0f0f0;
+  }
+  .gallery-item:hover { border-color: #174ea6; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Upload tab */
+  .upload-zone {
+    border: 2px dashed #ccc; border-radius: 6px; padding: 32px 20px;
+    text-align: center; color: #888; cursor: pointer; transition: all 0.2s;
+  }
+  .upload-zone:hover, .upload-zone.dragover { border-color: #174ea6; background: #f0f5ff; color: #174ea6; }
+  .upload-zone input { display: none; }
+
+  /* ── Submit buttons ── */
+  .btn-save {
+    background: #174ea6; color: #fff; border: none; border-radius: 4px;
+    padding: 8px 20px; font-size: 13px; cursor: pointer; font-weight: 600;
+    transition: background 0.15s;
+  }
+  .btn-save:hover { background: #0f3b82; }
+  .btn-outline-sm {
+    border: 1px solid #d0d0d0; background: #fff; border-radius: 4px;
+    padding: 7px 14px; font-size: 13px; cursor: pointer; color: #555;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline-sm:hover { background: #f3f3f3; }
+
+  /* ── Error list ── */
+  .error-list { list-style: none; padding: 0; margin: 0; }
+  .error-list li {
+    background: #fdecea; color: #c62828; font-size: 12px;
+    padding: 4px 10px; border-radius: 3px; margin-bottom: 4px;
+  }
+
+  /* ── Read time helper ── */
+  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+</style>
+
+<!-- Hidden data for Editor.js initialisation -->
+<div id="blocksData"
+     data-blocks="{{ blocks_json }}"
+     style="display:none;"></div>
+
+<!-- Gallery modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Select Cover Image</h3>
+      <button class="modal-close" onclick="closeGalleryModal()">×</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabGallery" onclick="switchToGalleryTab()">Gallery</button>
+      <button class="modal-tab" id="tabUpload" onclick="switchToUploadTab()">Upload New</button>
+      <button class="modal-tab" id="tabUrl" onclick="switchToUrlTab()">Paste URL</button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-panel active" id="panelGallery">
+        <div id="galleryGrid" class="gallery-grid">
+          <div style="color:#aaa; font-size:13px; padding:20px 0;">Loading images…</div>
+        </div>
+      </div>
+      <div class="tab-panel" id="panelUpload">
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="uploadFileInput" accept="image/*">
+          <div style="font-size:24px; margin-bottom:8px;">☁</div>
+          <div>Click to upload or drag an image here</div>
+          <div style="font-size:11px; margin-top:6px; color:#aaa;">JPG, PNG, WebP — max 15MB</div>
+        </div>
+        <div id="uploadStatus" style="margin-top:12px; font-size:13px; display:none;"></div>
+      </div>
+      <div class="tab-panel" id="panelUrl">
+        <div class="field-row" style="margin-top:4px;">
+          <label>Image URL</label>
+          <input type="url" id="pasteUrlInput" placeholder="https://…">
+        </div>
+        <button class="btn-save" onclick="applyPastedUrl()" style="margin-top:4px;">Use This URL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Top command bar ── -->
+<div class="cmd-bar">
+  <div class="cmd-bar-left">
+    <a href="{% url 'dashboard_insights' %}" class="btn-outline-sm">← Insights</a>
+    <span id="currentTitle">
+      {% if insight %}{{ insight.title|truncatechars:40 }}{% else %}New Article{% endif %}
+    </span>
+  </div>
+  <div class="cmd-bar-right">
+    <span id="saveStatus">{% if insight %}Saved{% else %}New{% endif %}</span>
+    {% if insight %}
+      <a href="{% url 'insight_detail' insight.slug %}" target="_blank" class="btn-outline-sm">
+        View ↗
+      </a>
+    {% endif %}
+    <button type="button" class="btn-save" id="submitBtn">
+      {% if insight %}Save Changes{% else %}Create Article{% endif %}
+    </button>
+  </div>
+</div>
+
+<!-- ── Main form ── -->
+<form method="post" id="insightForm" novalidate>
+  {% csrf_token %}
+  {{ form.blocks }}  {# Hidden #blocksField populated by Editor.js #}
+
+  <div class="editor-layout">
+
+    <!-- ── Left: title + editor ── -->
+    <div>
+      <input type="text" id="titleField" name="{{ form.title.html_name }}"
+             value="{{ form.title.value|default:'' }}"
+             placeholder="Article title…" autocomplete="off">
+      {% if form.title.errors %}
+        <ul class="error-list">{% for e in form.title.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+      {% endif %}
+
+      <div class="editor-wrap" style="margin-top:14px;">
+        <div id="editorHost"></div>
+      </div>
+    </div>
+
+    <!-- ── Right: sidebar panels ── -->
+    <div>
+
+      <!-- Status & settings -->
+      <div class="panel">
+        <div class="panel-title">Publish Settings</div>
+
+        <div class="field-row">
+          <label>Status</label>
+          <select name="{{ form.status.html_name }}" id="statusField">
+            {% for val, label in form.fields.status.choices %}
+              <option value="{{ val }}"
+                {% if form.status.value == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field-row">
+          <label>Category</label>
+          <select name="{{ form.category.html_name }}" id="categoryField">
+            {% for val, label in form.fields.category.choices %}
+              <option value="{{ val }}"
+                {% if form.category.value == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field-row">
+          <label>Read Time (minutes)</label>
+          <input type="number" name="{{ form.read_time.html_name }}" min="1" max="60"
+                 value="{{ form.read_time.value|default:'5' }}">
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" name="{{ form.is_featured.html_name }}" id="featuredCheck"
+                 {% if form.is_featured.value %}checked{% endif %}>
+          <label for="featuredCheck">Featured article</label>
+        </div>
+      </div>
+
+      <!-- Slug -->
+      <div class="panel">
+        <div class="panel-title">URL Slug</div>
+        <div class="field-row">
+          <label>Slug</label>
+          <input type="text" name="{{ form.slug.html_name }}" id="slugField"
+                 value="{{ form.slug.value|default:'' }}"
+                 placeholder="auto-generated" autocomplete="off">
+          {% if form.slug.errors %}
+            <ul class="error-list">{% for e in form.slug.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          {% endif %}
+        </div>
+        <div style="font-size:11px; color:#999;">/insights/<span id="slugPreview">{{ form.slug.value|default:'…' }}</span>/</div>
+      </div>
+
+      <!-- Excerpt -->
+      <div class="panel">
+        <div class="panel-title">Excerpt</div>
+        <div class="field-row">
+          <textarea name="{{ form.excerpt.html_name }}" rows="3"
+                    placeholder="Short description for listing cards…">{{ form.excerpt.value|default:'' }}</textarea>
+          {% if form.excerpt.errors %}
+            <ul class="error-list">{% for e in form.excerpt.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Cover Image -->
+      <div class="panel">
+        <div class="panel-title">Cover Image</div>
+        <div class="field-row">
+          <label>Image URL</label>
+          <input type="url" name="{{ form.cover_image_url.html_name }}" id="coverUrlField"
+                 value="{{ form.cover_image_url.value|default:'' }}"
+                 placeholder="https://…"
+                 oninput="updateCoverPreview()">
+        </div>
+        <button type="button" onclick="openGallery()"
+                class="btn-outline-sm" style="width:100%; margin-top:4px; text-align:center;">
+          Pick from Gallery
+        </button>
+        <img id="coverPreview" src="" alt="Cover preview">
+        <div class="cover-placeholder" id="coverPlaceholder">No cover image</div>
+        {% if form.cover_image_url.errors %}
+          <ul class="error-list">{% for e in form.cover_image_url.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+
+      <!-- Delete (edit mode only) -->
+      {% if insight %}
+      <div class="panel" style="border-color:#fdecea;">
+        <div class="panel-title" style="color:#c62828;">Danger Zone</div>
+        <form method="post" action="{% url 'dashboard_insight_delete' insight.pk %}"
+              onsubmit="return confirm('Delete this article permanently?')">
+          {% csrf_token %}
+          <button type="submit" class="btn-outline-sm"
+                  style="width:100%; color:#c62828; border-color:#f5c6cb; text-align:center;">
+            Delete Article
+          </button>
+        </form>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</form>
+
+<!-- ── Editor.js CDN ── -->
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.28.2/dist/editorjs.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.1/dist/header.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@1.10.0/dist/list.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@2.6.0/dist/quote.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.9.0/dist/image.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.4.2/dist/delimiter.umd.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (const c of cookies) {
+      const [k, v] = c.trim().split('=');
+      if (k === name) return decodeURIComponent(v || '');
+    }
+    return '';
+  }
+
+  function generateSlug(text) {
+    return text.toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .substring(0, 220);
+  }
+
+  // ── Editor.js initial data ──────────────────────────────────────────────
+  const rawBlocks = document.getElementById('blocksData').dataset.blocks || '{}';
+  let initial;
+  try {
+    const parsed = JSON.parse(rawBlocks);
+    initial = (parsed && Array.isArray(parsed.blocks) && parsed.blocks.length)
+      ? parsed
+      : { blocks: [{ type: 'paragraph', data: { text: '' } }] };
+  } catch (_) {
+    initial = { blocks: [{ type: 'paragraph', data: { text: '' } }] };
+  }
+
+  // ── Autosave state ───────────────────────────────────────────────────────
+  let isSaving = false;
+  let isUnsaved = false;
+  let autoSaveTimer = null;
+  let blocksSaved = false;
+
+  function updateSaveStatus(state) {
+    const el = document.getElementById('saveStatus');
+    if (!el) return;
+    el.className = '';
+    if (state === 'saving')        { el.className = 'saving'; el.textContent = 'Saving…'; }
+    else if (state === 'saved')    { el.className = 'saved';  el.textContent = 'Saved ✓'; }
+    else if (state === 'unsaved')  { el.className = 'unsaved'; el.textContent = 'Unsaved changes'; }
+    else if (state === 'error')    { el.className = 'error';  el.textContent = 'Save failed'; }
+    else                           { el.textContent = state || '–'; }
+  }
+
+  async function autoSave() {
+    if (isSaving) return;
+    isSaving = true;
+    updateSaveStatus('saving');
+    try {
+      const output = await editor.save();
+      document.getElementById('blocksField').value = JSON.stringify(output);
+      isUnsaved = false;
+      updateSaveStatus('saved');
+    } catch (err) {
+      console.error('Autosave failed:', err);
+      updateSaveStatus('error');
+    } finally {
+      isSaving = false;
+    }
+  }
+
+  // ── Initialise Editor.js ─────────────────────────────────────────────────
+  const editor = new EditorJS({
+    holder: 'editorHost',
+    placeholder: 'Start writing your article here…',
+    data: initial,
+    tools: {
+      header: {
+        class: Header,
+        config: { levels: [2, 3, 4], defaultLevel: 2 },
+        inlineToolbar: true,
+      },
+      list: {
+        class: List,
+        inlineToolbar: true,
+        config: { defaultStyle: 'unordered' },
+      },
+      quote: {
+        class: Quote,
+        inlineToolbar: true,
+        config: { quotePlaceholder: 'Quote…', captionPlaceholder: 'Attribution' },
+      },
+      image: {
+        class: ImageTool,
+        config: {
+          endpoints: {
+            byFile: '{% url "editor_image_upload" %}',
+            byUrl:  '{% url "editor_image_upload" %}',
+          },
+          additionalRequestHeaders: {
+            'X-CSRFToken': getCookie('csrftoken'),
+          },
+          captionPlaceholder: 'Caption (optional)',
+        },
+      },
+      delimiter: Delimiter,
+    },
+    onChange: () => {
+      isUnsaved = true;
+      updateSaveStatus('unsaved');
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(autoSave, 1200);
+    },
+    onReady: () => {
+      updateSaveStatus('{{ insight|yesno:"saved,new" }}');
+    },
+  });
+
+  // ── Title → slug auto-generation ─────────────────────────────────────────
+  const titleField = document.getElementById('titleField');
+  const slugField  = document.getElementById('slugField');
+  const slugPreview = document.getElementById('slugPreview');
+  const currentTitle = document.getElementById('currentTitle');
+
+  let userEditedSlug = Boolean('{{ form.slug.value|default:'' }}');
+
+  titleField.addEventListener('input', () => {
+    if (currentTitle) currentTitle.textContent = titleField.value || 'New Article';
+    if (!userEditedSlug) {
+      const s = generateSlug(titleField.value);
+      slugField.value = s;
+      if (slugPreview) slugPreview.textContent = s || '…';
+    }
+    isUnsaved = true;
+    updateSaveStatus('unsaved');
+  });
+
+  slugField.addEventListener('input', () => {
+    userEditedSlug = true;
+    if (slugPreview) slugPreview.textContent = slugField.value || '…';
+  });
+
+  // ── Cover preview ─────────────────────────────────────────────────────────
+  window.updateCoverPreview = function () {
+    const url = document.getElementById('coverUrlField').value.trim();
+    const img = document.getElementById('coverPreview');
+    const placeholder = document.getElementById('coverPlaceholder');
+
+    if (!url) {
+      img.style.display = 'none';
+      placeholder.style.display = 'flex';
+      return;
+    }
+    const test = new Image();
+    test.onload = () => {
+      img.src = url;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    test.onerror = () => {
+      img.style.display = 'none';
+      placeholder.style.display = 'flex';
+    };
+    test.src = url;
+  };
+
+  // Init cover preview on load
+  updateCoverPreview();
+
+  // ── Gallery modal ─────────────────────────────────────────────────────────
+  window.openGallery = function () {
+    document.getElementById('galleryModal').classList.add('open');
+    loadGalleryImages();
+  };
+  window.closeGalleryModal = function () {
+    document.getElementById('galleryModal').classList.remove('open');
+  };
+
+  function activateTab(tabId, panelId) {
+    ['Gallery','Upload','Url'].forEach(t => {
+      document.getElementById('tab' + t).classList.remove('active');
+      document.getElementById('panel' + t).classList.remove('active');
+    });
+    document.getElementById(tabId).classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+  window.switchToGalleryTab = () => { activateTab('tabGallery', 'panelGallery'); loadGalleryImages(); };
+  window.switchToUploadTab  = () => activateTab('tabUpload', 'panelUpload');
+  window.switchToUrlTab     = () => activateTab('tabUrl', 'panelUrl');
+
+  async function loadGalleryImages() {
+    const grid = document.getElementById('galleryGrid');
+    grid.innerHTML = '<div style="color:#aaa;font-size:13px;padding:20px 0;">Loading…</div>';
+    try {
+      const res = await fetch('{% url "gallery_api_images" %}');
+      const data = await res.json();
+      if (!data.images || !data.images.length) {
+        grid.innerHTML = '<div style="color:#aaa;font-size:13px;padding:20px 0;">No images in gallery yet.</div>';
+        return;
+      }
+      grid.innerHTML = '';
+      data.images.forEach(img => {
+        const url = img.thumb_url || img.web_url || img.secure_url;
+        const fullUrl = img.web_url || img.secure_url;
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.title = img.title || '';
+        div.innerHTML = `<img src="${url}" alt="${img.title || ''}" loading="lazy">`;
+        div.addEventListener('click', () => selectCoverImage(fullUrl));
+        grid.appendChild(div);
+      });
+    } catch (err) {
+      grid.innerHTML = '<div style="color:#c62828;font-size:13px;">Could not load gallery images.</div>';
+    }
+  }
+
+  function selectCoverImage(url) {
+    document.getElementById('coverUrlField').value = url;
+    updateCoverPreview();
+    closeGalleryModal();
+  }
+
+  // Upload tab
+  const uploadZone  = document.getElementById('uploadZone');
+  const uploadInput = document.getElementById('uploadFileInput');
+  const uploadStatus = document.getElementById('uploadStatus');
+
+  uploadZone.addEventListener('click', () => uploadInput.click());
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    handleFileUpload(e.dataTransfer.files);
+  });
+  uploadInput.addEventListener('change', () => handleFileUpload(uploadInput.files));
+
+  async function handleFileUpload(files) {
+    if (!files || !files.length) return;
+    const f = files[0];
+    uploadStatus.style.display = 'block';
+    uploadStatus.style.color = '#856404';
+    uploadStatus.textContent = 'Uploading…';
+
+    const fd = new FormData();
+    fd.append('image', f);
+    fd.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+    try {
+      const res = await fetch('{% url "gallery_api_upload" %}', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.success && data.image) {
+        uploadStatus.style.color = '#1e7e34';
+        uploadStatus.textContent = 'Uploaded! Selecting image…';
+        selectCoverImage(data.image.web_url || data.image.secure_url);
+        setTimeout(() => { uploadStatus.style.display = 'none'; }, 1500);
+        loadGalleryImages();
+      } else {
+        uploadStatus.style.color = '#c62828';
+        uploadStatus.textContent = 'Upload failed: ' + (data.error || 'Unknown error');
+      }
+    } catch (err) {
+      uploadStatus.style.color = '#c62828';
+      uploadStatus.textContent = 'Upload error: ' + err.message;
+    }
+  }
+
+  // Paste URL tab
+  window.applyPastedUrl = function () {
+    const url = document.getElementById('pasteUrlInput').value.trim();
+    if (url) selectCoverImage(url);
+  };
+
+  // ── Close modal on overlay click ──────────────────────────────────────────
+  document.getElementById('galleryModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeGalleryModal();
+  });
+
+  // ── Form submit guard ────────────────────────────────────────────────────
+  const form = document.getElementById('insightForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  submitBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (blocksSaved) { blocksSaved = false; form.submit(); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving blocks…';
+    updateSaveStatus('saving');
+
+    try {
+      const output = await editor.save();
+      document.getElementById('blocksField').value = JSON.stringify(output);
+      isUnsaved = false;
+      blocksSaved = true;
+      updateSaveStatus('saved');
+      form.submit();
+    } catch (err) {
+      console.error('Submit save failed:', err);
+      updateSaveStatus('error');
+      alert('Could not save editor content. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '{% if insight %}Save Changes{% else %}Create Article{% endif %}';
+    }
+  });
+
+  // ── Unsaved navigation guard ──────────────────────────────────────────────
+  window.addEventListener('beforeunload', e => {
+    if (isUnsaved) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+});
+</script>
+{% endblock %}

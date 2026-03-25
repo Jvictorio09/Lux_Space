@@ -185,6 +185,12 @@
             Gallery
           </a>
         </li>
+        <li>
+          <a href="{% url 'dashboard_insights' %}"
+             class="nav-link{% if '/dashboard/insights' in request.path %} current{% endif %}">
+            Insights
+          </a>
+        </li>
       </ul>
       <div class="menu-label">Account</div>
       <ul class="nav-list">

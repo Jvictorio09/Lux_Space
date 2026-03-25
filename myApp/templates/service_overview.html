@@ -29,23 +29,36 @@
 <!-- ════════════════════════════════════
      HERO
 ════════════════════════════════════ -->
-<section class="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
-  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg')] bg-cover bg-center opacity-[0.18]"></div>
-  <div class="absolute inset-0 bg-gradient-to-br from-dark via-dark/92 to-dark/60"></div>
+<section class="relative h-screen min-h-[760px] flex items-center justify-center overflow-hidden bg-dark">
+  <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dzgnshpxi/image/upload/v1773180031/luxspace/projects/3d_renders_11.jpg')] bg-cover bg-center opacity-[0.22] scale-105"></div>
+  <div class="absolute inset-0 bg-gradient-to-br from-dark/65 via-dark/55 to-dark/35"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent"></div>
+
   <!-- Corner ornaments -->
   <div class="absolute top-28 left-16 w-14 h-14 border-t border-l border-gold/25"></div>
   <div class="absolute bottom-14 right-16 w-14 h-14 border-b border-r border-gold/25"></div>
 
-  <div class="relative z-10 text-center px-8 max-w-4xl">
-    <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 rev max-w-[260px] mx-auto">WHAT WE CRAFT</div>
-    <h1 class="font-serif text-cream leading-[0.9] mb-8 rev" style="font-size:clamp(72px,10vw,118px);font-weight:300">
-      Our<br><em class="text-gold italic">Services</em>
+  <div class="relative z-10 text-center px-8 max-w-5xl">
+    <div class="orn text-gold text-[10px] tracking-[5px] font-medium mb-8 rev max-w-[300px] mx-auto">WHAT WE CRAFT</div>
+    <h1 class="font-serif text-cream leading-[0.9] mb-8 rev" style="font-size:clamp(64px,9vw,118px);font-weight:300">
+      Signature<br><em class="text-gold italic">Service Lines</em>
     </h1>
-    <p class="text-cream/45 text-[13px] tracking-[1.5px] leading-loose font-light max-w-md mx-auto mb-14 rev">
-      Extraordinary spaces through uncompromising vision, master craftsmanship, and meticulous execution.
+    <p class="text-cream/55 text-[13px] tracking-[1.5px] leading-loose font-light max-w-2xl mx-auto mb-12 rev">
+      Fit-out, landscaping, custom joinery, swimming pool contracting, and approval support -
+      delivered with one accountable team and uncompromising execution standards.
     </p>
-    <a href="#overview" class="inline-flex flex-col items-center gap-2 text-cream/30 text-[9px] tracking-[3px] rev group no-underline">
-      <span class="group-hover:text-gold transition-colors duration-300">EXPLORE SERVICES</span>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 rev">
+      <a href="#overview" class="cta-btn cta-btn-primary inline-flex items-center gap-3 no-underline">
+        EXPLORE SERVICES <i class="fa-solid fa-arrow-down text-xs"></i>
+      </a>
+      <a href="{% url 'contact' %}" class="cta-btn cta-btn-secondary inline-flex items-center gap-3 border border-cream/30 text-cream hover:border-cream no-underline">
+        BOOK A CONSULTATION <i class="fa-regular fa-calendar text-xs"></i>
+      </a>
+    </div>
+
+    <a href="#overview" class="inline-flex flex-col items-center gap-2 text-cream/35 text-[9px] tracking-[3px] rev group no-underline">
+      <span class="group-hover:text-gold transition-colors duration-300">SCROLL TO DISCOVER</span>
       <i class="fa-solid fa-chevron-down text-gold text-sm animate-bounce"></i>
     </a>
   </div>

@@ -16,7 +16,7 @@ Optional detail page fields (sections hidden when empty):
 
 PROJECTS_DATA = [
     {
-        "service_slug": "landscape-installation-maintenance",
+        "service_slug": "landscaping-services",
         "title": "Landscape Works for Private Villas & Pool Areas",
         "slug": "landscape-works-private-villas-pool-areas",
         "location": "UAE",

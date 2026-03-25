@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import GalleryImage, Project, Service
+from .models import GalleryImage, Insight, Project, Service
 
 
 class ServiceForm(forms.ModelForm):
@@ -109,6 +109,48 @@ class GalleryUploadForm(forms.Form):
         help_text="You can select one or many images.",
         required=True,
     )
+
+
+class InsightForm(forms.ModelForm):
+    """
+    Form for creating/editing Insight articles in the dashboard.
+    The `blocks` field is a hidden JSON field populated by Editor.js.
+    """
+
+    blocks = forms.CharField(
+        widget=forms.HiddenInput(attrs={"id": "blocksField"}),
+        required=False,
+        initial="{}",
+    )
+
+    class Meta:
+        model = Insight
+        fields = [
+            "title",
+            "slug",
+            "excerpt",
+            "category",
+            "cover_image_url",
+            "read_time",
+            "is_featured",
+            "status",
+            "blocks",
+        ]
+        widgets = {
+            "title": forms.TextInput(attrs={"placeholder": "Article title…", "autocomplete": "off"}),
+            "slug": forms.TextInput(attrs={"placeholder": "auto-generated-from-title"}),
+            "excerpt": forms.Textarea(attrs={"rows": 3, "placeholder": "Short description shown on listing cards…"}),
+            "cover_image_url": forms.URLInput(attrs={"placeholder": "https://…", "id": "coverUrlField"}),
+        }
+
+    def clean_blocks(self):
+        import json
+        raw = self.cleaned_data.get("blocks") or "{}"
+        try:
+            parsed = json.loads(raw)
+        except (ValueError, TypeError):
+            parsed = {}
+        return parsed
 
 
 class ProjectImageURLForm(forms.Form):

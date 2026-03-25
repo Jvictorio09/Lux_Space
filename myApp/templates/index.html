@@ -35,8 +35,8 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:0 3rem;height:72px;display:flex;align-items:center;justify-content:space-between;transition:background 0.4s,border-color 0.4s;border-bottom:1px solid transparent;background:rgba(10,10,8,0.6);backdrop-filter:blur(12px)}
 nav.scrolled{background:rgba(10,10,8,0.92);backdrop-filter:blur(20px);border-color:var(--rule)}
 .nav-links a,.nav-cta,.nav-hamburger{cursor:pointer}
-.nav-logo{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);text-decoration:none}
-.nav-logo span{color:var(--gold)}
+.nav-logo{display:inline-flex;align-items:center;text-decoration:none}
+.nav-logo img{height:56px;width:auto;display:block}
 .nav-links{display:flex;gap:2.5rem;list-style:none}
 .nav-links a{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--stone);text-decoration:none;transition:color 0.2s;font-weight:500}
 .nav-links a:hover{color:var(--cream)}
@@ -100,6 +100,27 @@ nav.scrolled{background:rgba(10,10,8,0.92);backdrop-filter:blur(20px);border-col
 .marquee-item{font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:300;color:var(--stone);padding:0 2.5rem;letter-spacing:0.06em;text-transform:uppercase}
 .marquee-dot{color:var(--gold);padding:0 0.5rem}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── PARTNERS STRIP ── */
+.partners-section{
+  background:#fff;
+  padding:4rem 0;
+  border-top:1px solid rgba(0,0,0,.05);
+  border-bottom:1px solid rgba(0,0,0,.05);
+}
+.partners-container{max-width:100%;margin:0 auto;padding:0 1.5rem}
+.partners-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;margin-bottom:2rem}
+.partners-head h3{font-weight:600;font-size:1.125rem;color:#0B0E14}
+.partners-divider{height:1px;background:rgba(0,0,0,.1)}
+.partners-link{font-weight:600;font-size:.9rem;text-decoration:none;color:var(--gold)}
+.partners-link:hover{text-decoration:underline}
+.partners-marquee{overflow:hidden;position:relative;min-height:calc(2.75rem + 1rem)}
+.partners-track{display:inline-flex;align-items:center;gap:1rem;white-space:nowrap;width:max-content;animation:partnersMarquee 38s linear infinite;will-change:transform}
+.logo-cell{width:8rem;height:2.75rem;display:inline-flex;align-items:center;justify-content:center;flex:0 0 8rem}
+.logo-cell img{display:block;max-height:100%;max-width:100%;object-fit:contain;transition:transform .25s ease,filter .25s ease,box-shadow .25s ease}
+.logo-cell:hover img{transform:translateY(-3px);filter:brightness(1.1);box-shadow:0 6px 12px rgba(24,175,171,.15)}
+.partners-marquee:hover .partners-track{animation-play-state:paused}
+@keyframes partnersMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── SERVICES ── */
 .services-section{padding:8rem 3rem;background:var(--ink)}
@@ -247,6 +268,8 @@ footer{padding:3rem;display:flex;align-items:center;justify-content:space-betwee
   .cta-section{padding:4rem 1.5rem}
   nav{padding:0 1.5rem}
   footer{flex-direction:column;gap:1.5rem;text-align:center;padding:2.5rem 1.5rem}
+  .partners-head{grid-template-columns:1fr;gap:0.75rem;text-align:left}
+  .logo-cell{width:6rem;height:2.25rem;flex-basis:6rem}
 }
 #mobile-nav{display:none;position:fixed;inset:0;background:var(--ink);z-index:950;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
 #mobile-nav.open{display:flex}
@@ -264,20 +287,24 @@ footer{padding:3rem;display:flex;align-items:center;justify-content:space-betwee
 <!-- Mobile Nav -->
 <div id="mobile-nav">
   <button id="mobile-close"><i class="fa-solid fa-xmark"></i></button>
-  <a href="{% url 'home' %}#about" onclick="closeMobile()">About</a>
+  <a href="{% url 'about' %}" onclick="closeMobile()">About</a>
   <a href="{% url 'services' %}" onclick="closeMobile()">Services</a>
   <a href="{% url 'projects' %}" onclick="closeMobile()">Portfolio</a>
+  <a href="{% url 'insights' %}" onclick="closeMobile()">Insights</a>
   <a href="{% url 'contact' %}" onclick="closeMobile()">Contact</a>
   <a href="{% url 'contact' %}" onclick="closeMobile()" style="color:var(--gold)">Get a Quote →</a>
 </div>
 
 <!-- Nav -->
 <nav id="main-nav">
-  <a href="{% url 'home' %}" class="nav-logo">Lux<span>Space</span></a>
+  <a href="{% url 'home' %}" class="nav-logo" aria-label="LuxSpace Home">
+    <img src="https://res.cloudinary.com/dzgnshpxi/image/upload/v1774398574/LOGO_WHITE_hcnorn.png" alt="LuxSpace logo"/>
+  </a>
   <ul class="nav-links">
-    <li><a href="{% url 'home' %}#about">About</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
     <li><a href="{% url 'services' %}">Services</a></li>
     <li><a href="{% url 'projects' %}">Portfolio</a></li>
+    <li><a href="{% url 'insights' %}">Insights</a></li>
     <li><a href="{% url 'contact' %}">Contact</a></li>
   </ul>
   <a href="{% url 'contact' %}" class="nav-cta">Get a Quote</a>
@@ -494,6 +521,50 @@ footer{padding:3rem;display:flex;align-items:center;justify-content:space-betwee
   </div>
 </section>
 
+<!-- Partners (colored version) -->
+<section class="partners-section">
+  <div class="partners-container">
+    <div class="partners-head">
+      <h3>Trusted by leading brands &amp; developers</h3>
+      <div class="partners-divider"></div>
+      <a href="{% url 'projects' %}" class="partners-link">View Projects →</a>
+    </div>
+
+    <div class="partners-marquee" aria-label="Partner logos marquee">
+      <div class="partners-track">
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/ETISALAT_m7lbre.png" alt="Etisalat"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/JUMEIRAH_GOLF_ESTATES_oqssei.png" alt="Jumeirah Golf Estates"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_PROPERTIES_vytwn6.png" alt="Dubai Properties"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_MUNICIPALITY_wl80rc.png" alt="Dubai Municipality"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_HOLDINGS_gaj4mj.png" alt="Dubai Holdings"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_HILLS_wskbo3.png" alt="Dubai Hills"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/TECOM_GROUP_pedwql.png" alt="TECOM Group"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/DAMAC_vmbuiw.png" alt="DAMAC"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/DAMAC_HILLS_mr57ti.png" alt="DAMAC Hills"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/EMAAR_oxdsdu.svg" alt="EMAAR"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735366/MERAAS_y2rrba.svg" alt="Meraas"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735366/NAKHEEL_gcikbo.svg" alt="Nakheel"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735366/CONCORDIA_DMCC_xdddg2.png" alt="Concordia DMCC"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735366/MICROSOFT_om7jd3.png" alt="Microsoft"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/AL_MEYDAN_mw8jbb.png" alt="Al Meydan"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/AL_ANSARI_nhomza.jpg" alt="Al Ansari"></span>
+        <span class="logo-cell"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735369/MAJID_AL_FUTTAIM_lr0vf6.jpg" alt="Majid Al Futtaim"></span>
+
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/ETISALAT_m7lbre.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/JUMEIRAH_GOLF_ESTATES_oqssei.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_PROPERTIES_vytwn6.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_MUNICIPALITY_wl80rc.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_HOLDINGS_gaj4mj.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/DUBAI_HILLS_wskbo3.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/TECOM_GROUP_pedwql.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/DAMAC_vmbuiw.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735367/DAMAC_HILLS_mr57ti.png" alt=""></span>
+        <span class="logo-cell" aria-hidden="true"><img src="https://res.cloudinary.com/dstlxtvar/image/upload/v1759735368/EMAAR_oxdsdu.svg" alt=""></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ CTA ══ -->
 <section class="cta-section">
   <div class="cta-bg">
@@ -569,7 +640,7 @@ footer{padding:3rem;display:flex;align-items:center;justify-content:space-betwee
 <!-- FOOTER -->
 <footer>
   <a href="{% url 'home' %}" class="footer-logo">Lux<span>Space</span></a>
-  <p class="footer-copy">© 2025 LuxSpace Fit Out & Technical Services LLC. Dubai, UAE.</p>
+  <p class="footer-copy"><a href="{% url 'insights' %}" style="color:var(--stone);text-decoration:none;margin-right:14px;letter-spacing:0.12em;text-transform:uppercase;font-size:10px">Insights</a>© 2025 LuxSpace Fit Out & Technical Services LLC. Dubai, UAE.</p>
   <div class="footer-social">
     <a href="#"><i class="fa-brands fa-instagram"></i></a>
     <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>

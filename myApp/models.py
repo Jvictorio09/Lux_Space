@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 
@@ -282,3 +283,95 @@ class GalleryImage(models.Model):
         if not self.cloudinary_url and self.secure_url:
             self.cloudinary_url = self.secure_url
         super().save(*args, **kwargs)
+
+
+class Insight(models.Model):
+    """
+    An editorial article / insight post.
+
+    Body content is stored as Editor.js JSON in the `blocks` JSONField.
+    Rendered to HTML at display time via the `insight_tags` template tag.
+    """
+
+    CATEGORY_CHOICES = [
+        ("interior", "Interior Design"),
+        ("landscape", "Landscaping"),
+        ("joinery", "Joinery"),
+        ("pools", "Swimming Pools"),
+        ("guides", "Project Guides"),
+        ("dubai", "Dubai Living"),
+    ]
+
+    STATUS_CHOICES = [
+        ("draft", "Draft"),
+        ("published", "Published"),
+    ]
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=220, unique=True)
+    excerpt = models.TextField(
+        blank=True,
+        help_text="Short summary shown on listing cards.",
+    )
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default="interior",
+    )
+    cover_image_url = models.URLField(
+        blank=True,
+        help_text="Full URL to the article cover/hero image.",
+    )
+    blocks = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Editor.js blocks JSON — the full article body.",
+    )
+    read_time = models.PositiveIntegerField(
+        default=5,
+        help_text="Estimated reading time in minutes.",
+    )
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Pin as the featured article on the insights listing page.",
+    )
+    status = models.CharField(
+        max_length=12,
+        choices=STATUS_CHOICES,
+        default="draft",
+    )
+    published_at = models.DateTimeField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at", "-created_at"]
+
+    def __str__(self) -> str:
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        if self.status == "published" and not self.published_at:
+            self.published_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    @property
+    def category_label(self) -> str:
+        return dict(self.CATEGORY_CHOICES).get(self.category, self.category)
+
+    @property
+    def published_date_display(self) -> str:
+        if self.published_at:
+            return self.published_at.strftime("%B %Y")
+        if self.created_at:
+            return self.created_at.strftime("%B %Y")
+        return ""
+
+    @property
+    def published_date_long(self) -> str:
+        if self.published_at:
+            return self.published_at.strftime("%B %d, %Y").replace(" 0", " ")
+        return ""
